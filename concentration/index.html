@@ -1,0 +1,120 @@
+<html>
+	<head>
+		<title>Memory: Animals</title>
+		<style>
+			body {
+				color: white;
+				background-color: black;
+				text-align:center;
+				vertical-align:middle;
+			}
+			#blank {
+				width: 100%;
+				height:6%;
+				display:inline-block;
+			}
+			#header {
+				font: bold 30pt verdana;
+				color: gold;
+				width: 100%;
+				height:30%;
+				display:inline-block;
+				vertical-align: middle;
+			}
+			#instructionsLabel {
+				font: bold 24pt verdana;
+				color: #ff9999;
+				display:inline-block;
+			}
+			#instructions {
+				font: normal 13pt verdana;
+				width: 100%;
+				height:25%;
+				vertical-align: middle;
+			}
+			#playButtons {
+				table-layout: fixed;
+				width: 100%;
+				font: normal 13pt verdana;
+				text-align:center;
+			}
+			#play1 {
+				width:80%;
+				background-color: #000066;
+				color: #9999ff;
+				font: bold 24pt verdana;
+			}
+			#play2 {
+				width:80%;
+				background-color: #004400;
+				color: #99ff99;
+				font: bold 24pt verdana;
+			}
+			img {
+				max-width:200px;
+				display:inline-block;
+				vertical-align:middle;
+			}
+			#extraTurnBox {
+			    width:30px;
+			    height:30px;
+			    border-radius:5px;
+			    border:2px solid #555;
+			    vertical-align:middle;
+			}
+			#extraTurnLabel:hover, #extraTurnBox:hover, #play1:hover, #play2:hover {
+				cursor:pointer;
+			}
+
+		</style>
+		<script>
+			function Play(numPlayers) {
+				if (numPlayers === 1) {
+					window.location.href = "play.html?1";
+				} else {
+					var url = "play.html?2";
+					if (!(document.getElementById("extraTurnBox").checked)) {
+						url = "play.html?2a";
+					}
+					window.location.href = url;
+				}
+			}
+
+			function PreloadImages() {
+				var images = [];
+				for (var i = 0; i < 33; i++) {
+					images[i] = new Image();
+					images[i].src = "images/mini/" + i + ".jpg";
+				}
+			}
+		</script>
+	</head>
+	<body onload="PreloadImages()">
+		<div id="blank">&nbsp;</div><br>
+		<div id="header">
+			<img src="images/splash.png"></img>
+			&nbsp; &nbsp;MEMORY: ANIMALS
+			<img src="images/splash.png"></img>
+		</div><br>
+		<div id="instructions">
+			<span id="instructionsLabel">INSTRUCTIONS</span><br>
+			Like the regular Memory/Concentration card game, flip over 2 cards at a time and try to find a match.<br>(Once you've found a match, you can view that picture full-size)
+		</div><br>
+		<table id="playButtons">
+			<tr>
+				<td>
+					<button onclick="Play(1)" id="play1">1-PLAYER GAME</button>
+				</td>
+				<td>
+					<button onclick="Play(2)" id="play2">2-PLAYER GAME</button>
+				</td>
+			</tr>
+				<td></td>
+				<td>
+					<label id="extraTurnLabel">
+						<input id="extraTurnBox" type="checkbox" checked />&nbsp;If you find a match, your turn continues
+					</label>
+				</td>
+		</table>
+	</body>
+</html>
