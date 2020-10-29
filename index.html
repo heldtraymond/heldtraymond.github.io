@@ -1,0 +1,156 @@
+<html>
+<head>
+	<title>Online Portfolio | Raymond Anthony Heldt</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<script src="jquery.js"></script>
+	<script src="portfolio.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css"></link>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+	<style>
+		body {
+			background-color:#002200;color:white;font-family:'Open Sans Condensed',sans-serif;
+		}
+		.section {
+			padding:5px;
+		}
+		hr {
+			margin-bottom:25px;margin-top:35px;border:1px solid white
+		}
+		#topheader {
+			text-align:center;
+		}
+		#name {
+			font-size:36pt;font-weight:bold;text-align:center;color:#bbbbff;
+		}
+		#resume {
+			font-size:24pt;font-weight:bold;text-align:center;color:#6666ff;
+		}
+		#sourceCode {
+			font-size:16pt;font-weight:bold;text-align:left;color:#6666ff;margin-top:30px;
+		}
+		#resume:hover, #sourceCode:hover {
+			cursor:pointer;color:#3333ff;
+		}
+		.subtitle {
+			font-size:18pt;line-height:110%;
+		}
+		#topSubtitle {
+			text-align:center;margin-top:10px;
+		}
+		#gamesSection {
+			text-align:left;margin-bottom:10px;
+		}
+		.title {
+			font-size:28pt;font-weight:bold;
+		}
+		#gamesTitle {
+			color:gold;
+		}
+		#gamesSubtitle {
+			text-align:left;
+		}
+		#games {
+			text-align:center;
+		}
+		.gamecontainer {
+			text-align:center;padding-left:10px;padding-right:10px;vertical-align:middle;padding-top:8px;height:90px;}
+		.game {
+			border:5px solid white;border-radius:20px;font-size:20pt;font-weight:bold;font-style:normal;height:100%;vertical-align:middle;line-height:100%;text-align:center;color:gold;font-family:'Open Sans',sans-serif;
+		}
+		.game:hover {
+			border-color:gold;cursor:pointer;font-weight:bold;
+		}
+		#memory:hover {
+			background-color:#99ff99;color:#004400;
+		}
+		#one:hover {
+			background-color:#ffcc99;color:red;
+		}
+		#trivia:hover {
+			background-color:#9999ff;color:#000044;
+		}
+		#fiveDice:hover {
+			background-color:white;color:black;
+		}
+		.vertical-aligner {
+			height:100%;vertical-align:middle;display:inline-block;
+		}
+		.vertical-aligned-text {
+			vertical-align:middle;line-height:10%;
+		}
+		#contactSection {
+			text-align:left;
+		}
+		#contactTitle {
+			color:#66ff66;
+		}
+		.contactinfo {
+			font-size:20pt;font-weight:bold;text-align:left;color:#66ff66;
+		}
+		.optimizedSection {
+			font-size:15pt;color:gold;font-style:italic;margin-top:20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row section" id="topheader">
+			<div class="col-xs-12 col-sm-12 my-auto" id="name">Raymond Heldt</div>
+			<div class="col-xs-12 col-sm-12 subtitle" id="topSubtitle"><i>Software Developer who's too cheap to pay for a domain name and will gladly keep using his old MSU student account, which for some reason is still active despite having graduated in 2013.</i></div>
+			<div class="col-xs-12 col-sm-12 my-auto" id="resume">View Resume</div>
+		</div>
+		<hr id="divider1">
+		<div class="row section" id="gamesSection">
+			<div class="col-xs-12 col-sm-12 title" id="gamesTitle">Free HTML5 Games</div>
+			<div class="col-xs-12 col-sm-12 subtitle" id="gamesSubtitle"><i>Occasionally I make webpage games as birthday or Christmas gifts for family/friends. These are some of my favorites, with some modifications since the originals contained photos of people that you probably don't know.</i></div>
+		</div>
+		<div id="games" class="row section">
+			<div class="col-xs-12 col-md-6 optimizedSection">
+				<span id="optimizeddesktop">Optimized for desktop</span>
+				<div class="row">
+					<div class="col-xs-12 col-md-6 my-auto gamecontainer">
+						<div class="game" id="memory">
+							<span class="vertical-aligner"></span>
+							<span class="vertical-aligned-text">MEMORY</span>
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-6 my-auto gamecontainer">
+						<div class="game" id="one">
+							<span class="vertical-aligner"></span>
+							<span class="vertical-aligned-text">ONE CARD</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 optimizedSection">
+				<span id="optimizedmobile">Optimized for mobile</span>
+				<div class="row">
+					<div class="col-xs-12 col-md-6 my-auto gamecontainer">
+						<div class="game" id="fiveDice">
+							<span class="vertical-aligner"></span>
+							<span class="vertical-aligned-text">FIVE DICE</span>
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-6 my-auto gamecontainer">
+						<div class="game" id="trivia">
+							<span class="vertical-aligner"></span>
+							<span class="vertical-aligned-text">TEAM TRIVIA</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12" id="sourceCode">
+				<a>Download source code of all games</a>
+			</div>
+		</div>
+		<hr id="divider2">
+		<div class="row section" id="contactSection">
+			<div class="col-xs-12 col-sm-12 title" id="contactTitle">Contact</div>
+			<div class="col-xs-12 col-md-12 my-auto contactinfo">heldt.raymond3@gmail.com</div>
+			<div class="col-xs-12 col-md-12 my-auto contactinfo">(517) 528-2550</div>
+		</div>
+	</div>
+</body>
+</html>
