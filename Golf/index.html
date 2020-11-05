@@ -1,0 +1,434 @@
+<html>
+<head>
+	<title>Golf</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<meta charset="UTF-8">
+	<style>
+		body {
+			text-align:center;
+			font-family:verdana;
+		}
+		#playTableContainer {
+			width:100%;
+			display:inline-block;
+			/*padding-left:30px;
+			padding-right:30px;*/
+		}
+		#playTable {
+			width:100%;
+			border-collapse:collapse;
+		}
+		/*#playTable tr, #playTable td {
+			border:none;
+		}*/
+		.infoOnly {
+			width:11%;
+		}
+		.playerCards {
+			width:13%;
+			padding-left:10px;
+			padding-right:10px;
+		}
+		#centerCell .card {
+			width:1.6em;
+		}
+		.card {
+			border:2px solid black;
+			border-radius:6px;
+			background-color:white;
+			font-size:22pt;
+			font-weight:bold;
+			width:33%;
+			text-align:center;
+			line-height:90%;
+			letter-spacing:-3;
+			padding-right:4px;
+			padding-bottom:8px;
+			height:2.4em;
+		}
+		#playTable tr td {
+			/*padding-bottom:8px;*/
+		}
+		.red {
+			color:red;
+		}
+		.black {
+			color:black;
+		}
+		.joker {
+			color:black;
+			font-size:22pt;
+			letter-spacing:0;
+			padding-right:0px;
+			line-height:75%;
+		}
+		.suit {
+			width:100%;
+			font-size:35pt;
+		}
+		.facedown {
+			background-repeat:no-repeat;
+			background-size:contain;
+			background-position:center;
+		}
+		.facedown.deck1 {
+			background-image:url('cardBack.png');
+			background-color:#224488;
+		}
+		.facedown.deck2 {
+			background-image:url('cardBackRed.png');
+			background-color:#bb4444;
+		}
+		.playerCell {
+			font-style:bold;
+		}
+		.playerInfo {
+			text-align:center;
+			font-family:arial;
+		}
+		.playerInfo.live img {
+			border:10px solid red;
+		}
+		.playerInfo img {
+			background-color:white;
+			border-radius:8px;
+			border:3px solid black;
+			max-height:80px;
+		}
+		.playerName, .playerScore {
+			color:black;
+			display:none;
+		}
+		/*.playerInfoWrapper {
+			background-color:white;
+			border-radius:10px;
+			border:1px solid black;
+			display:inline-block;
+    	}*/
+    	.playerName {
+    		font-size:16pt;
+    	}
+    	.playerScore {
+    		font-size:20pt;
+			font-weight:bold;
+    	}
+    	.playerCards table {
+    		width:100%;
+    	}
+    	.playerCards.live .faceup:hover {
+    		cursor:pointer;
+    		background-color:#88ff88;
+    	}
+    	.playerCards.live .facedown:hover {
+    		cursor:pointer;
+    		background-color:#ffff88;
+    		background-image:none;
+    	}
+    	.playerCards.live .facedown:hover .flipTextWrapper {
+    		display:inline-block;
+    	}
+    	.flipTextWrapper {
+    		width:100%;
+    		height:100%;
+    		display:none;
+    		text-align:center;
+    	}
+    	.flipText {
+    		font-weight:bold;
+    		font-size:9pt;
+    		color:#000088;
+    		letter-spacing:normal;
+    		text-align:center;
+    		line-height:95%;
+    	}
+    	.playerInfo.right {
+    		text-align:right;
+    	}
+    	.playerInfo.left {
+    		text-align:left;
+    	}
+    	.playerInfoWrapper br {
+			display:none;
+    	}
+    	#middleRow, #middleRow > td {
+    		padding-top:15px;
+    		padding-bottom:15px;
+    	}
+    	#centerCell {
+    		text-align:center;
+    	}
+	</style>
+	<script src="jquery.js"></script>
+</head>
+<body style="overflow-y:scroll;text-align:center">
+	<img id="bgPhoto" src="livingRoomMedium_new.png" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
+	<div id="playTableContainer">
+		<table id="playTable">
+			<tr>
+				<td class="infoOnly"></td>
+				<td></td>
+				<td class="playerInfo cellComponent" id="playerInfo0">
+				</td>
+				<td class="playerInfo cellComponent" id="playerInfo1">
+				</td>
+				<td class="playerInfo cellComponent" id="playerInfo2">
+				</td>
+				<td class="playerInfo cellComponent" id="playerInfo3">
+				</td>
+				<td></td>
+				<td class="infoOnly"></td>
+			</tr>
+			<tr>
+				<td class="playerInfo cellComponent right" id="playerInfo13">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards13">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards0">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards1">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards2">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards3">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards4">
+				</td>
+				<td class="playerInfo cellComponent left" id="playerInfo4">
+				</td>
+			</tr>
+			<tr id="middleRow">
+				<td class="playerInfo cellComponent right" id="playerInfo12">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards12">
+				</td>
+				<td colspan="4" id="centerCell"></td>
+				<td class="playerCards cellComponent" id="playerCards5">
+				</td>
+				<td class="playerInfo cellComponent left" id="playerInfo5">
+				</td>
+			</tr>
+			<tr>
+				<td class="playerInfo live cellComponent right" id="playerInfo11">
+				</td>
+				<td class="playerCards live cellComponent" id="playerCards11">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards10">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards9">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards8">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards7">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards6">
+				</td>
+				<td class="playerInfo cellComponent left" id="playerInfo6">
+				</td>
+			</tr>
+			<tr>
+				<td class="infoOnly"></td>
+				<td></td>
+				<td class="playerInfo cellComponent" id="playerInfo10">
+				</td>
+				<td class="playerInfo cellComponent" id="playerInfo9">
+				</td>
+				<td class="playerInfo cellComponent" id="playerInfo8">
+				</td>
+				<td class="playerInfo cellComponent" id="playerInfo7">
+				</td>
+				<td></td>
+				<td class="infoOnly"></td>
+			</tr>
+		</table>
+	</div>
+</body>
+<script>
+	var DECK = [];
+	var PLAYERS = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
+	var SCORES = [0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	var NAMES = [
+		"Samantha",
+		"Diane",
+		"Tracy",
+		"David",
+		"Jeff",
+		"Lauren",
+		"Michael",
+		"Elizabeth",
+		"Nicholas",
+		"Justin",
+		"Michelle",
+		"Nicole",
+		"Angela",
+		"Ray",
+	];
+	var SUITS = ["♥", "♠", "♦", "♣"];
+	var VALS = [
+		"A",
+		"2",
+		"3",
+		"4",
+		"5",
+		"6",
+		"7",
+		"8",
+		"9",
+		"10",
+		"J",
+		"Q",
+		"K",
+	];
+	$(window).resize(FitToWindow);
+	$("#playTable").css("opacity", 0);
+	Setup();
+	FitToWindow();
+	ShuffleUpAndDeal();
+	setTimeout(function() {
+		$("#playTable").css("opacity", 1);
+	}, 500);
+	//ShuffleUpAndDeal();
+
+	function Setup() {
+		$(".playerInfo").each(function() {
+			var span = $("<span></span>");
+			span.addClass("playerInfoWrapper");
+			var name = $("<span></span>");
+			name.addClass("playerName");
+			var score = $("<span></span>");
+			score.addClass("playerScore");
+			var img = $("<img>");
+			img.attr("src", "User.png");
+			span.append(name);
+			span.append("<br>");
+			span.append(img);
+			span.append("<br>");
+			span.append(score);
+			$(this).append(span);
+		});
+		$(".playerCards").each(function() {
+			var table = $("<table></table>");
+			for (var r = 0; r < 2; r++) {
+				var tr = $("<tr></tr>");
+				for (var c = 0; c < 3; c++) {
+					var td = $("<td></td>");
+					td.addClass("card");
+					tr.append(td);
+				}
+				table.append(tr);
+			}
+			$(this).append(table);
+		});
+		var span = $("<span style='display:inline-block'></span>");
+		var table = $("<table></table>");
+		var tr = $("<tr></tr>");
+		table.append(tr);
+		for (var c = 0; c < 2; c++) {
+			var td = $("<td></td>");
+			td.addClass("card");
+			tr.append(td);
+		}
+		span.append(table);
+		$("#centerCell").append(span);
+	}
+
+	function ShuffleUpAndDeal() {
+		for (var i = 0; i < 108; i++) {
+			DECK[i] = i;
+		}
+
+		for (var i = 0; i < 108; i++) {
+			var randInt = i + Math.floor(Math.random() * (108-i));
+			var temp = DECK[i];
+			DECK[i] = DECK[randInt];
+			DECK[randInt] = temp;
+		}
+
+		var livePlayer = Math.floor(Math.random() * 14);
+
+		for (var i = 0; i < PLAYERS.length; i++) {
+			var info = $("#playerInfo" + i);
+			var cards = $("#playerCards" + i);
+			console.log(cards);
+			info.find(".playerName").html(NAMES[i]);
+			info.find(".playerScore").html(SCORES[i]);
+			if (i === livePlayer) {
+				info.addClass("live");
+				cards.addClass("live");
+			}
+			else {
+				info.removeClass("live");
+				cards.removeClass("live");
+			}
+
+			for (var c = 6 * i; c < 6 * i + 6; c++) {
+				var td = cards.find("td").eq(c % 6);
+				RenderCard(td, DECK[c], (Math.random() * 2) > 1);
+			}
+		}
+
+		var totalDealt = PLAYERS.length * 6;
+		for (var i = 0; i < 2; i++) {
+			RenderCard($("#centerCell .card").eq(i), DECK[totalDealt + i], (i > 0));
+		}
+	}
+
+	function RenderCard(td, value, isFaceDown) {
+		td.removeClass("red").removeClass("black").removeClass("facedown").removeClass("faceup").removeClass("joker");
+		if (isFaceDown) {
+			td.addClass("facedown").addClass(value < 54 ? "deck1" : "deck2");
+			td.html("");
+		}
+		else {
+			td.addClass("faceup");
+			var cardVal = value % 54;
+			if (cardVal > 51) {
+				td.addClass("joker");
+				td.html("<span style='font-size:8pt'>J<span style='color:red'>O</span>K<span style='color:red'>E</span>R</span><br>♠<span style='color:red'>♥</span><br><span style='color:red'>♦</span>♣");
+			}
+			else {
+				var suit = Math.floor(cardVal / 13);
+				td.html(VALS[cardVal % 13] + '<div class="suit">' + SUITS[suit] + '</div>')
+				  .addClass(suit % 2 == 1 ? "black" : "red");
+			}
+		}
+	}
+
+	function FitToWindow() {
+		setTimeout(function() {
+			var idealMiddle = 0.565;
+			var tableHeight = $("#playTable").height();
+			var imageHeight = $("#bgPhoto").height();
+			var windowHeight = $(window).height();
+			var percentHeight = (tableHeight / imageHeight);
+			var marginTopPercent = idealMiddle - (percentHeight / 2);
+			var marginTopPixels = marginTopPercent * imageHeight - $("#playTableContainer").position().top;
+
+			if (tableHeight > imageHeight) {
+				marginTopPixels = -($("#playTableContainer").position().top);
+			}
+			else if (marginTopPixels + tableHeight > imageHeight) {
+				marginTopPixels = imageHeight - tableHeight - $("#playTableContainer").position().top;
+			}
+
+			console.log(idealMiddle);
+			console.log(tableHeight);
+			console.log(imageHeight);
+			console.log(windowHeight);
+			console.log(percentHeight);
+			console.log(marginTopPercent);
+			console.log(marginTopPixels);
+			$("#playTableContainer").css("margin-top", marginTopPixels + "px");
+
+            var ua = window.navigator.userAgent.toLowerCase();
+            if (ua.indexOf("trident") >= 0 || ua.indexOf("edge") >= 0) {
+                // IE and Edge don't support smooth animated scrolling - just set the scroll
+                window.scroll(0, marginTopPixels - 5);
+            }
+            else {
+                window.scroll({ top: marginTopPixels - 5, behavior: 'smooth' });
+            }
+		}, 100);
+	}
+</script>
+
+</html>
