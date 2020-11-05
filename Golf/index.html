@@ -86,14 +86,19 @@
 			text-align:center;
 			font-family:arial;
 		}
+		.cellComponent.current {
+			background-color:#33aa33;
+		}
 		.playerInfo.live img {
 			border:10px solid red;
+			margin:-10px -10px -10px -10px;
 		}
 		.playerInfo img {
 			background-color:white;
 			border-radius:8px;
 			border:3px solid black;
 			max-height:80px;
+			position:relative;
 		}
 		.playerName, .playerScore {
 			color:black;
@@ -160,7 +165,7 @@
 	</style>
 	<script src="jquery.js"></script>
 </head>
-<body style="overflow-y:scroll;text-align:center">
+<body style="overflow-y:scroll;text-align:center" onclick="RandomizeCurrent()">
 	<img id="bgPhoto" src="LivingRoomMedium_new.png" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
 	<div id="playTableContainer">
 		<table id="playTable">
@@ -208,9 +213,9 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="playerInfo live cellComponent right" id="playerInfo11">
+				<td class="playerInfo cellComponent right" id="playerInfo11">
 				</td>
-				<td class="playerCards live cellComponent" id="playerCards11">
+				<td class="playerCards cellComponent" id="playerCards11">
 				</td>
 				<td class="playerCards cellComponent" id="playerCards10">
 				</td>
@@ -245,6 +250,8 @@
 <script>
 	var DECK = [];
 	var PLAYERS = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
+	var livePlayer = Math.floor(Math.random() * PLAYERS.length);
+	var currentPlayer = Math.floor(Math.random() * PLAYERS.length);
 	var SCORES = [0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 	var NAMES = [
 		"Samantha",
@@ -279,14 +286,61 @@
 		"K",
 	];
 	$(window).resize(FitToWindow);
-	$("#playTable").css("opacity", 0);
 	Setup();
+	$(".playerInfo").css("opacity", "0");
+	$(".playerCards .card").css("opacity", "0");
+	$("#centerCell .card").hide();
 	FitToWindow();
 	ShuffleUpAndDeal();
 	setTimeout(function() {
-		$("#playTable").css("opacity", 1);
-	}, 500);
-	//ShuffleUpAndDeal();
+		$(".playerInfo").css("opacity", "1");
+	setTimeout(function() {
+		$(".playerInfoWrapper img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
+	setTimeout(function() {
+		$(".playerInfoWrapper img").css("border", "").css("margin", "");
+	setTimeout(function() {
+		$(".playerInfoWrapper img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
+	setTimeout(function() {
+		$(".playerInfoWrapper img").css("border", "").css("margin", "");
+	setTimeout(function() {
+		$(".playerInfoWrapper img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
+	setTimeout(function() {
+		$(".playerInfoWrapper img").css("border", "").css("margin", "");
+	setTimeout(function() {
+		$(".playerInfoWrapper img").animate({
+	    	left:'0px',
+	    	top:'0px',
+		}, 1500, function() {
+			var delayTime = 0;
+			for (var i = 0; i < 6; i++) {
+				for (var p = 0; p < 14; p++) {
+					delayTime += 50;
+					DealCard($("#playerCards" + p + " .card").eq(i), delayTime);
+				}
+			}
+
+			setTimeout(function() {
+				$("#centerCell .card").show();
+				$("#playerInfo" + PLAYERS[livePlayer]).addClass("live");
+				$("#playerCards" + PLAYERS[livePlayer]).addClass("live");
+				$("#playerInfo" + PLAYERS[currentPlayer]).addClass("current");
+				$("#playerCards" + PLAYERS[currentPlayer]).addClass("current");
+			}, delayTime + 1000);
+  		});
+	}, 700);
+	}, 100);
+	}, 100);
+	}, 100);
+	}, 100);
+	}, 100);
+	}, 700);
+	}, 700);
+
+	function DealCard(card, delayTime) {
+		setTimeout(function() {
+			card.css("opacity", "1");
+		}, delayTime);
+	}
 
 	function Setup() {
 		$(".playerInfo").each(function() {
@@ -329,6 +383,11 @@
 		}
 		span.append(table);
 		$("#centerCell").append(span);
+
+		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img").css("left", "125px");
+		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img").css("left", "-123px");
+		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img").css("top", "118px");
+		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img").css("top", "-118px");
 	}
 
 	function ShuffleUpAndDeal() {
@@ -343,26 +402,17 @@
 			DECK[randInt] = temp;
 		}
 
-		var livePlayer = Math.floor(Math.random() * 14);
-
 		for (var i = 0; i < PLAYERS.length; i++) {
 			var info = $("#playerInfo" + i);
 			var cards = $("#playerCards" + i);
 			console.log(cards);
 			info.find(".playerName").html(NAMES[i]);
 			info.find(".playerScore").html(SCORES[i]);
-			if (i === livePlayer) {
-				info.addClass("live");
-				cards.addClass("live");
-			}
-			else {
-				info.removeClass("live");
-				cards.removeClass("live");
-			}
+			info.removeClass("live").removeClass("current");
 
 			for (var c = 6 * i; c < 6 * i + 6; c++) {
 				var td = cards.find("td").eq(c % 6);
-				RenderCard(td, DECK[c], (Math.random() * 2) > 1);
+				RenderCard(td, DECK[c], (Math.random() * 2) > 0.66667);
 			}
 		}
 
@@ -428,6 +478,14 @@
                 window.scroll({ top: marginTopPixels - 5, behavior: 'smooth' });
             }
 		}, 100);
+	}
+
+	function RandomizeCurrent() {
+		currentPlayer += 1;
+		currentPlayer %= 14;
+		$(".current").removeClass("current");
+		$("#playerInfo" + currentPlayer).addClass("current");
+		$("#playerCards" + currentPlayer).addClass("current");
 	}
 </script>
 
