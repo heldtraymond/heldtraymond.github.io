@@ -3,10 +3,11 @@
 	<title>Golf</title>
 	<!--meta name="viewport" content="width=device-width,initial-scale=1.0"-->
 	<meta charset="UTF-8">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@800&display=swap" rel="stylesheet">
 	<style>
 		body {
 			text-align:center;
-			font-family:Tahoma, Verdana, sans-serif;
+			font-family:'Tahoma', Verdana, sans-serif;
 		}
 		#playTableContainer {
 			width:100%;
@@ -47,19 +48,23 @@
 		#centerCell .card {
 			width:1.6em;
 		}
+		#centerCell {
+			font-size:12pt;
+		}
 		.card {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
 			border:2px solid black;
 			border-radius:6px;
 			background-color:white;
-			font-size:22pt;
-			font-weight:bold;
+			font-size:24pt;
+			font-weight:bolder;
 			width:33%;
 			text-align:center;
-			line-height:90%;
+			line-height:85%;
 			letter-spacing:-3;
 			padding-right:4px;
 			padding-bottom:8px;
-			height:2.4em;
+			height:2.1em;
 		}
 		#playTable tr td {
 			/*padding-bottom:8px;*/
@@ -72,14 +77,16 @@
 		}
 		.joker {
 			color:black;
-			font-size:22pt;
 			letter-spacing:0;
 			padding-right:0px;
 			line-height:65%;
 		}
+		.jokerText {
+			font-size:8pt;
+		}
 		.suit {
 			width:100%;
-			font-size:35pt;
+			font-size:33pt;
 		}
 		.facedown {
 			background-repeat:no-repeat;
@@ -114,7 +121,7 @@
 			background-color:white;
 			border-radius:8px;
 			border:3px solid black;
-			max-height:75px;
+			max-height:80px;
 			position:relative;
 		}
 		.playerName {
@@ -149,23 +156,6 @@
     		cursor:pointer;
     		background-color:#ffff88;
     		background-image:none;
-    	}
-    	.playerCards.live .facedown:hover .flipTextWrapper {
-    		display:inline-block;
-    	}
-    	.flipTextWrapper {
-    		width:100%;
-    		height:100%;
-    		display:none;
-    		text-align:center;
-    	}
-    	.flipText {
-    		font-weight:bold;
-    		font-size:9pt;
-    		color:#000088;
-    		letter-spacing:normal;
-    		text-align:center;
-    		line-height:95%;
     	}
     	.playerInfo.right {
     		text-align:right;
@@ -212,8 +202,8 @@
 		</style>
 	<script src="jquery.js"></script>
 </head>
-<body style="overflow-y:scroll;text-align:center;font-size:85%" onclick="RandomizeCurrent()">
-	<img id="bgPhoto" src="LivingRoomMedium_new.png" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
+<body style="overflow-y:scroll;text-align:center;" onclick="RandomizeCurrent()">
+	<img id="bgPhoto" src="LivingRoom4.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
 	<div id="playTableContainer">
 		<table id="playTable">
 			<tr>
@@ -332,6 +322,7 @@
 		"Q",
 		"K",
 	];
+	var lastResize = new Date();
 	$(window).resize(FitToWindow);
 	Setup();
 	var showScores = (Math.random() > 0.5);	
@@ -346,7 +337,7 @@
 	$(".playerInfo, .playerName").css("opacity", "0");
 	$(".playerCards .card").css("opacity", "0");
 	$("#centerCell>span").hide();
-	FitToWindow();
+	FitToWindow(true);
 	ShuffleUpAndDeal();
 	var dealer = (currentPlayer + 13) % 14;
 	setTimeout(function() {
@@ -536,7 +527,7 @@
 			var cardVal = value % 54;
 			if (cardVal > 51) {
 				td.addClass("joker");
-				td.html("<span style='font-size:8pt'>J<span style='color:red'>O</span>K<span style='color:red'>E</span>R</span><br>♠<span style='color:red'>♥</span><br><span style='color:red'>♦</span>♣");
+				td.html("<span class='jokerText'>J<span style='color:red'>O</span>K<span style='color:red'>E</span>R</span><br>♠<span style='color:red'>♥</span><br><span style='color:red'>♦</span>♣");
 			}
 			else {
 				var suit = Math.floor(cardVal / 13);
@@ -546,9 +537,15 @@
 		}
 	}
 
-	function FitToWindow() {
+	function FitToWindow(pOnPageLoad = false) {
+		lastResize = new Date();
+		var currTime = lastResize; 
 		setTimeout(function() {
-			var idealMiddle = 0.565;
+			if (currTime !== lastResize) {
+				return;
+			}
+			ResizeText();
+			var idealMiddle = 0.575;
 			var tableHeight = $("#playTable").height();
 			var imageHeight = $("#bgPhoto").height();
 			var windowHeight = window.innerHeight;
@@ -563,13 +560,13 @@
 				marginTopPixels = imageHeight - tableHeight - ($("#playTableContainer").position().top) - 2;
 			}
 
-			console.log(idealMiddle);
+			/*console.log(idealMiddle);
 			console.log(tableHeight);
 			console.log(imageHeight);
 			console.log(windowHeight);
 			console.log(percentHeight);
 			console.log(marginTopPercent);
-			console.log(marginTopPixels);
+			console.log(marginTopPixels);*/
 			$("#playTableContainer").css("margin-top", marginTopPixels + "px");
 
 			var scrollTo = marginTopPixels + tableHeight - windowHeight + 10;
@@ -580,14 +577,23 @@
 				scrollTo = (tableHeight - windowHeight) / 2;
 			}
 
-            var ua = window.navigator.userAgent.toLowerCase();
-            if (ua.indexOf("trident") >= 0 || ua.indexOf("edge") >= 0) {
-                // IE and Edge don't support smooth animated scrolling - just set the scroll
-                window.scroll(0, scrollTo);
+            if (pOnPageLoad == true) {
+	            $('body').animate({
+	                scrollTop: scrollTo
+		        }, 1500);
             }
             else {
-                window.scroll({ top: scrollTo, behavior: 'smooth' });
+                window.scroll(0, scrollTo);
+	            /*var ua = window.navigator.userAgent.toLowerCase();
+	            if (ua.indexOf("trident") >= 0 || ua.indexOf("edge") >= 0) {
+	                // IE and Edge don't support smooth animated scrolling - just set the scroll
+	                window.scroll(0, scrollTo);
+	            }
+	            else {
+	                window.scroll({ top: scrollTo, behavior: 'smooth' });
+	            }*/
             }
+
 		}, 100);
 	}
 
@@ -598,6 +604,40 @@
 		$("#playerInfo" + currentPlayer).addClass("current");
 		$("#playerCards" + currentPlayer).addClass("current");
 	}
+
+	function ResizeText() {
+		var idealWidth = 1270;
+		var actualWidth = window.innerWidth;
+		var scale = (actualWidth / idealWidth);
+
+		var photoHeight = scale * 80;
+		if (photoHeight > 100) {
+			photoHeight = 100;
+		}
+		if (photoHeight < 50) {
+			photoHeight = 50;
+		}
+
+		$(".playerInfo img").css("max-height", photoHeight + "px");
+
+		// Compensate for line thickness
+		if (scale > 1) {
+			scale *= 1.02;
+		}
+		else {
+			scale /= 1.02;
+		}
+
+		// Card 22 pt
+		// Suit 35 pt
+		// Joker 8 pt
+		// Name 12 pt
+
+		$(".card").css("font-size", (scale * 24) + "pt");
+		$(".suit").css("font-size", (scale * 33) + "pt");
+		$(".jokerText").css("font-size", (scale * 8) + "pt");
+		$(".playerName, #centerCell").css("font-size", (scale * 12) + "pt");
+	}
 </script>
 
-</html>
+</html>0
