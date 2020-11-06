@@ -1,647 +1,156 @@
 <html>
 <head>
-	<title>Golf</title>
-	<!--meta name="viewport" content="width=device-width,initial-scale=1.0"-->
-	<meta charset="UTF-8">
-	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@800&display=swap" rel="stylesheet">
+	<title>Online Portfolio | Raymond Anthony Heldt</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<script src="jquery.js"></script>
+	<script src="portfolio.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css"></link>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 	<style>
 		body {
-			text-align:center;
-			font-family:'Tahoma', Verdana, sans-serif;
+			background-color:#002200;color:white;font-family:'Open Sans Condensed',sans-serif;
 		}
-		#playTableContainer {
-			width:100%;
-			display:inline-block;
-			/*padding-left:30px;
-			padding-right:30px;*/
+		.section {
+			padding:5px;
 		}
-		#playTable {
-			width:100%;
-			border-collapse:collapse;
+		hr {
+			margin-bottom:25px;margin-top:35px;border:1px solid white
 		}
-		.dealerLabel {
-			display:none;
-			font-weight:bold;
-			position:relative;
-			margin-bottom:-1.5em;
-			margin-top:0px;
-			height:1.5em;
-			z-index:104;
-		}
-		.dealerLabel span {
-			color:white;
-			border:5px solid blue;
-			border-radius:5px;
-			background-color:blue;
-		}
-		/*#playTable tr, #playTable td {
-			border:none;
-		}*/
-		.infoOnly {
-			width:11%;
-		}
-		.playerCards {
-			width:13%;
-			padding-left:10px;
-			padding-right:10px;
-		}
-		#centerCell .card {
-			width:1.6em;
-		}
-		#centerCell {
-			font-size:12pt;
-		}
-		.card {
-			font-family:'Roboto Slab', Tahoma, sans-serif;
-			border:2px solid black;
-			border-radius:6px;
-			background-color:white;
-			font-size:24pt;
-			font-weight:bolder;
-			width:33%;
-			text-align:center;
-			line-height:85%;
-			letter-spacing:-3;
-			padding-right:4px;
-			padding-bottom:8px;
-			height:2.1em;
-		}
-		#playTable tr td {
-			/*padding-bottom:8px;*/
-		}
-		.red {
-			color:red;
-		}
-		.black {
-			color:black;
-		}
-		.joker {
-			color:black;
-			letter-spacing:0;
-			padding-right:0px;
-			line-height:65%;
-		}
-		.jokerText {
-			font-size:8pt;
-		}
-		.suit {
-			width:100%;
-			font-size:33pt;
-		}
-		.facedown {
-			background-repeat:no-repeat;
-			background-size:contain;
-			background-position:center;
-		}
-		.facedown.deck1 {
-			background-image:url('cardBack.png');
-			background-color:#224488;
-		}
-		.facedown.deck2 {
-			background-image:url('cardBackRed.png');
-			background-color:#bb4444;
-		}
-		.playerCell {
-			font-style:bold;
-		}
-		.playerInfo {
+		#topheader {
 			text-align:center;
 		}
-		.playerInfoWrapper {
-			max-width:80px;
+		#name {
+			font-size:36pt;font-weight:bold;text-align:center;color:#bbbbff;
 		}
-		.cellComponent.current {
-			background-color:#33aa33;
+		#resume {
+			font-size:24pt;font-weight:bold;text-align:center;color:#6666ff;
 		}
-		.playerInfo.live img {
-			border:10px solid red;
-			margin:-10px -10px -10px -10px;
+		#sourceCode {
+			font-size:16pt;font-weight:bold;text-align:left;color:#6666ff;margin-top:30px;
 		}
-		.playerInfo img {
-			background-color:white;
-			border-radius:8px;
-			border:3px solid black;
-			max-height:80px;
-			position:relative;
+		#resume:hover, #sourceCode:hover {
+			cursor:pointer;color:#3333ff;
 		}
-		.playerName {
-			margin-top:0px;
-			margin-bottom:0px;
-    		font-size:12pt;
-			position:relative;
-			z-index:100;
+		.subtitle {
+			font-size:18pt;line-height:110%;
 		}
-		.playerName span {
-			color:black;
-			border-radius:4px;
-			background-color:#ccccff;
-			border:2px solid #000088;
-			padding-left:3px;
-			padding-right:3px;
-			display:inline-block;
-			margin-top:-1.3em;
-			margin-bottom:-1.3em;
-			min-height:1.3em;
-			min-width:1.3em;
+		#topSubtitle {
+			text-align:center;margin-top:10px;
 		}
-    	.playerCards table {
-    		width:100%;
-    		table-layout:fixed;
-    	}
-    	.playerCards.live .faceup:hover {
-    		cursor:pointer;
-    		background-color:#88ff88;
-    	}
-    	.playerCards.live .facedown:hover {
-    		cursor:pointer;
-    		background-color:#ffff88;
-    		background-image:none;
-    	}
-    	.playerInfo.right {
-    		text-align:right;
-    	}
-    	.playerInfo.left {
-    		text-align:left;
-    	}
-    	.playerInfoWrapper br {
-			display:none;
-    	}
-    	#middleRow, #middleRow > td {
-    		padding-top:5px;
-    		padding-bottom:3px;
-    	}
-    	#centerCell {
-    		text-align:center;
-    	}
-    	#toggleNamesBox {
-    		margin-right:6px;
-    	}
-    	#toggleScoresBox {
-    		margin-left:6px;
-    	}
-    	#toggleScoresBox, #toggleNamesBox {
-    		height:20px;
-    		width:20px;
-    	}
-    	#toggleScoresBox, #toggleNamesBox, .toggleLabel {
-    		vertical-align:middle;
-    		cursor:pointer;
-    	}
-    	#toggleScores:hover, #toggleNames:hover {
-    		cursor:pointer;
-    		background-color:#bbbbff;
-    		border:2px solid #000088;
-    		border-radius:6px;
-    		padding-top:2px;
-    		padding-right:4px;
-    		padding-left:4px;
-    	}
-    	#toggleScores, #toggleNames {
-    		padding:6px;
-    	}
-		</style>
-	<script src="jquery.js"></script>
+		#gamesSection {
+			text-align:left;margin-bottom:10px;
+		}
+		.title {
+			font-size:28pt;font-weight:bold;
+		}
+		#gamesTitle {
+			color:gold;
+		}
+		#gamesSubtitle {
+			text-align:left;
+		}
+		#games {
+			text-align:center;
+		}
+		.gamecontainer {
+			text-align:center;padding-left:10px;padding-right:10px;vertical-align:middle;padding-top:8px;height:90px;}
+		.game {
+			border:5px solid white;border-radius:20px;font-size:20pt;font-weight:bold;font-style:normal;height:100%;vertical-align:middle;line-height:100%;text-align:center;color:gold;font-family:'Open Sans',sans-serif;
+		}
+		.game:hover {
+			border-color:gold;cursor:pointer;font-weight:bold;
+		}
+		#memory:hover {
+			background-color:#99ff99;color:#004400;
+		}
+		#one:hover {
+			background-color:#ffcc99;color:red;
+		}
+		#trivia:hover {
+			background-color:#9999ff;color:#000044;
+		}
+		#fiveDice:hover {
+			background-color:white;color:black;
+		}
+		.vertical-aligner {
+			height:100%;vertical-align:middle;display:inline-block;
+		}
+		.vertical-aligned-text {
+			vertical-align:middle;line-height:10%;
+		}
+		#contactSection {
+			text-align:left;
+		}
+		#contactTitle {
+			color:#66ff66;
+		}
+		.contactinfo {
+			font-size:20pt;font-weight:bold;text-align:left;color:#66ff66;
+		}
+		.optimizedSection {
+			font-size:15pt;color:gold;font-style:italic;margin-top:20px;
+		}
+	</style>
 </head>
-<body style="overflow-y:scroll;text-align:center;" onclick="RandomizeCurrent()">
-	<img id="bgPhoto" src="LivingRoom4.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
-	<div id="playTableContainer">
-		<table id="playTable">
-			<tr>
-				<td class="infoOnly"></td>
-				<td></td>
-				<td class="playerInfo cellComponent" id="playerInfo0">
-				</td>
-				<td class="playerInfo cellComponent" id="playerInfo1">
-				</td>
-				<td class="playerInfo cellComponent" id="playerInfo2">
-				</td>
-				<td class="playerInfo cellComponent" id="playerInfo3">
-				</td>
-				<td></td>
-				<td class="infoOnly"></td>
-			</tr>
-			<tr>
-				<td class="playerInfo cellComponent right" id="playerInfo13">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards13">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards0">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards1">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards2">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards3">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards4">
-				</td>
-				<td class="playerInfo cellComponent left" id="playerInfo4">
-				</td>
-			</tr>
-			<tr id="middleRow">
-				<td class="playerInfo cellComponent right" id="playerInfo12">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards12">
-				</td>
-				<td colspan="4" id="centerCell"></td>
-				<td class="playerCards cellComponent" id="playerCards5">
-				</td>
-				<td class="playerInfo cellComponent left" id="playerInfo5">
-				</td>
-			</tr>
-			<tr>
-				<td class="playerInfo cellComponent right" id="playerInfo11">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards11">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards10">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards9">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards8">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards7">
-				</td>
-				<td class="playerCards cellComponent" id="playerCards6">
-				</td>
-				<td class="playerInfo cellComponent left" id="playerInfo6">
-				</td>
-			</tr>
-			<tr>
-				<td class="infoOnly"></td>
-				<td></td>
-				<td class="playerInfo cellComponent" id="playerInfo10">
-				</td>
-				<td class="playerInfo cellComponent" id="playerInfo9">
-				</td>
-				<td class="playerInfo cellComponent" id="playerInfo8">
-				</td>
-				<td class="playerInfo cellComponent" id="playerInfo7">
-				</td>
-				<td></td>
-				<td class="infoOnly"></td>
-			</tr>
-		</table>
+<body>
+	<div class="container-fluid">
+		<div class="row section" id="topheader">
+			<div class="col-xs-12 col-sm-12 my-auto" id="name">Raymond Heldt</div>
+			<div class="col-xs-12 col-sm-12 subtitle" id="topSubtitle"><i>Software Developer who's too cheap to pay for a domain name and will gladly keep using his old MSU student account, which for some reason is still active despite having graduated in 2013.</i></div>
+			<div class="col-xs-12 col-sm-12 my-auto" id="resume">View Resume</div>
+		</div>
+		<hr id="divider1">
+		<div class="row section" id="gamesSection">
+			<div class="col-xs-12 col-sm-12 title" id="gamesTitle">Free HTML5 Games</div>
+			<div class="col-xs-12 col-sm-12 subtitle" id="gamesSubtitle"><i>Occasionally I make webpage games as birthday or Christmas gifts for family/friends. These are some of my favorites, with some modifications since the originals contained photos of people that you probably don't know.</i></div>
+		</div>
+		<div id="games" class="row section">
+			<div class="col-xs-12 col-md-6 optimizedSection">
+				<span id="optimizeddesktop">Optimized for desktop</span>
+				<div class="row">
+					<div class="col-xs-12 col-md-6 my-auto gamecontainer">
+						<div class="game" id="memory">
+							<span class="vertical-aligner"></span>
+							<span class="vertical-aligned-text">MEMORY</span>
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-6 my-auto gamecontainer">
+						<div class="game" id="one">
+							<span class="vertical-aligner"></span>
+							<span class="vertical-aligned-text">ONE CARD</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 optimizedSection">
+				<span id="optimizedmobile">Optimized for mobile</span>
+				<div class="row">
+					<div class="col-xs-12 col-md-6 my-auto gamecontainer">
+						<div class="game" id="fiveDice">
+							<span class="vertical-aligner"></span>
+							<span class="vertical-aligned-text">FIVE DICE</span>
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-6 my-auto gamecontainer">
+						<div class="game" id="trivia">
+							<span class="vertical-aligner"></span>
+							<span class="vertical-aligned-text">TEAM TRIVIA</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12" id="sourceCode">
+				<a>Download source code of all games</a>
+			</div>
+		</div>
+		<hr id="divider2">
+		<div class="row section" id="contactSection">
+			<div class="col-xs-12 col-sm-12 title" id="contactTitle">Contact</div>
+			<div class="col-xs-12 col-md-12 my-auto contactinfo">heldt.raymond3@gmail.com</div>
+			<div class="col-xs-12 col-md-12 my-auto contactinfo">(517) 528-2550</div>
+		</div>
 	</div>
 </body>
-<script>
-	var DECK = [];
-	var PLAYERS = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
-	var SCORES = [0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-	var NAMES = [
-		"Samantha",
-		"Diane",
-		"Tracy",
-		"David",
-		"Jeff",
-		"Lauren",
-		"Michael",
-		"Elizabeth",
-		"Nicholas",
-		"Justin",
-		"Michelle",
-		"Nicole",
-		"Angela",
-		"Ray",
-	];
-	var livePlayer = Math.floor(Math.random() * PLAYERS.length);
-	var currentPlayer = Math.floor(Math.random() * PLAYERS.length);
-	var SUITS = ["♥", "♠", "♦", "♣"];
-	var VALS = [
-		"A",
-		"2",
-		"3",
-		"4",
-		"5",
-		"6",
-		"7",
-		"8",
-		"9",
-		"10",
-		"J",
-		"Q",
-		"K",
-	];
-	var lastResize = new Date();
-	$(window).resize(SafeFitToWindow);
-	Setup();
-	var showScores = (Math.random() > 0.5);	
-	var showNames = (Math.random() > 0.5);	
-	if (showScores || showNames) {
-		$(".playerName").css("opacity", "0");
-	}
-	else {
-		$(".playerName").hide();
-	}
-
-	$(".playerInfo, .playerName").css("opacity", "0");
-	$(".playerCards .card").css("opacity", "0");
-	$("#centerCell>span").hide();
-	FitToWindow(true);
-	ShuffleUpAndDeal();
-	var dealer = (currentPlayer + 13) % 14;
-	setTimeout(function() {
-		$(".playerInfo").css("opacity", "1");
-	setTimeout(function() {
-		$("#playerInfo" + dealer + " img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
-		$("#playerInfo" + dealer + " .dealerLabel").show();
-	setTimeout(function() {
-		$(".playerInfoWrapper img").css("border", "").css("margin", "");
-	setTimeout(function() {
-		$("#playerInfo" + dealer + " img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
-	setTimeout(function() {
-		$(".playerInfoWrapper img").css("border", "").css("margin", "");
-	setTimeout(function() {
-		$("#playerInfo" + dealer + " img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
-	setTimeout(function() {
-		$(".playerInfoWrapper img").css("border", "").css("margin", "");
-	setTimeout(function() {
-		$("#playerInfo" + dealer + " img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
-	setTimeout(function() {
-		$(".playerInfoWrapper img, .dealerLabel").animate({
-	    	left:'0px',
-	    	top:'0px',
-		}, 1500, function() {
-			ShowHideNames();
-
-			var delayTime = 0;
-			for (var i = 0; i < 6; i++) {
-				for (var p = 0; p < 14; p++) {
-					delayTime += (i === 0 ? (p < 5 ? 250 : 130) : 50);
-					DealCard($("#playerCards" + ((currentPlayer + p) % 14) + " .card").eq(i), delayTime);
-				}
-			}
-
-			setTimeout(function() {
-				$(".playerName").css("opacity", "1");
-				$(".playerInfoWrapper img").css("border", "").css("margin", "");
-				$("#playerInfo" + dealer + " .dealerLabel").hide();
-				$("#centerCell>span").show();
-				$("#playerInfo" + PLAYERS[currentPlayer]).addClass("current");
-				$("#playerCards" + PLAYERS[currentPlayer]).addClass("current");
-			}, delayTime + 1000);
-  		});
-	}, 700);
-	}, 100);
-	}, 100);
-	}, 100);
-	}, 100);
-	}, 100);
-	}, 100);
-	}, 700);
-	}, 700);
-
-	function DealCard(card, delayTime) {
-		setTimeout(function() {
-			card.css("opacity", "1");
-		}, delayTime);
-	}
-
-	function Setup() {
-		$(".playerInfo").each(function() {
-			var span = $("<span></span>");
-			span.addClass("playerInfoWrapper");
-			var name = $("<p><span></span></p>");
-			name.addClass("playerName");
-			var img = $("<img>");
-			img.attr("src", "User.png");
-			var dealer = $("<p><span>DEALER</span></p>");
-			dealer.addClass("dealerLabel");
-			var id = parseInt($(this).attr("id").substring(10));
-			if (id >= 40 && id <= 3) {
-				span.append(name);
-				span.append(img);
-				span.append(dealer);
-			}
-			else {
-				span.append(img);
-				span.append(dealer);
-				span.append(name);
-			}
-			$(this).append(span);
-		});
-		$(".playerCards").each(function() {
-			var table = $("<table></table>");
-			for (var r = 0; r < 2; r++) {
-				var tr = $("<tr></tr>");
-				for (var c = 0; c < 3; c++) {
-					var td = $("<td></td>");
-					td.addClass("card");
-					tr.append(td);
-				}
-				table.append(tr);
-			}
-			$(this).append(table);
-		});
-		var span = $("<span style='display:inline-block;text-align:center;'><span id='roundNum'></span></span>");
-		var innerSpan = $("<span></span>");
-		var table = $("<table align='center'></table>");
-		var tr = $("<tr></tr>");
-		table.append(tr);
-		for (var c = 0; c < 3; c++) {
-			var td = $("<td></td>");
-			if (c !== 1) {
-				td.addClass("card");
-			}
-			tr.append(td);
-		}
-		innerSpan.append(table);
-		span.append(innerSpan);
-		span.append("<span id='toggleNames'><label class='toggleLabel' for='toggleNamesBox'>Show names</label><input type='checkbox' id='toggleNamesBox' onclick='ToggleNames()' /></span>");
-		span.append("<span id='toggleScores'><input type='checkbox' id='toggleScoresBox' onclick='ToggleScores()' /><label class='toggleLabel' for='toggleScoresBox'>Show scores</label></span>");
-		$("#centerCell").append(span);
-
-		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").css("left", "125px").css("top", "11px");
-		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").css("left", "-123px").css("top", "11px");
-		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").css("top", "100px");
-		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img, .dealerLabel").css("top", "-80px");
-
-		for (var i = 0; i < 14; i++) {
-			var randInt = i + Math.floor(Math.random() * (14-i));
-			var temp = NAMES[i];
-			NAMES[i] = NAMES[randInt];
-			NAMES[randInt] = temp;
-			SCORES[i] = Math.floor(Math.random() * 154) - 10
-		}
-	}
-
-	function ToggleNames() {
-		showNames = !showNames;
-		ShowHideNames();
-	}
-
-	function ToggleScores() {
-		showScores = !showScores;
-		ShowHideNames();
-	}
-
-	function ShowHideNames() {
-		$(".playerName").toggle(showScores || showNames);
-
-		for (var i = 0; i < PLAYERS.length; i++) {
-			var info = $("#playerInfo" + i);
-			info.find(".playerName span").html((showNames ? NAMES[i] : "") + (showScores ? " <strong>" + SCORES[i] + "</strong>" : ""));
-		}
-	}
-
-	function ShuffleUpAndDeal() {
-		$("#toggleScoresBox").prop("checked", showScores);
-		$("#toggleNamesBox").prop("checked", showNames);
-		$("#roundNum").html("Round 5 of 9");
-		for (var i = 0; i < 108; i++) {
-			DECK[i] = i;
-		}
-
-		for (var i = 0; i < 108; i++) {
-			var randInt = i + Math.floor(Math.random() * (108-i));
-			var temp = DECK[i];
-			DECK[i] = DECK[randInt];
-			DECK[randInt] = temp;
-		}
-
-		for (var i = 0; i < PLAYERS.length; i++) {
-			var info = $("#playerInfo" + i);
-			info.removeClass("live").removeClass("current");
-			var cards = $("#playerCards" + i);
-
-			for (var c = 6 * i; c < 6 * i + 6; c++) {
-				var td = cards.find("td").eq(c % 6);
-				RenderCard(td, DECK[c], (Math.random() * 2) < 0.3333);
-			}
-		}
-
-		var totalDealt = PLAYERS.length * 6;
-		for (var i = 0; i < 2; i++) {
-			RenderCard($("#centerCell .card").eq(i), DECK[totalDealt + i], (i > 0));
-		}
-	}
-
-	function RenderCard(td, value, isFaceDown) {
-		td.removeClass("red").removeClass("black").removeClass("facedown").removeClass("faceup").removeClass("joker");
-		if (isFaceDown) {
-			td.addClass("facedown").addClass(value < 54 ? "deck1" : "deck2");
-			td.html("");
-		}
-		else {
-			td.addClass("faceup");
-			var cardVal = value % 54;
-			if (cardVal > 51) {
-				td.addClass("joker");
-				td.html("<span class='jokerText'>J<span style='color:red'>O</span>K<span style='color:red'>E</span>R</span><br>♠<span style='color:red'>♥</span><br><span style='color:red'>♦</span>♣");
-			}
-			else {
-				var suit = Math.floor(cardVal / 13);
-				td.html(VALS[cardVal % 13] + '<div class="suit">' + SUITS[suit] + '</div>')
-				  .addClass(suit % 2 == 1 ? "black" : "red");
-			}
-		}
-	}
-
-	function SafeFitToWindow() {
-		FitToWindow(false);
-	}
-
-	function FitToWindow(pOnPageLoad) {
-		lastResize = new Date();
-		var currTime = lastResize; 
-		setTimeout(function() {
-			if (currTime !== lastResize) {
-				return;
-			}
-			ResizeText();
-			var idealMiddle = 0.575;
-			var tableHeight = $("#playTable").height();
-			var imageHeight = $("#bgPhoto").height();
-			var windowHeight = window.innerHeight;
-			var percentHeight = (tableHeight / imageHeight);
-			var marginTopPercent = idealMiddle - (percentHeight / 2);
-			var marginTopPixels = marginTopPercent * imageHeight;
-
-			if (tableHeight > imageHeight) {
-				marginTopPixels = -($("#playTableContainer").position().top);
-			}
-			else if (marginTopPixels + tableHeight > imageHeight) {
-				marginTopPixels = imageHeight - tableHeight - ($("#playTableContainer").position().top) - 2;
-			}
-
-			/*console.log(idealMiddle);
-			console.log(tableHeight);
-			console.log(imageHeight);
-			console.log(windowHeight);
-			console.log(percentHeight);
-			console.log(marginTopPercent);
-			console.log(marginTopPixels);*/
-			$("#playTableContainer").css("margin-top", marginTopPixels + "px");
-
-			var scrollTo = marginTopPixels + tableHeight - windowHeight + 10;
-
-			if (windowHeight > tableHeight) {
-				scrollTo += ((windowHeight - tableHeight) / 2);
-			} else if (tableHeight > imageHeight) {
-				scrollTo = (tableHeight - windowHeight) / 2;
-			}
-
-            if (pOnPageLoad == true) {
-	            $('body').animate({
-	                scrollTop: scrollTo
-		        }, 1500);
-            }
-            else {
-                window.scroll(0, scrollTo);
-	            /*var ua = window.navigator.userAgent.toLowerCase();
-	            if (ua.indexOf("trident") >= 0 || ua.indexOf("edge") >= 0) {
-	                // IE and Edge don't support smooth animated scrolling - just set the scroll
-	                window.scroll(0, scrollTo);
-	            }
-	            else {
-	                window.scroll({ top: scrollTo, behavior: 'smooth' });
-	            }*/
-            }
-
-		}, 100);
-	}
-
-	function RandomizeCurrent() {
-		currentPlayer += 1;
-		currentPlayer %= 14;
-		$(".current").removeClass("current");
-		$("#playerInfo" + currentPlayer).addClass("current");
-		$("#playerCards" + currentPlayer).addClass("current");
-	}
-
-	function ResizeText() {
-		var idealWidth = 1270;
-		var actualWidth = window.innerWidth;
-		var scale = (actualWidth / idealWidth);
-
-		var photoHeight = scale * 80;
-		if (photoHeight > 100) {
-			photoHeight = 100;
-		}
-		if (photoHeight < 50) {
-			photoHeight = 50;
-		}
-
-		$(".playerInfo img").css("max-height", photoHeight + "px");
-
-		// Compensate for line thickness
-		if (scale > 1) {
-			scale *= 1.02;
-		}
-		else {
-			scale /= 1.02;
-		}
-
-		// Card 22 pt
-		// Suit 35 pt
-		// Joker 8 pt
-		// Name 12 pt
-
-		$(".card").css("font-size", (scale * 24) + "pt");
-		$(".suit").css("font-size", (scale * 33) + "pt");
-		$(".jokerText").css("font-size", (scale * 8) + "pt");
-		$(".playerName, #centerCell").css("font-size", (scale * 12) + "pt");
-	}
-</script>
-
 </html>
