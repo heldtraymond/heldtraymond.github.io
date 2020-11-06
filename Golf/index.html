@@ -323,7 +323,7 @@
 		"K",
 	];
 	var lastResize = new Date();
-	$(window).resize(FitToWindow);
+	$(window).resize(SafeFitToWindow);
 	Setup();
 	var showScores = (Math.random() > 0.5);	
 	var showNames = (Math.random() > 0.5);	
@@ -537,7 +537,11 @@
 		}
 	}
 
-	function FitToWindow(pOnPageLoad = false) {
+	function SafeFitToWindow() {
+		FitToWindow(false);
+	}
+
+	function FitToWindow(pOnPageLoad) {
 		lastResize = new Date();
 		var currTime = lastResize; 
 		setTimeout(function() {
@@ -640,4 +644,4 @@
 	}
 </script>
 
-</html>0
+</html>
