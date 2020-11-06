@@ -6,7 +6,7 @@
 	<style>
 		body {
 			text-align:center;
-			font-family:verdana;
+			font-family:Tahoma, Verdana, sans-serif;
 		}
 		#playTableContainer {
 			width:100%;
@@ -17,6 +17,21 @@
 		#playTable {
 			width:100%;
 			border-collapse:collapse;
+		}
+		.dealerLabel {
+			display:none;
+			font-weight:bold;
+			position:relative;
+			margin-bottom:-1.5em;
+			margin-top:0px;
+			height:1.5em;
+			z-index:104;
+		}
+		.dealerLabel span {
+			color:white;
+			border:5px solid blue;
+			border-radius:5px;
+			background-color:blue;
 		}
 		/*#playTable tr, #playTable td {
 			border:none;
@@ -60,7 +75,7 @@
 			font-size:22pt;
 			letter-spacing:0;
 			padding-right:0px;
-			line-height:75%;
+			line-height:65%;
 		}
 		.suit {
 			width:100%;
@@ -84,7 +99,9 @@
 		}
 		.playerInfo {
 			text-align:center;
-			font-family:arial;
+		}
+		.playerInfoWrapper {
+			max-width:80px;
 		}
 		.cellComponent.current {
 			background-color:#33aa33;
@@ -97,26 +114,29 @@
 			background-color:white;
 			border-radius:8px;
 			border:3px solid black;
-			max-height:80px;
+			max-height:75px;
 			position:relative;
 		}
-		.playerName, .playerScore {
-			color:black;
-			display:none;
+		.playerName {
+			margin-top:0px;
+			margin-bottom:0px;
+    		font-size:12pt;
+			position:relative;
+			z-index:100;
 		}
-		/*.playerInfoWrapper {
-			background-color:white;
-			border-radius:10px;
-			border:1px solid black;
+		.playerName span {
+			color:black;
+			border-radius:4px;
+			background-color:#ccccff;
+			border:2px solid #000088;
+			padding-left:3px;
+			padding-right:3px;
 			display:inline-block;
-    	}*/
-    	.playerName {
-    		font-size:16pt;
-    	}
-    	.playerScore {
-    		font-size:20pt;
-			font-weight:bold;
-    	}
+			margin-top:-1.3em;
+			margin-bottom:-1.3em;
+			min-height:1.3em;
+			min-width:1.3em;
+		}
     	.playerCards table {
     		width:100%;
     		table-layout:fixed;
@@ -157,16 +177,42 @@
 			display:none;
     	}
     	#middleRow, #middleRow > td {
-    		padding-top:15px;
-    		padding-bottom:15px;
+    		padding-top:5px;
+    		padding-bottom:3px;
     	}
     	#centerCell {
     		text-align:center;
     	}
-	</style>
+    	#toggleNamesBox {
+    		margin-right:6px;
+    	}
+    	#toggleScoresBox {
+    		margin-left:6px;
+    	}
+    	#toggleScoresBox, #toggleNamesBox {
+    		height:20px;
+    		width:20px;
+    	}
+    	#toggleScoresBox, #toggleNamesBox, .toggleLabel {
+    		vertical-align:middle;
+    		cursor:pointer;
+    	}
+    	#toggleScores:hover, #toggleNames:hover {
+    		cursor:pointer;
+    		background-color:#bbbbff;
+    		border:2px solid #000088;
+    		border-radius:6px;
+    		padding-top:2px;
+    		padding-right:4px;
+    		padding-left:4px;
+    	}
+    	#toggleScores, #toggleNames {
+    		padding:6px;
+    	}
+		</style>
 	<script src="jquery.js"></script>
 </head>
-<body style="overflow-y:scroll;text-align:center" onclick="RandomizeCurrent()">
+<body style="overflow-y:scroll;text-align:center;font-size:85%" onclick="RandomizeCurrent()">
 	<img id="bgPhoto" src="LivingRoomMedium_new.png" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
 	<div id="playTableContainer">
 		<table id="playTable">
@@ -251,8 +297,6 @@
 <script>
 	var DECK = [];
 	var PLAYERS = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
-	var livePlayer = Math.floor(Math.random() * PLAYERS.length);
-	var currentPlayer = Math.floor(Math.random() * PLAYERS.length);
 	var SCORES = [0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 	var NAMES = [
 		"Samantha",
@@ -270,6 +314,8 @@
 		"Angela",
 		"Ray",
 	];
+	var livePlayer = Math.floor(Math.random() * PLAYERS.length);
+	var currentPlayer = Math.floor(Math.random() * PLAYERS.length);
 	var SUITS = ["♥", "♠", "♦", "♣"];
 	var VALS = [
 		"A",
@@ -288,47 +334,64 @@
 	];
 	$(window).resize(FitToWindow);
 	Setup();
-	$(".playerInfo").css("opacity", "0");
+	var showScores = (Math.random() > 0.5);	
+	var showNames = (Math.random() > 0.5);	
+	if (showScores || showNames) {
+		$(".playerName").css("opacity", "0");
+	}
+	else {
+		$(".playerName").hide();
+	}
+
+	$(".playerInfo, .playerName").css("opacity", "0");
 	$(".playerCards .card").css("opacity", "0");
-	$("#centerCell .card").hide();
+	$("#centerCell>span").hide();
 	FitToWindow();
 	ShuffleUpAndDeal();
+	var dealer = (currentPlayer + 13) % 14;
 	setTimeout(function() {
 		$(".playerInfo").css("opacity", "1");
 	setTimeout(function() {
-		$(".playerInfoWrapper img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
+		$("#playerInfo" + dealer + " img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
+		$("#playerInfo" + dealer + " .dealerLabel").show();
 	setTimeout(function() {
 		$(".playerInfoWrapper img").css("border", "").css("margin", "");
 	setTimeout(function() {
-		$(".playerInfoWrapper img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
+		$("#playerInfo" + dealer + " img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
 	setTimeout(function() {
 		$(".playerInfoWrapper img").css("border", "").css("margin", "");
 	setTimeout(function() {
-		$(".playerInfoWrapper img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
+		$("#playerInfo" + dealer + " img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
 	setTimeout(function() {
 		$(".playerInfoWrapper img").css("border", "").css("margin", "");
 	setTimeout(function() {
-		$(".playerInfoWrapper img").animate({
+		$("#playerInfo" + dealer + " img").css("border", "10px solid blue").css("margin", "-7px -7px -7px -7px");
+	setTimeout(function() {
+		$(".playerInfoWrapper img, .dealerLabel").animate({
 	    	left:'0px',
 	    	top:'0px',
 		}, 1500, function() {
+			ShowHideNames();
+
 			var delayTime = 0;
 			for (var i = 0; i < 6; i++) {
 				for (var p = 0; p < 14; p++) {
-					delayTime += 50;
-					DealCard($("#playerCards" + p + " .card").eq(i), delayTime);
+					delayTime += (i === 0 ? (p < 5 ? 250 : 130) : 50);
+					DealCard($("#playerCards" + ((currentPlayer + p) % 14) + " .card").eq(i), delayTime);
 				}
 			}
 
 			setTimeout(function() {
-				$("#centerCell .card").show();
-				$("#playerInfo" + PLAYERS[livePlayer]).addClass("live");
-				$("#playerCards" + PLAYERS[livePlayer]).addClass("live");
+				$(".playerName").css("opacity", "1");
+				$(".playerInfoWrapper img").css("border", "").css("margin", "");
+				$("#playerInfo" + dealer + " .dealerLabel").hide();
+				$("#centerCell>span").show();
 				$("#playerInfo" + PLAYERS[currentPlayer]).addClass("current");
 				$("#playerCards" + PLAYERS[currentPlayer]).addClass("current");
 			}, delayTime + 1000);
   		});
 	}, 700);
+	}, 100);
 	}, 100);
 	}, 100);
 	}, 100);
@@ -347,17 +410,23 @@
 		$(".playerInfo").each(function() {
 			var span = $("<span></span>");
 			span.addClass("playerInfoWrapper");
-			var name = $("<span></span>");
+			var name = $("<p><span></span></p>");
 			name.addClass("playerName");
-			var score = $("<span></span>");
-			score.addClass("playerScore");
 			var img = $("<img>");
 			img.attr("src", "User.png");
-			span.append(name);
-			span.append("<br>");
-			span.append(img);
-			span.append("<br>");
-			span.append(score);
+			var dealer = $("<p><span>DEALER</span></p>");
+			dealer.addClass("dealerLabel");
+			var id = parseInt($(this).attr("id").substring(10));
+			if (id >= 40 && id <= 3) {
+				span.append(name);
+				span.append(img);
+				span.append(dealer);
+			}
+			else {
+				span.append(img);
+				span.append(dealer);
+				span.append(name);
+			}
 			$(this).append(span);
 		});
 		$(".playerCards").each(function() {
@@ -373,25 +442,61 @@
 			}
 			$(this).append(table);
 		});
-		var span = $("<span style='display:inline-block'></span>");
-		var table = $("<table></table>");
+		var span = $("<span style='display:inline-block;text-align:center;'><span id='roundNum'></span></span>");
+		var innerSpan = $("<span></span>");
+		var table = $("<table align='center'></table>");
 		var tr = $("<tr></tr>");
 		table.append(tr);
-		for (var c = 0; c < 2; c++) {
+		for (var c = 0; c < 3; c++) {
 			var td = $("<td></td>");
-			td.addClass("card");
+			if (c !== 1) {
+				td.addClass("card");
+			}
 			tr.append(td);
 		}
-		span.append(table);
+		innerSpan.append(table);
+		span.append(innerSpan);
+		span.append("<span id='toggleNames'><label class='toggleLabel' for='toggleNamesBox'>Show names</label><input type='checkbox' id='toggleNamesBox' onclick='ToggleNames()' /></span>");
+		span.append("<span id='toggleScores'><input type='checkbox' id='toggleScoresBox' onclick='ToggleScores()' /><label class='toggleLabel' for='toggleScoresBox'>Show scores</label></span>");
 		$("#centerCell").append(span);
 
-		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img").css("left", "125px");
-		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img").css("left", "-123px");
-		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img").css("top", "118px");
-		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img").css("top", "-118px");
+		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").css("left", "125px").css("top", "11px");
+		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").css("left", "-123px").css("top", "11px");
+		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").css("top", "100px");
+		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img, .dealerLabel").css("top", "-80px");
+
+		for (var i = 0; i < 14; i++) {
+			var randInt = i + Math.floor(Math.random() * (14-i));
+			var temp = NAMES[i];
+			NAMES[i] = NAMES[randInt];
+			NAMES[randInt] = temp;
+			SCORES[i] = Math.floor(Math.random() * 154) - 10
+		}
+	}
+
+	function ToggleNames() {
+		showNames = !showNames;
+		ShowHideNames();
+	}
+
+	function ToggleScores() {
+		showScores = !showScores;
+		ShowHideNames();
+	}
+
+	function ShowHideNames() {
+		$(".playerName").toggle(showScores || showNames);
+
+		for (var i = 0; i < PLAYERS.length; i++) {
+			var info = $("#playerInfo" + i);
+			info.find(".playerName span").html((showNames ? NAMES[i] : "") + (showScores ? " <strong>" + SCORES[i] + "</strong>" : ""));
+		}
 	}
 
 	function ShuffleUpAndDeal() {
+		$("#toggleScoresBox").prop("checked", showScores);
+		$("#toggleNamesBox").prop("checked", showNames);
+		$("#roundNum").html("Round 5 of 9");
 		for (var i = 0; i < 108; i++) {
 			DECK[i] = i;
 		}
@@ -405,15 +510,12 @@
 
 		for (var i = 0; i < PLAYERS.length; i++) {
 			var info = $("#playerInfo" + i);
-			var cards = $("#playerCards" + i);
-			console.log(cards);
-			info.find(".playerName").html(NAMES[i]);
-			info.find(".playerScore").html(SCORES[i]);
 			info.removeClass("live").removeClass("current");
+			var cards = $("#playerCards" + i);
 
 			for (var c = 6 * i; c < 6 * i + 6; c++) {
 				var td = cards.find("td").eq(c % 6);
-				RenderCard(td, DECK[c], (Math.random() * 2) > 0.66667);
+				RenderCard(td, DECK[c], (Math.random() * 2) < 0.3333);
 			}
 		}
 
@@ -449,16 +551,16 @@
 			var idealMiddle = 0.565;
 			var tableHeight = $("#playTable").height();
 			var imageHeight = $("#bgPhoto").height();
-			var windowHeight = $(window).height();
+			var windowHeight = window.innerHeight;
 			var percentHeight = (tableHeight / imageHeight);
 			var marginTopPercent = idealMiddle - (percentHeight / 2);
-			var marginTopPixels = marginTopPercent * imageHeight - $("#playTableContainer").position().top;
+			var marginTopPixels = marginTopPercent * imageHeight;
 
 			if (tableHeight > imageHeight) {
 				marginTopPixels = -($("#playTableContainer").position().top);
 			}
 			else if (marginTopPixels + tableHeight > imageHeight) {
-				marginTopPixels = imageHeight - tableHeight - $("#playTableContainer").position().top;
+				marginTopPixels = imageHeight - tableHeight - ($("#playTableContainer").position().top) - 2;
 			}
 
 			console.log(idealMiddle);
@@ -470,13 +572,21 @@
 			console.log(marginTopPixels);
 			$("#playTableContainer").css("margin-top", marginTopPixels + "px");
 
+			var scrollTo = marginTopPixels + tableHeight - windowHeight + 10;
+
+			if (windowHeight > tableHeight) {
+				scrollTo += ((windowHeight - tableHeight) / 2);
+			} else if (tableHeight > imageHeight) {
+				scrollTo = (tableHeight - windowHeight) / 2;
+			}
+
             var ua = window.navigator.userAgent.toLowerCase();
             if (ua.indexOf("trident") >= 0 || ua.indexOf("edge") >= 0) {
                 // IE and Edge don't support smooth animated scrolling - just set the scroll
-                window.scroll(0, marginTopPixels - 5);
+                window.scroll(0, scrollTo);
             }
             else {
-                window.scroll({ top: marginTopPixels - 5, behavior: 'smooth' });
+                window.scroll({ top: scrollTo, behavior: 'smooth' });
             }
 		}, 100);
 	}
