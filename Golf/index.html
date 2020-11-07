@@ -71,9 +71,9 @@
 			text-align:center;
 			line-height:87%;
 			letter-spacing:-3;
-			padding-right:4px;
+			padding-right:3px;
 			padding-top:0px;
-			padding-bottom:4px;
+			padding-bottom:5px;
 			height:2.2em;
 		}
 		#playTable tr td {
@@ -539,7 +539,7 @@
 			var cardVal = value % 54;
 			if (cardVal > 51) {
 				td.addClass("joker");
-				td.html("<span class='jokerText'>J<span style='color:red' class='jokerLetter'>O</span>K<span class='jokerLetter' style='color:red'>E</span>R</span><br>♠<span style='color:red'>♥</span><br><span style='color:red'>♦</span>♣");
+				td.html("<span class='jokerText'>J<span style='color:red'>O</span>K<span style='color:red'>E</span>R</span><br><span style='color:black'>♠</span><span style='color:red'>♥</span><br><span style='color:red'>♦</span><span style='color:black'>♣</span>");
 			}
 			else {
 				var suit = Math.floor(cardVal / 13);
@@ -651,10 +651,10 @@
 		// Joker 8 pt
 		// Name 12 pt
 
-		$(".card").css("font-size", (scale * 24) + "pt");
+		$(".card").css("font-size", (scale * 24) + "pt").css("padding-bottom", (scale * 5) + "px");
 		$(".jokerText").css("font-size", (scale * 8) + "pt");
 		$(".suit").css("font-size", (scale * suitScale * 24) + "pt");
-		$(".jokerText span").not(".jokerLetter").css("font-size", (scale * 18) + "pt");
+		$(".joker>span").not(".jokerText").css("font-size", (scale * suitScale * 16) + "pt");
 		$(".playerName, #centerCell").css("font-size", (scale * 12 < 10 ? 10 : scale * 12) + "pt");
 	}
 </script>
