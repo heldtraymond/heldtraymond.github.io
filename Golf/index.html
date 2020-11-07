@@ -9,6 +9,15 @@
 			text-align:center;
 			font-family:'Tahoma', Verdana, sans-serif;
 		}
+		.widthTest {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+			font-size:50pt;
+			opacity:0;
+			position:absolute;
+			left:0px;
+			top:0px;
+			z-index:-2;
+		}
 		#playTableContainer {
 			width:100%;
 			display:inline-block;
@@ -46,7 +55,7 @@
 			padding-right:10px;
 		}
 		#centerCell .card {
-			width:1.6em;
+			width:1.4em;
 		}
 		#centerCell {
 			font-size:12pt;
@@ -60,11 +69,12 @@
 			font-weight:bolder;
 			width:33%;
 			text-align:center;
-			line-height:85%;
+			line-height:87%;
 			letter-spacing:-3;
 			padding-right:4px;
-			padding-bottom:8px;
-			height:2.1em;
+			padding-top:0px;
+			padding-bottom:4px;
+			height:2.2em;
 		}
 		#playTable tr td {
 			/*padding-bottom:8px;*/
@@ -203,6 +213,8 @@
 	<script src="jquery.js"></script>
 </head>
 <body style="overflow-y:scroll;text-align:center;" onclick="RandomizeCurrent()">
+	<span class="widthTest" id="widthTestValue">A</span>
+	<span class="widthTest" id="widthTestSuit">♣</span>
 	<img id="bgPhoto" src="LivingRoom4.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
 	<div id="playTableContainer">
 		<table id="playTable">
@@ -527,7 +539,7 @@
 			var cardVal = value % 54;
 			if (cardVal > 51) {
 				td.addClass("joker");
-				td.html("<span class='jokerText'>J<span style='color:red'>O</span>K<span style='color:red'>E</span>R</span><br>♠<span style='color:red'>♥</span><br><span style='color:red'>♦</span>♣");
+				td.html("<span class='jokerText'>J<span style='color:red' class='jokerLetter'>O</span>K<span class='jokerLetter' style='color:red'>E</span>R</span><br>♠<span style='color:red'>♥</span><br><span style='color:red'>♦</span>♣");
 			}
 			else {
 				var suit = Math.floor(cardVal / 13);
@@ -632,15 +644,18 @@
 			scale /= 1.02;
 		}
 
-		// Card 22 pt
-		// Suit 35 pt
+		var suitScale = $("#widthTestValue").width() / $("#widthTestSuit").width() * 1.25;
+
+		// Card 24 pt
+		// Suit (24 * scale) pt since different browsers render them different sizes
 		// Joker 8 pt
 		// Name 12 pt
 
 		$(".card").css("font-size", (scale * 24) + "pt");
-		$(".suit").css("font-size", (scale * 33) + "pt");
 		$(".jokerText").css("font-size", (scale * 8) + "pt");
-		$(".playerName, #centerCell").css("font-size", (scale * 12) + "pt");
+		$(".suit").css("font-size", (scale * suitScale * 24) + "pt");
+		$(".jokerText span").not(".jokerLetter").css("font-size", (scale * 18) + "pt");
+		$(".playerName, #centerCell").css("font-size", (scale * 12 < 10 ? 10 : scale * 12) + "pt");
 	}
 </script>
 
