@@ -104,12 +104,12 @@
 			background-position:center;
 		}
 		.facedown.deck1 {
-			background-image:url('cardBack.png');
-			background-color:#224488;
+			background-image:url('cardBackBicycle.png');
+			background-color:#252760;
 		}
 		.facedown.deck2 {
-			background-image:url('cardBackRed.png');
-			background-color:#bb4444;
+			background-image:url('cardBackDominos2.png');
+			background-color:#000000;
 		}
 		.playerCell {
 			font-style:bold;
@@ -121,11 +121,11 @@
 			max-width:80px;
 		}
 		.cellComponent.current {
-			background-color:#33aa33;
+			background-color:#7777ff;/*#33aa33;*/
 		}
 		.playerInfo.live img {
-			border:10px solid red;
-			margin:-10px -10px -10px -10px;
+			border:6px solid red;
+			margin:-6px -6px -6px -6px;
 		}
 		.playerInfo img {
 			background-color:white;
@@ -160,12 +160,17 @@
     	}
     	.playerCards.live .faceup:hover {
     		cursor:pointer;
-    		background-color:#88ff88;
+    		background-color:#66dd66;
+    		/*border-color:green;*/
     	}
     	.playerCards.live .facedown:hover {
     		cursor:pointer;
-    		background-color:#ffff88;
-    		background-image:none;
+    		background-color:#66dd66;
+    		/*border-color:#ffff88;
+    		background-image:none;*/
+    	}
+    	.playerCards .card:hover {
+    		cursor:not-allowed;
     	}
     	.playerInfo.right {
     		text-align:right;
@@ -212,7 +217,7 @@
 		</style>
 	<script src="jquery.js"></script>
 </head>
-<body style="overflow-y:scroll;text-align:center;" onclick="RandomizeCurrent()">
+<body style="overflow-y:scroll;text-align:center;">
 	<span class="widthTest" id="widthTestValue">A</span>
 	<span class="widthTest" id="widthTestSuit">♣</span>
 	<img id="bgPhoto" src="LivingRoom4.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
@@ -335,6 +340,7 @@
 		"K",
 	];
 	var lastResize = new Date();
+	var windowSize = window.innerWidth;
 	$(window).resize(SafeFitToWindow);
 	Setup();
 	var showScores = (Math.random() > 0.5);	
@@ -351,6 +357,8 @@
 	$("#centerCell>span").hide();
 	FitToWindow(true);
 	ShuffleUpAndDeal();
+	$("#playerInfo" + PLAYERS[livePlayer]).addClass("live");
+	$("#playerCards" + PLAYERS[livePlayer]).addClass("live");
 	var dealer = (currentPlayer + 13) % 14;
 	setTimeout(function() {
 		$(".playerInfo").css("opacity", "1");
@@ -379,7 +387,7 @@
 			var delayTime = 0;
 			for (var i = 0; i < 6; i++) {
 				for (var p = 0; p < 14; p++) {
-					delayTime += (i === 0 ? (p < 5 ? 250 : 130) : 50);
+					delayTime += (i === 0 ? (p < 3 ? 400 : 60) : 30);
 					DealCard($("#playerCards" + ((currentPlayer + p) % 14) + " .card").eq(i), delayTime);
 				}
 			}
@@ -433,12 +441,16 @@
 			$(this).append(span);
 		});
 		$(".playerCards").each(function() {
+			var id = parseInt($(this).attr("id").substring(11));
 			var table = $("<table></table>");
 			for (var r = 0; r < 2; r++) {
 				var tr = $("<tr></tr>");
 				for (var c = 0; c < 3; c++) {
 					var td = $("<td></td>");
 					td.addClass("card");
+					//if (id === livePlayer) {
+						td.attr("onclick", "ClickedCard(this," + id + "," + (r * 3 + c) + ")");
+					//}
 					tr.append(td);
 				}
 				table.append(tr);
@@ -518,7 +530,7 @@
 
 			for (var c = 6 * i; c < 6 * i + 6; c++) {
 				var td = cards.find("td").eq(c % 6);
-				RenderCard(td, DECK[c], (Math.random() * 2) < 0.3333);
+				RenderCard(td, DECK[c], (Math.random() * 2) > 0);
 			}
 		}
 
@@ -554,12 +566,23 @@
 	}
 
 	function FitToWindow(pOnPageLoad) {
+		var currWindowSize = window.innerWidth;
+
+		console.log(currWindowSize);
+		console.log(windowSize);
+
+		if (currWindowSize === windowSize && pOnPageLoad !== true) {
+			return;
+		}
+
+
 		lastResize = new Date();
 		var currTime = lastResize; 
 		setTimeout(function() {
 			if (currTime !== lastResize) {
 				return;
 			}
+			windowSize = window.innerWidth;
 			ResizeText();
 			var idealMiddle = 0.575;
 			var tableHeight = $("#playTable").height();
@@ -613,7 +636,29 @@
 		}, 100);
 	}
 
-	function RandomizeCurrent() {
+	function ClickedCard(pCardEl, pPlayerNum, pCardNum) {
+		FlipOverCard(pPlayerNum, pCardNum);
+	}
+
+	function FlipOverCard(pPlayerNum, pCardNum) {
+		var cards = $("#playerCards" + pPlayerNum);
+		var card = cards.find(".card").eq(pCardNum);
+		var deckIndex = 6 * pPlayerNum + pCardNum;
+		var value = -DECK[deckIndex];
+		DECK[deckIndex] = value;
+		card.fadeOut(200, function() {
+			card.css("background-color", "white");
+			RenderCard(card, Math.abs(value), (value > 0));
+		});
+		card.fadeIn(200, function() {
+			IncrementCurrent();
+		});
+		setTimeout(function() {
+			card.css("background-color", "");
+		}, 2000);
+	}
+
+	function IncrementCurrent() {
 		currentPlayer += 1;
 		currentPlayer %= 14;
 		$(".current").removeClass("current");
@@ -654,7 +699,7 @@
 		$(".card").css("font-size", (scale * 24) + "pt").css("padding-bottom", (scale * 5) + "px");
 		$(".jokerText").css("font-size", (scale * 8) + "pt");
 		$(".suit").css("font-size", (scale * suitScale * 24) + "pt");
-		$(".joker>span").not(".jokerText").css("font-size", (scale * suitScale * 16) + "pt");
+		$(".joker>span").not(".jokerText").css("font-size", (scale * suitScale * 12) + "pt");
 		$(".playerName, #centerCell").css("font-size", (scale * 12 < 10 ? 10 : scale * 12) + "pt");
 	}
 </script>
