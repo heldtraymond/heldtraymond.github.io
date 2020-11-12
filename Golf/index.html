@@ -104,7 +104,7 @@
 			background-position:center;
 		}
 		.facedown.deck1 {
-			background-image:url('cardBackBicycle2.png');
+			background-image:url('cardBackBicycle.png');
 			background-color:#252760;
 		}
 		.facedown.deck2 {
@@ -220,7 +220,7 @@
 <body style="overflow-y:scroll;text-align:center;">
 	<span class="widthTest" id="widthTestValue">A</span>
 	<span class="widthTest" id="widthTestSuit">♣</span>
-	<img id="bgPhoto" src="LivingRoom4.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
+	<img id="bgPhoto" src="LivingRoom6.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
 	<div id="playTableContainer">
 		<table id="playTable">
 			<tr>
@@ -303,8 +303,6 @@
 </body>
 <script>
 	var DECK = [];
-	var PLAYERS = [0,1,2,3,4,5,6,7,8,9,10,11,12,13];
-	var SCORES = [0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 	var NAMES = [
 		"Samantha",
 		"Diane",
@@ -321,8 +319,45 @@
 		"Angela",
 		"Ray",
 	];
-	var livePlayer = Math.floor(Math.random() * PLAYERS.length);
-	var currentPlayer = Math.floor(Math.random() * PLAYERS.length);
+	var ROUND_NUM = 0;
+	var DRAW_INDEX = 0;
+	var PLAYERS = [];
+
+	for (var i = 0; i < NAMES.length; i++) {
+		if (Math.random() < 0.9) {
+			PLAYERS.push({
+				name: NAMES[i],
+				score: 0,
+				isLive: Math.random() < 0.15
+			});
+		}
+	}
+
+	var totalSeats = 14;
+	var SEATS = [];
+	for (var i = 0; i < totalSeats; i++) {
+		SEATS.push(null);
+	}
+
+	console.log("Setting seats");
+
+	for (var i = 0; i < PLAYERS.length; i++) {
+		var seat = -1;
+		while (seat < 0 || SEATS[seat] !== null) {
+			seat = Math.floor(Math.random() * 14);
+		}
+
+		SEATS[seat] = PLAYERS[i];
+	}
+
+	console.log("Done with seats");
+
+	var currentSeat = Math.floor(Math.random() * totalSeats);
+	IncrementCurrent(false);
+	var dealer = currentSeat;
+	IncrementCurrent(false);
+	console.log(currentSeat);
+
 	var SUITS = ["♥", "♠", "♦", "♣"];
 	var VALS = [
 		"A",
@@ -339,10 +374,32 @@
 		"Q",
 		"K",
 	];
+
 	var lastResize = new Date();
 	var windowSize = window.innerWidth;
 	$(window).resize(SafeFitToWindow);
 	Setup();
+
+	for (var i = 0; i < totalSeats; i++) {
+		if (SEATS[i] === null) {
+			$("#playerInfo" + i + " img").hide();
+			$("#playerInfo" + i + " .playerName").hide();
+			$("#playerCards" + i + " table").hide();
+		}
+		else {
+			if (SEATS[i].isLive) {
+				$("#playerInfo" + i).addClass("live");
+				$("#playerCards" + i).addClass("live");
+			}
+			//if (SEATS[i].name === "Angela" || SEATS[i].name === "Ray") {
+			//	$("#playerInfo" + i + " img").attr("src", "players/" + SEATS[i].name + ".jpg");
+			//}
+			//else {
+				$("#playerInfo" + i + " img").attr("src", "User.png");
+			//}
+		}
+	}
+
 	var showScores = (Math.random() > 0.5);	
 	var showNames = (Math.random() > 0.5);	
 	if (showScores || showNames) {
@@ -357,9 +414,7 @@
 	$("#centerCell>span").hide();
 	FitToWindow(true);
 	ShuffleUpAndDeal();
-	$("#playerInfo" + PLAYERS[livePlayer]).addClass("live");
-	$("#playerCards" + PLAYERS[livePlayer]).addClass("live");
-	var dealer = (currentPlayer + 13) % 14;
+	console.log("Here");
 	setTimeout(function() {
 		$(".playerInfo").css("opacity", "1");
 	setTimeout(function() {
@@ -381,14 +436,28 @@
 		$(".playerInfoWrapper img, .dealerLabel").animate({
 	    	left:'0px',
 	    	top:'0px',
-		}, 1500, function() {
+		}, 1500);
+		setTimeout(function() {
 			ShowHideNames();
 
 			var delayTime = 0;
-			for (var i = 0; i < 6; i++) {
-				for (var p = 0; p < 14; p++) {
-					delayTime += (i === 0 ? (p < 3 ? 400 : 60) : 30);
-					DealCard($("#playerCards" + ((currentPlayer + p) % 14) + " .card").eq(i), delayTime);
+			var totalCards = 0;
+			for (var q = 0; q < 6; q++) {
+				for (var p = 0; p < SEATS.length; p++) {
+					if (SEATS[p] === null) {
+						continue;
+					}
+
+					var delay = (totalCards <= 3 ? 400 : (totalCards < PLAYERS.length ? 60 : 30));
+					delayTime += delay;
+					totalCards++;
+					//console.log(currentSeat);
+					//console.log(currentSeat + "x" + q + " - " + totalCards);
+					DealCard($("#playerCards" + currentSeat + " .card").eq(q), delayTime);
+
+					if (totalCards < (6 * PLAYERS.length)) {
+						IncrementCurrent(false);
+					}
 				}
 			}
 
@@ -397,10 +466,9 @@
 				$(".playerInfoWrapper img").css("border", "").css("margin", "");
 				$("#playerInfo" + dealer + " .dealerLabel").hide();
 				$("#centerCell>span").show();
-				$("#playerInfo" + PLAYERS[currentPlayer]).addClass("current");
-				$("#playerCards" + PLAYERS[currentPlayer]).addClass("current");
+				AdvanceToNextPlayer();
 			}, delayTime + 1000);
-  		});
+  		}, 1500);
 	}, 700);
 	}, 100);
 	}, 100);
@@ -410,6 +478,141 @@
 	}, 100);
 	}, 700);
 	}, 700);
+
+	function AdvanceToNextPlayer() {
+		IncrementCurrent(true);
+		console.log(currentSeat + " " + DRAW_INDEX);
+
+		if (!SEATS[currentSeat].isLive) {
+			setTimeout(OpponentMove, 500 + Math.floor(Math.random() * 2000));
+		}
+	}
+
+	function OpponentMove() {
+		var cards = GetPlayerCards(currentSeat);
+		var facedownIndices = [];
+		for (var i = 0; i < 6; i++) {
+			if (cards[i] < 0) {
+				facedownIndices.push(i);
+			}
+		}
+
+		var randNum = Math.random();
+
+		if (facedownIndices.length > 0 && randNum < 0.5) {
+			// Flip over card
+			FlipOverCard(currentSeat, facedownIndices[Math.floor(Math.random() * facedownIndices.length)]);
+		}
+		else if (randNum < 0.75) {
+			OpponentDrawCard();
+		}
+		else {
+			OpponentTakeDiscard(Math.floor(Math.random() * 6));
+		}
+	}
+
+	function OpponentDrawCard() {
+		FlipDrawCard(false);
+	}
+
+	function OpponentUseDrawCard() {
+		var swapWith = Math.floor(Math.random() * 7);
+		PlayDrawCard(swapWith);
+	}
+
+	function PlayDrawCard(pCardIndex) {
+		DRAW_INDEX++;
+		if (pCardIndex > 5) {
+			var centerCards = $("#centerCell .card");
+			$.when(centerCards.fadeOut(200)).then(function() {
+				$("#centerCell .card").eq(0).css("opacity", 1);
+				RenderCard(centerCards.eq(0), DECK[DRAW_INDEX]);
+				RenderCard(centerCards.eq(1), -1);
+				$.when(centerCards.fadeIn(200)).then(function() {
+					AdvanceToNextPlayer();
+				});
+			});
+		}
+		else {
+			var oldPlayerCardIndex = GetPlayerIndex(currentSeat) * 6 + pCardIndex;
+			var oldPlayerCardVal = DECK[oldPlayerCardIndex];
+			DECK[oldPlayerCardIndex] = DECK[DRAW_INDEX];
+			DECK[DRAW_INDEX] = Math.abs(oldPlayerCardVal);
+
+			var swapCards = $("#playerCards" + currentSeat + " .card").eq(pCardIndex).add($("#centerCell .card").eq(1));
+			$.when(swapCards.fadeOut(200)).then(function() {
+				$("#playerCards" + currentSeat + " .card").eq(pCardIndex).css("background-color", "white");
+				RenderCard($("#playerCards" + currentSeat + " .card").eq(pCardIndex), DECK[oldPlayerCardIndex]);
+				RenderCard($("#centerCell .card").eq(1), -1);
+				$.when(swapCards.fadeIn(200)).then(function() {
+					AdvanceToNextPlayer();
+					setTimeout(function() {
+						$("#playerCards" + currentSeat + " .card").eq(pCardIndex).css("background-color", "");
+					}, 2000);
+				});
+			});
+			var discard = $("#centerCell .card").eq(0);
+			$.when(discard.fadeOut(200)).then(function() {
+				discard.css("opacity", 1);
+				RenderCard(discard, DECK[DRAW_INDEX]);
+				discard.fadeIn(200);
+			});
+		}
+	}
+
+	function OpponentTakeDiscard(pCardIndex) {
+		TakeDiscard(pCardIndex);
+	}
+
+	function TakeDiscard(pCardIndex) {
+		var oldPlayerCardIndex = GetPlayerIndex(currentSeat) * 6 + pCardIndex;
+		var oldPlayerCardVal = DECK[oldPlayerCardIndex];
+		DECK[oldPlayerCardIndex] = DECK[DRAW_INDEX];
+		DECK[DRAW_INDEX] = Math.abs(oldPlayerCardVal);
+
+		var swapCards = $("#playerCards" + currentSeat + " .card").eq(pCardIndex).add($("#centerCell .card").eq(0));
+		$.when(swapCards.fadeOut(200)).then(function() {
+			$("#playerCards" + currentSeat + " .card").eq(pCardIndex).css("background-color", "white");
+			RenderCard($("#playerCards" + currentSeat + " .card").eq(pCardIndex), DECK[oldPlayerCardIndex]);
+			RenderCard($("#centerCell .card").eq(0), DECK[DRAW_INDEX]);
+			$.when(swapCards.fadeIn(200)).then(function() {
+				AdvanceToNextPlayer();
+				setTimeout(function() {
+					swapCards.eq(0).css("background-color", "");
+				}, 2000);
+			});
+		});
+	}
+
+	function FlipDrawCard(pIsLivePlayer) {
+		var drawCard = $("#centerCell .card").eq(1);
+		var deckIndex = DRAW_INDEX + 1;
+		var value = -DECK[deckIndex];
+		DECK[deckIndex] = value;
+		$.when(drawCard.fadeOut(200)).then(function() {
+			drawCard.css("background-color", "white");
+			RenderCard(drawCard, value);
+			$.when(drawCard.fadeIn(200)).then(function() {
+				if (!pIsLivePlayer) {
+					setTimeout(OpponentUseDrawCard, 1500 + Math.floor(Math.random() * 2000));
+				}
+				$("#centerCell .card").eq(0).css("opacity", 0.15);
+				setTimeout(function() {
+					drawCard.css("background-color", "");
+				}, 2000);
+			});
+		});
+	}
+
+	function GetPlayerCards(pSeatNum) {
+		var deckIndexStart = 6 * GetPlayerIndex(pSeatNum);
+		var cards = [];
+		for (var i = 0; i < 6; i++) {
+			cards.push(DECK[deckIndexStart + i]);
+		}
+
+		return cards;
+	}
 
 	function DealCard(card, delayTime) {
 		setTimeout(function() {
@@ -479,14 +682,6 @@
 		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").css("left", "-123px").css("top", "11px");
 		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").css("top", "100px");
 		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img, .dealerLabel").css("top", "-80px");
-
-		for (var i = 0; i < 14; i++) {
-			var randInt = i + Math.floor(Math.random() * (14-i));
-			var temp = NAMES[i];
-			NAMES[i] = NAMES[randInt];
-			NAMES[randInt] = temp;
-			SCORES[i] = Math.floor(Math.random() * 154) - 10
-		}
 	}
 
 	function ToggleNames() {
@@ -502,18 +697,24 @@
 	function ShowHideNames() {
 		$(".playerName").toggle(showScores || showNames);
 
-		for (var i = 0; i < PLAYERS.length; i++) {
-			var info = $("#playerInfo" + i);
-			info.find(".playerName span").html((showNames ? NAMES[i] : "") + (showScores ? " <strong>" + SCORES[i] + "</strong>" : ""));
+		for (var i = 0; i < SEATS.length; i++) {
+			var label = $("#playerInfo" + i).find(".playerName span");
+			if (SEATS[i] === null) {
+				label.hide();
+			}
+			else {
+				label.html((showNames ? SEATS[i].name : "") + (showScores ? " <strong>" + SEATS[i].score + "</strong>" : ""));
+			}
 		}
 	}
 
 	function ShuffleUpAndDeal() {
+		ROUND_NUM++;
 		$("#toggleScoresBox").prop("checked", showScores);
 		$("#toggleNamesBox").prop("checked", showNames);
-		$("#roundNum").html("Round 5 of 9");
+		$("#roundNum").html("Round " + ROUND_NUM + " of 9");
 		for (var i = 0; i < 108; i++) {
-			DECK[i] = i;
+			DECK[i] = -(i + 1);
 		}
 
 		for (var i = 0; i < 108; i++) {
@@ -523,32 +724,45 @@
 			DECK[randInt] = temp;
 		}
 
-		for (var i = 0; i < PLAYERS.length; i++) {
+		var prevPlayers = 0;
+		for (var i = 0; i < SEATS.length; i++) {
+			if (SEATS[i] === null) {
+				continue;
+			}
+
 			var info = $("#playerInfo" + i);
-			info.removeClass("live").removeClass("current");
+			info.removeClass("current");
 			var cards = $("#playerCards" + i);
 
-			for (var c = 6 * i; c < 6 * i + 6; c++) {
+			for (var c = 6 * prevPlayers; c < 6 * prevPlayers + 6; c++) {
 				var td = cards.find("td").eq(c % 6);
-				RenderCard(td, DECK[c], (Math.random() * 2) > 0);
+				RenderCard(td, DECK[c]);
 			}
+
+			prevPlayers++;
 		}
+
+		DRAW_INDEX = (6 * PLAYERS.length) + 1;
+		DECK[DRAW_INDEX] = -DECK[DRAW_INDEX];
 
 		var totalDealt = PLAYERS.length * 6;
 		for (var i = 0; i < 2; i++) {
-			RenderCard($("#centerCell .card").eq(i), DECK[totalDealt + i], (i > 0));
+			RenderCard($("#centerCell .card").eq(i), DECK[DRAW_INDEX + i]);
 		}
 	}
 
-	function RenderCard(td, value, isFaceDown) {
+	function RenderCard(td, value) {
 		td.removeClass("red").removeClass("black").removeClass("facedown").removeClass("faceup").removeClass("joker");
+		var isFaceDown = (value < 0);
+		value = Math.abs(value);
+
 		if (isFaceDown) {
-			td.addClass("facedown").addClass(value < 54 ? "deck1" : "deck2");
+			td.addClass("facedown").addClass(value <= 54 ? "deck1" : "deck2");
 			td.html("");
 		}
 		else {
 			td.addClass("faceup");
-			var cardVal = value % 54;
+			var cardVal = (value - 1) % 54;
 			if (cardVal > 51) {
 				td.addClass("joker");
 				td.html("<span class='jokerText'>J<span style='color:red'>O</span>K<span style='color:red'>E</span>R</span><br><span style='color:black'>♠</span><span style='color:red'>♥</span><br><span style='color:red'>♦</span><span style='color:black'>♣</span>");
@@ -636,34 +850,59 @@
 		}, 100);
 	}
 
-	function ClickedCard(pCardEl, pPlayerNum, pCardNum) {
-		FlipOverCard(pPlayerNum, pCardNum);
+	function ClickedCard(pCardEl, pSeatNum, pCardNum) {
+		if (!SEATS[currentSeat].isLive || pSeatNum !== currentSeat) {
+			return;
+		}
+
+		FlipOverCard(pSeatNum, pCardNum);
 	}
 
-	function FlipOverCard(pPlayerNum, pCardNum) {
-		var cards = $("#playerCards" + pPlayerNum);
+	function GetPlayerIndex(pSeatNum) {
+		var playerNum = -1;
+		for (var s = 0; s <= pSeatNum; s++) {
+			if (SEATS[s] !== null) {
+				playerNum++;
+			}
+		}
+
+		return playerNum;
+	}
+
+	function FlipOverCard(pSeatNum, pCardNum) {
+		var cards = $("#playerCards" + pSeatNum);
 		var card = cards.find(".card").eq(pCardNum);
-		var deckIndex = 6 * pPlayerNum + pCardNum;
+		var deckIndex = 6 * GetPlayerIndex(pSeatNum) + pCardNum;
 		var value = -DECK[deckIndex];
 		DECK[deckIndex] = value;
 		card.fadeOut(200, function() {
 			card.css("background-color", "white");
-			RenderCard(card, Math.abs(value), (value > 0));
+			RenderCard(card, value);
 		});
 		card.fadeIn(200, function() {
-			IncrementCurrent();
+			AdvanceToNextPlayer();
 		});
 		setTimeout(function() {
 			card.css("background-color", "");
 		}, 2000);
 	}
 
-	function IncrementCurrent() {
-		currentPlayer += 1;
-		currentPlayer %= 14;
+	function IncrementCurrent(pHighlight = false) {
+		//console.log("Incrementing");
+		var started = true;
+		while (started === true || SEATS[currentSeat] === null) {
+			started = false;
+			currentSeat += 1;
+			currentSeat %= 14;
+		}
+		//console.log("Done Incrementing");
+
 		$(".current").removeClass("current");
-		$("#playerInfo" + currentPlayer).addClass("current");
-		$("#playerCards" + currentPlayer).addClass("current");
+
+		if (pHighlight) {
+			$("#playerInfo" + currentSeat).addClass("current");
+			$("#playerCards" + currentSeat).addClass("current");
+		}
 	}
 
 	function ResizeText() {
