@@ -141,6 +141,9 @@
 			background-color:#8833bb;
 			border-radius:6px;
 		}
+		.playerInfo.live.firstPlayer img {
+			border-color:#8833bb;
+		}
 		.playerInfo.firstPlayer img {
 			border:5px solid #8833bb;
 			margin:-2px -2px -2px -2px;
@@ -263,6 +266,63 @@
     	#toggleScores, #toggleNames {
     		padding:6px;
     	}
+    	#instructionsContainer {
+    		text-align:center;
+    		width:100%;
+    		position:absolute;
+    		left:0;
+    		z-index:100;
+    		display:none;
+    	}
+    	#instructionsBackground {
+    		width:100%;
+    		position:absolute;
+    		height:100%;
+    		left:0;
+    		background-color:black;
+    		opacity:50%;
+    		z-index:-1;
+    	}
+    	#instructions {
+    		opacity:100%;
+    		text-align:left;
+    		width:13em;
+    		display:inline-block;
+    		padding:1.7em;
+    		border: 4px solid black;
+    		border-radius:10px;
+    		background-color:white;
+    		font-family:'Times New Roman';
+    		font-size:24pt;
+    		line-height:150%;
+    	}
+    	.scoringSettings {
+			padding:0px;
+			margin:0px;
+    	}
+		.scoringSettings li {
+			display: flex;
+			padding-left:0px;
+			margin-left:0px;
+		}
+
+		.scoringSettings li .cardType {
+			order: 1;
+		}
+
+		.scoringSettings li .cardPoints {
+			order: 3;
+		}
+
+		.scoringSettings li::after {
+			content: "";
+			border-bottom: 4px dotted;
+			flex-grow: 1;
+			order: 2;
+			margin-bottom:0.4em;
+			margin-left:0.1em;
+			margin-right:0.1em;
+		}
 		</style>
 	<script src="jquery.js"></script>
 </head>
@@ -349,6 +409,51 @@
 			</tr>
 		</table>
 	</div>
+	<div id="instructionsContainer">
+		<div id="instructionsBackground"></div>
+		<span id="instructions">
+			<u><i><strong>GOLF</strong></i></u>
+			<ul class="scoringSettings">
+			  <li>
+			    <span class="cardType">Ace</span>
+			    <span class="cardPoints"><strong>1</strong> point</span>
+			  </li>
+			  <li>
+			    <span class="cardType">King</span>
+			    <span class="cardPoints"><strong>0</strong> points</span>
+			  </li>
+			  <li>
+			    <span class="cardType">Queen</span>
+			    <span class="cardPoints"><strong>10</strong> points</span>
+			  </li>
+			  <li>
+			    <span class="cardType">Jack</span>
+			    <span class="cardPoints"><strong>20</strong> points</span>
+			  </li>
+			  <li>
+			    <span class="cardType">Joker</span>
+			    <span class="cardPoints"><strong>-3</strong> points</span>
+			  </li>
+			  <li>
+			    <span class="cardType">All others</span>
+			    <span class="cardPoints"><strong>face</strong> value</span>
+			  </li>
+			  <br>
+			  <li>
+			    <span class="cardType">All 4 corners</span>
+			    <span class="cardPoints"><strong>-20</strong> points</span>
+			  </li>
+			  <li>
+			    <span class="cardType">4 next to each other</span>
+			    <span class="cardPoints"><strong>-20</strong> points</span>
+			  </li>
+			  <li>
+			    <span class="cardType">All 6</span>
+			    <span class="cardPoints"><strong>-30</strong> points</span>
+			  </li>
+			</ul>
+		</span>
+	</div>
 </body>
 <script>
 	var DECK = [];
@@ -378,172 +483,282 @@
 		if (Math.random() < 0.99) {
 			PLAYERS.push({
 				name: NAMES[i],
-				score: 0,
+				scores: [0,0,0,0,0,0,0,0,0],
 				isLive: Math.random() < 0.15
 			});
 		}
 	}
 
-	var clockInterval = null;
-	var countdownTime = null;
+	var CLOCK_INTERVAL = null;
+	var COUNTDOWN_TIME = null;
 
+	var TOTAL_SEATS = 14;
+	var SEATS = [];
+	var DEALER = null;
+	var CURRENT_SEAT = null;
 	var END_SEAT = null;
 
-	var totalSeats = 14;
-	var SEATS = [];
-	for (var i = 0; i < totalSeats; i++) {
-		SEATS.push(null);
-	}
+	var SUITS = ["♥", "♠", "♦", "♣"];
+	var VALS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
 
-	console.log("Setting seats");
+	var SHOW_SCORES = true; // (Math.random() > 0.5);	
+	var SHOW_NAMES = (Math.random() > 0.5);
+	var PREV_SHOW_SCORES = SHOW_SCORES;
 
-	for (var i = 0; i < PLAYERS.length; i++) {
-		var seat = -1;
-		while (seat < 0 || SEATS[seat] !== null) {
-			seat = Math.floor(Math.random() * 14);
+	var LAST_RESIZE = new Date();
+	var LAST_WINDOW_SIZE = window.innerWidth;
+
+	Setup();
+	ShuffleUpAndDeal();
+
+	function Setup() {
+		$(window).resize(SafeFitToWindow);
+
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			SEATS.push(null);
 		}
 
-		SEATS[seat] = PLAYERS[i];
-	}
+		for (var i = 0; i < PLAYERS.length; i++) {
+			var seat = -1;
+			while (seat < 0 || SEATS[seat] !== null) {
+				seat = Math.floor(Math.random() * TOTAL_SEATS);
+			}
 
-	console.log("Done with seats");
+			SEATS[seat] = PLAYERS[i];
+		}
 
-	var currentSeat = Math.floor(Math.random() * totalSeats);
-	IncrementCurrent(false);
-	var dealer = currentSeat;
-	IncrementCurrent(false);
-	console.log(currentSeat);
+		$(".playerInfo").each(function() {
+			var span = $("<span></span>");
+			span.addClass("playerInfoWrapper");
+			var name = $("<p><span></span></p>");
+			name.addClass("playerName");
+			var img = $("<img>");
+			img.attr("src", "User.png");
+			var dealer = $("<p><span>DEALER</span></p>");
+			dealer.addClass("dealerLabel");
+			var id = parseInt($(this).attr("id").substring(10));
+			if (id >= 40 && id <= 3) {
+				span.append(name);
+				span.append(img);
+				span.append(dealer);
+			}
+			else {
+				span.append(img);
+				span.append(dealer);
+				span.append(name);
+			}
+			$(this).append(span);
+		});
+		$(".playerCards").each(function() {
+			var id = parseInt($(this).attr("id").substring(11));
+			var table = $("<table></table>");
+			for (var r = 0; r < 2; r++) {
+				var tr = $("<tr></tr>");
+				for (var c = 0; c < 3; c++) {
+					var td = $("<td></td>");
+					td.addClass("card");
+					td.attr("seatNum", id);
+					td.attr("cardNum", (r * 3 + c));
+					//if (id === livePlayer) {
+						td.attr("onclick", "ClickedCard(this," + id + "," + (r * 3 + c) + ")");
+					//}
+					tr.append(td);
+				}
+				table.append(tr);
+			}
+			$(this).append(table);
+		});
+		var status = $("<span id='statusText'></span>");
+		var span = $("<span style='display:inline-block;text-align:center;'><span id='roundNum'></span></span>");
+		var innerSpan = $("<span></span>");
+		var table = $("<table align='center'></table>");
+		var tr = $("<tr></tr>");
+		table.append(tr);
+		for (var c = 0; c < 3; c++) {
+			var td = $("<td></td>");
+			if (c !== 1) {
+				td.addClass("card");
+			}
+			if (c === 0) {
+				td.attr("onclick", "ClickedDiscard()");
+			}
+			if (c === 2) {
+				td.attr("onclick", "ClickedDrawCard()");
+			}
+			tr.append(td);
+		}
+		innerSpan.append(table);
+		span.append(innerSpan);
+		span.append("<span id='toggleNames'><label class='toggleLabel' for='toggleNamesBox'>Show names</label><input type='checkbox' id='toggleNamesBox' onclick='ToggleNames()' /></span>");
+		span.append("<span id='toggleScores'><input type='checkbox' id='toggleScoresBox' onclick='ToggleScores()' /><label class='toggleLabel' for='toggleScoresBox'>Show scores</label></span>");
+		$("#centerCell").append(span);
+		$("#centerCell").append(status);
 
-	var SUITS = ["♥", "♠", "♦", "♣"];
-	var VALS = [
-		"A",
-		"2",
-		"3",
-		"4",
-		"5",
-		"6",
-		"7",
-		"8",
-		"9",
-		"10",
-		"J",
-		"Q",
-		"K",
-	];
+		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").css("left", "125px").css("top", "11px");
+		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").css("left", "-123px").css("top", "11px");
+		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").css("top", "100px");
+		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img, .dealerLabel").css("top", "-80px");
 
-	var lastResize = new Date();
-	var windowSize = window.innerWidth;
-	$(window).resize(SafeFitToWindow);
-	Setup();
-	$("#statusText").hide();
+		$("#statusText").hide();
 
-	for (var i = 0; i < totalSeats; i++) {
-		if (SEATS[i] === null) {
-			$("#playerInfo" + i + " img").hide();
-			$("#playerInfo" + i + " .playerName").hide();
-			$("#playerCards" + i + " table").hide();
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			if (SEATS[i] === null) {
+				$("#playerInfo" + i + " img").hide();
+				$("#playerInfo" + i + " .playerName").hide();
+				$("#playerCards" + i + " table").hide();
+			}
+			else {
+				if (SEATS[i].isLive) {
+					$("#playerInfo" + i).addClass("live");
+					$("#playerCards" + i).addClass("live");
+				}
+				//if (SEATS[i].name === "Angela" || SEATS[i].name === "Ray") {
+					$("#playerInfo" + i + " img").attr("src", "players/" + SEATS[i].name + ".jpg");
+				//}
+				//else {
+				//	$("#playerInfo" + i + " img").attr("src", "User.png");
+				//}
+			}
+		}
+
+		if (SHOW_SCORES || SHOW_NAMES) {
+			$(".playerName").css("opacity", "0");
 		}
 		else {
-			if (SEATS[i].isLive) {
-				$("#playerInfo" + i).addClass("live");
-				$("#playerCards" + i).addClass("live");
-			}
-			//if (SEATS[i].name === "Angela" || SEATS[i].name === "Ray") {
-				$("#playerInfo" + i + " img").attr("src", "players/" + SEATS[i].name + ".jpg");
-			//}
-			//else {
-			//	$("#playerInfo" + i + " img").attr("src", "User.png");
-			//}
+			$(".playerName").hide();
 		}
+
+		$(".playerInfo, .playerName").css("opacity", "0");
+		$(".playerCards .card").css("opacity", "0");
+		$("#centerCell>span").hide();
 	}
 
-	var showScores = (Math.random() > 0.5);	
-	var showNames = (Math.random() > 0.5);
-	prevShowScores = showScores;
-	if (showScores || showNames) {
-		$(".playerName").css("opacity", "0");
-	}
-	else {
-		$(".playerName").hide();
-	}
 
-	$(".playerInfo, .playerName").css("opacity", "0");
-	$(".playerCards .card").css("opacity", "0");
-	$("#centerCell>span").hide();
-	FitToWindow(true);
-	ShuffleUpAndDeal();
-	console.log("Here");
-	setTimeout(function() {
-		$(".playerInfo").css("opacity", "1");
-	setTimeout(function() {
-		$("#playerInfo" + dealer + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
-		$("#playerInfo" + dealer + " .dealerLabel").show();
-	setTimeout(function() {
-		$(".playerInfoWrapper img").css("border", "").css("margin", "");
-	setTimeout(function() {
-		$("#playerInfo" + dealer + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
-	setTimeout(function() {
-		$(".playerInfoWrapper img").css("border", "").css("margin", "");
-	setTimeout(function() {
-		$("#playerInfo" + dealer + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
-	setTimeout(function() {
-		$(".playerInfoWrapper img").css("border", "").css("margin", "");
-	setTimeout(function() {
-		$("#playerInfo" + dealer + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
-	setTimeout(function() {
-		$(".playerInfoWrapper img, .dealerLabel").animate({
-	    	left:'0px',
-	    	top:'0px',
-		}, 1500);
+	function ShuffleUpAndDeal() {
+		END_SEAT = null;
+		CURRENT_SEAT = Math.floor(Math.random() * TOTAL_SEATS);
+		IncrementCurrent(false);
+		DEALER = CURRENT_SEAT;
+		IncrementCurrent(false);
+
 		setTimeout(function() {
-			$("#statusText").html("Dealing").hide();
-			ShowHideNames();
+			FitToWindow(true);
+		}, 500);
 
-			var delayTime = 0;
-			var totalCards = 0;
-			var firstPlayerSeat = currentSeat;
-			DRAWING_TWO = true;
-			countdownTime = (new Date()).getTime() + (31 * 1000);
-			clockInterval = setInterval(Countdown, 100);
+		ROUND_NUM++;
+		$("#statusText").html("Shuffling").hide();
+		$("#toggleScoresBox").prop("checked", SHOW_SCORES);
+		$("#toggleNamesBox").prop("checked", SHOW_NAMES);
+		$("#roundNum").html("Round " + ROUND_NUM + " of 9");
+		for (var i = 0; i < 108; i++) {
+			DECK[i] = -(i + 1);
+		}
 
-			for (var q = 0; q < 6; q++) {
-				for (var p = 0; p < SEATS.length; p++) {
-					if (SEATS[p] === null) {
-						continue;
-					}
+		for (var i = 0; i < 108; i++) {
+			var randInt = i + Math.floor(Math.random() * (108-i));
+			var temp = DECK[i];
+			DECK[i] = DECK[randInt];
+			DECK[randInt] = temp;
+		}
 
-					var delay = (totalCards <= 3 ? 400 : (totalCards < PLAYERS.length ? 60 : 30));
-					delayTime += delay;
-					totalCards++;
-					//console.log(currentSeat);
-					//console.log(currentSeat + "x" + q + " - " + totalCards);
-					DealCard($("#playerCards" + currentSeat + " .card").eq(q), delayTime);
+		var prevPlayers = 0;
+		for (var i = 0; i < SEATS.length; i++) {
+			if (SEATS[i] === null) {
+				continue;
+			}
 
-					if (totalCards < (6 * PLAYERS.length)) {
-						IncrementCurrent(false);
+			var info = $("#playerInfo" + i);
+			info.removeClass("current");
+			var cards = $("#playerCards" + i);
+
+			for (var c = 6 * prevPlayers; c < 6 * prevPlayers + 6; c++) {
+				var td = cards.find("td").eq(c % 6);
+				RenderCard(td, DECK[c]);
+			}
+
+			prevPlayers++;
+		}
+
+		DRAW_INDEX = (6 * PLAYERS.length) + 1;
+		DECK[DRAW_INDEX] = -DECK[DRAW_INDEX];
+
+		var totalDealt = PLAYERS.length * 6;
+		for (var i = 0; i < 2; i++) {
+			RenderCard($("#centerCell .card").eq(i), DECK[DRAW_INDEX + i]);
+		}
+
+		setTimeout(function() {
+			$(".playerInfo").css("opacity", "1");
+		setTimeout(function() {
+			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
+			$("#playerInfo" + DEALER + " .dealerLabel").show();
+		setTimeout(function() {
+			$(".playerInfoWrapper img").css("border", "").css("margin", "");
+		setTimeout(function() {
+			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
+		setTimeout(function() {
+			$(".playerInfoWrapper img").css("border", "").css("margin", "");
+		setTimeout(function() {
+			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
+		setTimeout(function() {
+			$(".playerInfoWrapper img").css("border", "").css("margin", "");
+		setTimeout(function() {
+			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
+		setTimeout(function() {
+			$(".playerInfoWrapper img, .dealerLabel").animate({
+		    	left:'0px',
+		    	top:'0px',
+			}, 1500);
+			setTimeout(function() {
+				$("#statusText").html("Dealing").hide();
+				ShowHideNames();
+
+				var delayTime = 0;
+				var totalCards = 0;
+				var firstPlayerSeat = CURRENT_SEAT;
+				DRAWING_TWO = true;
+				COUNTDOWN_TIME = (new Date()).getTime() + (31 * 1000);
+				CLOCK_INTERVAL = setInterval(Countdown, 100);
+
+				for (var q = 0; q < 6; q++) {
+					for (var p = 0; p < SEATS.length; p++) {
+						if (SEATS[p] === null) {
+							continue;
+						}
+
+						var delay = (totalCards <= 3 ? 400 : (totalCards < PLAYERS.length ? 60 : 30));
+						delayTime += delay;
+						totalCards++;
+						//console.log(CURRENT_SEAT);
+						//console.log(CURRENT_SEAT + "x" + q + " - " + totalCards);
+						DealCard($("#playerCards" + CURRENT_SEAT + " .card").eq(q), delayTime);
+
+						if (totalCards < (6 * PLAYERS.length)) {
+							IncrementCurrent(false);
+						}
 					}
 				}
-			}
 
-			setTimeout(function() {
-				$(".playerName").css("opacity", "1");
-				$(".playerInfoWrapper img").css("border", "").css("margin", "");
-				$("#playerInfo" + dealer + " .dealerLabel").hide();
-				$("#playerInfo" + firstPlayerSeat).addClass("firstPlayer");
-				$("#playerCards" + firstPlayerSeat).addClass("firstPlayer");
+				setTimeout(function() {
+					$(".playerName").css("opacity", "1");
+					$(".playerInfoWrapper img").css("border", "").css("margin", "");
+					$("#playerInfo" + DEALER + " .dealerLabel").hide();
+					$("#playerInfo" + firstPlayerSeat).addClass("firstPlayer");
+					$("#playerCards" + firstPlayerSeat).addClass("firstPlayer");
 
-				EveryoneDrawTwo();
-			}, delayTime + 1000);
-  		}, 1500);
-	}, 700);
-	}, 100);
-	}, 100);
-	}, 100);
-	}, 100);
-	}, 100);
-	}, 100);
-	}, 700);
-	}, 700);
+					EveryoneDrawTwo();
+				}, delayTime + 1000);
+	  		}, 1500);
+		}, 700);
+		}, 100);
+		}, 100);
+		}, 100);
+		}, 100);
+		}, 100);
+		}, 100);
+		}, 700);
+		}, 1500);
+	}
 
 	function EveryoneDrawTwo() {
 		for (var i = 0; i < SEATS.length; i++) {
@@ -561,7 +776,7 @@
 	}
 
 	function FlipTwoCards(pSeatNum, pNow) {
-		var delay = (pNow === true ? 0 : 1000 + Math.floor(Math.random() * 11000));
+		var delay = (pNow === true ? 0 : 1000 + Math.floor(Math.random() * 2000));
 		setTimeout(function() {
 			var upCardIndex = null;
 			if (pNow === true) {
@@ -623,7 +838,7 @@
 		}
 
 		if (!anyoneNotDone) {
-			clearInterval(clockInterval);
+			clearInterval(CLOCK_INTERVAL);
 			setTimeout(function() {
 				$("#statusText").html("").hide();
 				$("#centerCell>span").show();
@@ -637,7 +852,7 @@
 	function AdvanceToNextPlayer() {
 		DRAWING_TWO = false;
 
-		var cards = GetPlayerCards(currentSeat);
+		var cards = GetPlayerCards(CURRENT_SEAT);
 		var anyFacedown = false;
 		for (var i = 0; i < 6; i++) {
 			if (cards[i] < 0) {
@@ -648,12 +863,12 @@
 
 		if (anyFacedown === false) {
 			if (END_SEAT === null) {
-				END_SEAT = currentSeat;
+				END_SEAT = CURRENT_SEAT;
 				ShowAllCards();
 			}
-			$("#playerInfo" + currentSeat).addClass("endplayer");
-			$("#playerCards" + currentSeat).addClass("endplayer");
-			UpdateScore(currentSeat);
+			$("#playerInfo" + CURRENT_SEAT).addClass("endplayer");
+			$("#playerCards" + CURRENT_SEAT).addClass("endplayer");
+			UpdateScore(CURRENT_SEAT);
 		}
 
 		// END OF PREVIOUS TURN - BEGIN NEXT TURN
@@ -662,32 +877,36 @@
 		$(".discard").removeClass("discard");
 		$(".card").css("opacity", 1);
 		SELECTED_CARD = null;
+		CheckAllCards();
 
 		IncrementCurrent(true);
-		if (END_SEAT !== null && END_SEAT === currentSeat) {
+		if (END_SEAT !== null && END_SEAT === CURRENT_SEAT) {
 			$(".current").removeClass("current");
 			$(".endplayer").removeClass("endplayer");
-			currentSeat === null;
+			CURRENT_SEAT === null;
 			ShowHideNames();
 			if (ROUND_NUM < 9) {
 				$("#centerCell>span").hide();
-				prevShowScores = showScores;
-				showScores = true;
+				PREV_SHOW_SCORES = SHOW_SCORES;
+				SHOW_SCORES = true;
 				ShowHideNames();
 				/*$("#statusText").html("End of Round " + ROUND_NUM).show();
-				countdownTime = (new Date()).getTime() + (121 * 1000); 
-				clockInterval = setInterval(Countdown, 100);*/
+				COUNTDOWN_TIME = (new Date()).getTime() + (121 * 1000); 
+				CLOCK_INTERVAL = setInterval(Countdown, 100);*/
 				//setTimeout(ShuffleUpAndDeal, 10000);
 			}
 			// End of hand
+			setTimeout(function() {
+				$(".playerInfo .playerName span").css("background-color", "").css("border-color", "");
+			}, 1500);
 		}
 		else {
-			if (SEATS[currentSeat].isLive) {
+			if (SEATS[CURRENT_SEAT].isLive) {
 				// Set playable cards for live player
-				var cards = GetPlayerCards(currentSeat);
+				var cards = GetPlayerCards(CURRENT_SEAT);
 				for (var i = 0; i < 6; i++) {
 					if (cards[i] < 0) {
-						$("#playerCards" + currentSeat + " .card").eq(i).addClass("playableCard");
+						$("#playerCards" + CURRENT_SEAT + " .card").eq(i).addClass("playableCard");
 					}
 				}
 
@@ -701,8 +920,8 @@
 
 	function Countdown() {
 		var current = new Date();
-		if (current >= countdownTime) {
-			clearInterval(clockInterval);
+		if (current >= COUNTDOWN_TIME) {
+			clearInterval(CLOCK_INTERVAL);
 			$("#statusText").html("").hide();
 			if (DRAWING_TWO) {
 				CheckForFlipTwoDone(true);
@@ -712,7 +931,7 @@
 			}
 		}
 		else {
-			timeDiff = (countdownTime - current);
+			timeDiff = (COUNTDOWN_TIME - current);
 			var totalSeconds = Math.floor(timeDiff / 1000);
 			var minutes = Math.floor(totalSeconds / 60);
 			var seconds = totalSeconds % 60;
@@ -752,12 +971,21 @@
 	}
 
 	function UpdateScore(pSeatNum) {
-		SEATS[pSeatNum].score += GetSeatScore(pSeatNum);
-		//$("#playerInfo" + pSeatNum).find(".playerName span").css("background-color", "#ffaaaa");
-		ShowHideNames();
+		SEATS[pSeatNum].scores[ROUND_NUM - 1] = GetSeatScore(pSeatNum);
+		var labelEl = $("#playerInfo" + pSeatNum).find(".playerName span");
+		$.when(labelEl.fadeOut(200)).then(function() {
+			setTimeout(function() {
+				labelEl.html(GetPlayerLabelText(pSeatNum)).css("background-color", "#ffaaaa").css("border-color", "red");
+				labelEl.fadeIn(200);
+			}, 201);
+		});
 	}
 
 	function GetCardValue(pCardIndex) {
+		if (pCardIndex < 0) {
+			return -1;
+		}
+
 		var deckVal = (pCardIndex - 1) % 54;
 
 		if (deckVal > 51) {
@@ -806,25 +1034,62 @@
 	}
 
 	function OpponentMove() {
-		var cards = GetPlayerCards(currentSeat);
+		var cards = GetPlayerCards(CURRENT_SEAT);
 		var facedownIndices = [];
+		var swapIndex = null;
+		var faceUpVal = GetCardValue(DECK[DRAW_INDEX]);
 		for (var i = 0; i < 6; i++) {
 			if (cards[i] < 0) {
 				facedownIndices.push(i);
 			}
+			else {
+				var cardVal = GetCardValue(cards[i]);
+				if (cardVal === faceUpVal && cardVal !== 0) {
+					var oppositeIndex = (i + 3) % 6;
+					var oppositeCard = cards[oppositeIndex];
+					if (oppositeCard < 0) {
+						swapIndex = oppositeIndex;
+						break;
+					}
+					else {
+						var oppositeVal = GetCardValue(oppositeCard);
+						if ((oppositeVal !== 0 || (cardVal > 3 && cardVal < 13)) && oppositeVal !== cardVal) {
+							swapIndex = oppositeIndex;
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		if (swapIndex !== null) {
+			//console.log("Pair of " + faceUpVal + "'s to swap at " + (swapIndex + 1));
+		}
+		else {
+			var swappable = [];
+			for (var i = 0; i < 3; i++) {
+				var A = GetCardValue(cards[i]);
+				var B = GetCardValue(cards[i + 3]);
+
+				if (A !== B || A < 0) {
+					swappable.push(i);
+					swappable.push(i + 3);
+				}
+			}
 		}
 
 		var randNum = Math.random();
-
-		if (facedownIndices.length > 0 && randNum < 0.65) {
-			// Flip over card
-			FlipOverCard(currentSeat, facedownIndices[Math.floor(Math.random() * facedownIndices.length)]);
+		if (swapIndex !== null) {
+			OpponentTakeDiscard(swapIndex);
 		}
-		else if (Math.random() < 0.5) {
+		else if (facedownIndices.length > 0 && randNum < 0.35) {
+			FlipOverCard(CURRENT_SEAT, facedownIndices[Math.floor(Math.random() * facedownIndices.length)]);
+		}
+		else if (Math.random() < 0.5 || swappable.length <= 0) {
 			OpponentDrawCard();
 		}
 		else {
-			OpponentTakeDiscard(Math.floor(Math.random() * 6));
+			OpponentTakeDiscard(swappable[Math.floor(Math.random() * swappable.length)]);
 		}
 	}
 
@@ -837,7 +1102,48 @@
 	}
 
 	function OpponentUseDrawCard() {
-		var swapWith = Math.floor(Math.random() * 7);
+		var swapIndex = null;
+		var drawVal = GetCardValue(DECK[DRAW_INDEX + 1]);
+		var cards = GetPlayerCards(CURRENT_SEAT);
+
+		for (var i = 0; i < 6; i++) {
+			if (cards[i] > 0) {
+				var cardVal = GetCardValue(cards[i]);
+				if (cardVal === drawVal && cardVal !== 0) {
+					var oppositeIndex = (i + 3) % 6;
+					var oppositeCard = cards[oppositeIndex];
+					if (oppositeCard < 0) {
+						swapIndex = oppositeIndex;
+						break;
+					}
+					else {
+						var oppositeVal = GetCardValue(oppositeCard);
+						if ((oppositeVal !== 0 || (cardVal > 3 && cardVal < 13)) && oppositeVal !== cardVal) {
+							swapIndex = oppositeIndex;
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		if (swapIndex !== null) {
+			//console.log("Pair of " + drawVal + "'s to swap at " + (swapIndex + 1));
+		}
+		else {
+			var swappable = [6];
+			for (var i = 0; i < 3; i++) {
+				var A = GetCardValue(cards[i]);
+				var B = GetCardValue(cards[i + 3]);
+
+				if (A !== B || A < 0) {
+					swappable.push(i);
+					swappable.push(i + 3);
+				}
+			}
+		}
+
+		var swapWith = (swapIndex === null ? swappable[Math.floor(Math.random() * swappable.length)] : swapIndex);
 		PlayDrawCard(swapWith);
 	}
 
@@ -865,6 +1171,7 @@
 		CheckForReshuffle();
 
 		if (pCardIndex > 5) {
+			console.log(SEATS[CURRENT_SEAT].name + ": Discard the draw card");
 			var centerCards = $("#centerCell .card");
 			$.when(centerCards.fadeOut(200)).then(function() {
 				$("#centerCell .card").eq(0).css("opacity", 1);
@@ -877,21 +1184,22 @@
 			});
 		}
 		else {
-			var oldPlayerCardIndex = GetPlayerIndex(currentSeat) * 6 + pCardIndex;
+			console.log(SEATS[CURRENT_SEAT].name + ": Swap draw card at index " + (pCardIndex + 1));
+			var oldPlayerCardIndex = GetPlayerIndex(CURRENT_SEAT) * 6 + pCardIndex;
 			var oldPlayerCardVal = DECK[oldPlayerCardIndex];
 			DECK[oldPlayerCardIndex] = DECK[DRAW_INDEX];
 			DECK[DRAW_INDEX] = Math.abs(oldPlayerCardVal);
 
-			var swapCards = $("#playerCards" + currentSeat + " .card").eq(pCardIndex).add($("#centerCell .card").eq(1));
+			var swapCards = $("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).add($("#centerCell .card").eq(1));
 			$.when(swapCards.fadeOut(200)).then(function() {
-				//$("#playerCards" + currentSeat + " .card").eq(pCardIndex).css("background-color", "white");
+				//$("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).css("background-color", "white");
 				$(".discard").removeClass("discard");
-				RenderCard($("#playerCards" + currentSeat + " .card").eq(pCardIndex), DECK[oldPlayerCardIndex]);
+				RenderCard($("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex), DECK[oldPlayerCardIndex]);
 				RenderCard($("#centerCell .card").eq(1), DECK[DRAW_INDEX + 1]);
 				$.when(swapCards.fadeIn(200)).then(function() {
 					AdvanceToNextPlayer();
 					setTimeout(function() {
-						$("#playerCards" + currentSeat + " .card").eq(pCardIndex).css("background-color", "");
+						$("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).css("background-color", "");
 					}, 2000);
 				});
 			});
@@ -909,15 +1217,19 @@
 	}
 
 	function TakeDiscard(pCardIndex) {
-		var oldPlayerCardIndex = GetPlayerIndex(currentSeat) * 6 + pCardIndex;
+		console.log(SEATS[CURRENT_SEAT].name + ": Swap discard at index " + (pCardIndex + 1));
+		if (pCardIndex >= 6) {
+			console.trace();
+		}
+		var oldPlayerCardIndex = GetPlayerIndex(CURRENT_SEAT) * 6 + pCardIndex;
 		var oldPlayerCardVal = DECK[oldPlayerCardIndex];
 		DECK[oldPlayerCardIndex] = DECK[DRAW_INDEX];
 		DECK[DRAW_INDEX] = Math.abs(oldPlayerCardVal);
 
-		var swapCards = $("#playerCards" + currentSeat + " .card").eq(pCardIndex).add($("#centerCell .card").eq(0));
+		var swapCards = $("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).add($("#centerCell .card").eq(0));
 		$.when(swapCards.fadeOut(200)).then(function() {
-			//$("#playerCards" + currentSeat + " .card").eq(pCardIndex).css("background-color", "white");
-			RenderCard($("#playerCards" + currentSeat + " .card").eq(pCardIndex), DECK[oldPlayerCardIndex]);
+			//$("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).css("background-color", "white");
+			RenderCard($("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex), DECK[oldPlayerCardIndex]);
 			RenderCard($("#centerCell .card").eq(0), DECK[DRAW_INDEX]);
 			$.when(swapCards.fadeIn(200)).then(function() {
 				AdvanceToNextPlayer();
@@ -929,6 +1241,7 @@
 	}
 
 	function FlipDrawCard(pIsLivePlayer) {
+		console.log(SEATS[CURRENT_SEAT].name + ": Flip draw card");
 		var drawCard = $("#centerCell .card").eq(1);
 		var deckIndex = DRAW_INDEX + 1;
 		var value = -DECK[deckIndex];
@@ -955,7 +1268,7 @@
 	}
 
 	function ClickedDiscard() {
-		if (SEATS[currentSeat].isLive && $("#centerCell .card").eq(0).hasClass("playableCard")) {
+		if (SEATS[CURRENT_SEAT].isLive && $("#centerCell .card").eq(0).hasClass("playableCard")) {
 			if (SELECTED_CARD === 1) {
 				PlayDrawCard(6);
 			}
@@ -975,7 +1288,7 @@
 	}
 
 	function ClickedDrawCard() {
-		if (SEATS[currentSeat].isLive && $("#centerCell .card").eq(1).hasClass("playableCard")) {
+		if (SEATS[CURRENT_SEAT].isLive && $("#centerCell .card").eq(1).hasClass("playableCard")) {
 			FlipDrawCard(true);
 		}
 	}
@@ -989,7 +1302,7 @@
 			FlipOverCard(pSeatNum, pCardNum);
 			CheckForFlipTwoDone(false);
 		}
-		else if (SEATS[currentSeat].isLive && pSeatNum === currentSeat) {
+		else if (SEATS[CURRENT_SEAT].isLive && pSeatNum === CURRENT_SEAT) {
 			if (SELECTED_CARD === null) {
 				FlipOverCard(pSeatNum, pCardNum);
 			}
@@ -1018,90 +1331,19 @@
 		}, delayTime);
 	}
 
-	function Setup() {
-		$(".playerInfo").each(function() {
-			var span = $("<span></span>");
-			span.addClass("playerInfoWrapper");
-			var name = $("<p><span></span></p>");
-			name.addClass("playerName");
-			var img = $("<img>");
-			img.attr("src", "User.png");
-			var dealer = $("<p><span>DEALER</span></p>");
-			dealer.addClass("dealerLabel");
-			var id = parseInt($(this).attr("id").substring(10));
-			if (id >= 40 && id <= 3) {
-				span.append(name);
-				span.append(img);
-				span.append(dealer);
-			}
-			else {
-				span.append(img);
-				span.append(dealer);
-				span.append(name);
-			}
-			$(this).append(span);
-		});
-		$(".playerCards").each(function() {
-			var id = parseInt($(this).attr("id").substring(11));
-			var table = $("<table></table>");
-			for (var r = 0; r < 2; r++) {
-				var tr = $("<tr></tr>");
-				for (var c = 0; c < 3; c++) {
-					var td = $("<td></td>");
-					td.addClass("card");
-					//if (id === livePlayer) {
-						td.attr("onclick", "ClickedCard(this," + id + "," + (r * 3 + c) + ")");
-					//}
-					tr.append(td);
-				}
-				table.append(tr);
-			}
-			$(this).append(table);
-		});
-		var status = $("<span id='statusText'></span>");
-		var span = $("<span style='display:inline-block;text-align:center;'><span id='roundNum'></span></span>");
-		var innerSpan = $("<span></span>");
-		var table = $("<table align='center'></table>");
-		var tr = $("<tr></tr>");
-		table.append(tr);
-		for (var c = 0; c < 3; c++) {
-			var td = $("<td></td>");
-			if (c !== 1) {
-				td.addClass("card");
-			}
-			if (c === 0) {
-				td.attr("onclick", "ClickedDiscard()");
-			}
-			if (c === 2) {
-				td.attr("onclick", "ClickedDrawCard()");
-			}
-			tr.append(td);
-		}
-		innerSpan.append(table);
-		span.append(innerSpan);
-		span.append("<span id='toggleNames'><label class='toggleLabel' for='toggleNamesBox'>Show names</label><input type='checkbox' id='toggleNamesBox' onclick='ToggleNames()' /></span>");
-		span.append("<span id='toggleScores'><input type='checkbox' id='toggleScoresBox' onclick='ToggleScores()' /><label class='toggleLabel' for='toggleScoresBox'>Show scores</label></span>");
-		$("#centerCell").append(span);
-		$("#centerCell").append(status);
-
-		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").css("left", "125px").css("top", "11px");
-		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").css("left", "-123px").css("top", "11px");
-		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").css("top", "100px");
-		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img, .dealerLabel").css("top", "-80px");
-	}
-
 	function ToggleNames() {
-		showNames = !showNames;
+		SHOW_NAMES = !SHOW_NAMES;
 		ShowHideNames();
 	}
 
 	function ToggleScores() {
-		showScores = !showScores;
+		SHOW_SCORES = !SHOW_SCORES;
 		ShowHideNames();
 	}
 
 	function ShowHideNames() {
-		$(".playerName").toggle(showScores || showNames);
+		console.log("ShowHideNames");
+		$(".playerName").toggle(SHOW_SCORES || SHOW_NAMES);
 
 		for (var i = 0; i < SEATS.length; i++) {
 			var label = $("#playerInfo" + i).find(".playerName span");
@@ -1109,56 +1351,45 @@
 				label.hide();
 			}
 			else {
-				label.html((showNames ? SEATS[i].name : "") + (showScores ? " <strong>" + SEATS[i].score + "</strong>" : ""));
+				label.html(GetPlayerLabelText(i));
 			}
 		}
 	}
 
-	function ShuffleUpAndDeal() {
-		ROUND_NUM++;
-		$("#statusText").html("Shuffling").hide();
-		$("#toggleScoresBox").prop("checked", showScores);
-		$("#toggleNamesBox").prop("checked", showNames);
-		$("#roundNum").html("Round " + ROUND_NUM + " of 9");
-		for (var i = 0; i < 108; i++) {
-			DECK[i] = -(i + 1);
+	function GetPlayerLabelText(pSeatNum) {
+		var roundScores = SEATS[pSeatNum].scores;
+		var total = 0;
+		for (var i = 0; i < 9; i++) {
+			total += roundScores[i];
 		}
+		return (SHOW_NAMES ? SEATS[pSeatNum].name : "") + (SHOW_SCORES ? " <strong>" + total + "</strong>" : "");
+	}
 
-		for (var i = 0; i < 108; i++) {
-			var randInt = i + Math.floor(Math.random() * (108-i));
-			var temp = DECK[i];
-			DECK[i] = DECK[randInt];
-			DECK[randInt] = temp;
-		}
+	function CheckAllCards() {
+		$(".card").each(function() {
+			CheckCard($(this));
+		});
+	}
 
-		var prevPlayers = 0;
-		for (var i = 0; i < SEATS.length; i++) {
-			if (SEATS[i] === null) {
-				continue;
+	function CheckCard(cardEl, value) {
+		if (typeof cardEl.attr("seatNum") !== "undefined") {
+			var deckIndex = 6 * GetPlayerIndex(parseInt(cardEl.attr("seatNum"))) + parseInt(cardEl.attr("cardNum"));
+			if (typeof value !== "undefined" && DECK[deckIndex] != value) {
+				console.log(SEATS[parseInt(cardEl.attr("seatNum"))].name + " (" + (1 + parseInt(cardEl.attr("cardNum"))) + "): " + value + " should be " + DECK[deckIndex]);
 			}
 
-			var info = $("#playerInfo" + i);
-			info.removeClass("current");
-			var cards = $("#playerCards" + i);
-
-			for (var c = 6 * prevPlayers; c < 6 * prevPlayers + 6; c++) {
-				var td = cards.find("td").eq(c % 6);
-				RenderCard(td, DECK[c]);
+			if (typeof cardEl.attr("cardVal") !== "undefined") {
+				var cardVal = parseInt(cardEl.attr("cardVal"));
+				if (DECK[deckIndex] !== cardVal) {
+					console.log(SEATS[parseInt(cardEl.attr("seatNum"))].name + " (" + (1 + parseInt(cardEl.attr("cardNum"))) + "): showing as " + cardVal + " should be " + DECK[deckIndex]);
+				}
 			}
-
-			prevPlayers++;
-		}
-
-		DRAW_INDEX = (6 * PLAYERS.length) + 1;
-		DECK[DRAW_INDEX] = -DECK[DRAW_INDEX];
-
-		var totalDealt = PLAYERS.length * 6;
-		for (var i = 0; i < 2; i++) {
-			RenderCard($("#centerCell .card").eq(i), DECK[DRAW_INDEX + i]);
 		}
 	}
 
 	function RenderCard(td, value) {
+		td.attr("cardVal", value);
+		CheckCard(td, value);
 		td.removeClass("red").removeClass("black").removeClass("deck1").removeClass("deck2").removeClass("facedown").removeClass("faceup").removeClass("joker").attr("title", "");
 		var isFaceDown = (value < 0);
 		value = Math.abs(value);
@@ -1191,18 +1422,18 @@
 	function FitToWindow(pOnPageLoad) {
 		var currWindowSize = window.innerWidth;
 
-		if (currWindowSize === windowSize && pOnPageLoad !== true) {
+		if (currWindowSize === LAST_WINDOW_SIZE && pOnPageLoad !== true) {
 			return;
 		}
 
 
-		lastResize = new Date();
-		var currTime = lastResize; 
+		LAST_RESIZE = new Date();
+		var currTime = LAST_RESIZE; 
 		setTimeout(function() {
-			if (currTime !== lastResize) {
+			if (currTime !== LAST_RESIZE) {
 				return;
 			}
-			windowSize = window.innerWidth;
+			LAST_WINDOW_SIZE = window.innerWidth;
 			ResizeText();
 			var idealMiddle = 0.575;
 			var tableHeight = $("#playTable").height();
@@ -1268,6 +1499,7 @@
 	}
 
 	function FlipOverCard(pSeatNum, pCardNum) {
+		console.log(SEATS[pSeatNum].name + ": Flip over card #" + (pCardNum + 1));
 		var cards = $("#playerCards" + pSeatNum);
 		var card = cards.find(".card").eq(pCardNum);
 		var deckIndex = 6 * GetPlayerIndex(pSeatNum) + pCardNum;
@@ -1286,18 +1518,18 @@
 	function IncrementCurrent(pHighlight = false) {
 		//console.log("Incrementing");
 		var started = true;
-		while (started === true || SEATS[currentSeat] === null) {
+		while (started === true || SEATS[CURRENT_SEAT] === null) {
 			started = false;
-			currentSeat += 1;
-			currentSeat %= 14;
+			CURRENT_SEAT += 1;
+			CURRENT_SEAT %= TOTAL_SEATS;
 		}
 		//console.log("Done Incrementing");
 
 		$(".current").removeClass("current");
 
 		if (pHighlight) {
-			$("#playerInfo" + currentSeat).addClass("current");
-			$("#playerCards" + currentSeat).addClass("current");
+			$("#playerInfo" + CURRENT_SEAT).addClass("current");
+			$("#playerCards" + CURRENT_SEAT).addClass("current");
 		}
 	}
 
