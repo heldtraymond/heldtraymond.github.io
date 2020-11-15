@@ -266,15 +266,16 @@
     	#toggleScores, #toggleNames {
     		padding:6px;
     	}
-    	#instructionsContainer {
+    	#overlayContainer {
     		text-align:center;
     		width:100%;
     		position:absolute;
     		left:0;
     		z-index:100;
     		display:none;
+    		top:0;
     	}
-    	#instructionsBackground {
+    	#overlayBackground {
     		width:100%;
     		position:absolute;
     		height:100%;
@@ -323,13 +324,90 @@
 			margin-left:0.1em;
 			margin-right:0.1em;
 		}
+
+		#roundByRound {
+    		opacity:100%;
+    		text-align:left;
+    		display:inline-block;
+    		border: 4px solid black;
+    		border-radius:10px;
+    		background-color:white;
+    		padding:1em;
+    		margin-top:1em;
+    		position:relative;
+		}
+
+		#roundByRoundTable {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+    		font-size:20pt;
+    		border-collapse:collapse;
+    		display:inline-block;
+		}
+
+		#roundByRoundTable td {
+			border-top:1px solid #006600;
+			border-bottom:1px solid #006600;
+		}
+
+		#roundByRoundTable tr td:nth-child(1) {
+			text-align:right;
+			/*background-color:#88bb88 !important;*/
+		}
+		#roundByRoundTable tr th:nth-child(1) {
+			text-align:right;
+		}
+
+		#roundByRoundTable tr td:nth-child(even) {
+			background-color:#aaeeaa;
+			color:#000000;
+		}
+
+		#roundByRoundTable tr td:nth-child(2) {
+			background-color:#006600;
+			color:white !important;
+			/*border-right:3px solid black !important;*/
+		}
+
+		#roundByRoundTable th, #roundByRoundTable td {
+			padding:3px 7px 3px 7px;
+			text-align:center;
+			min-width:1em;
+		}
+
+		#roundByRoundTable th {
+			background-color:#006600;
+			color:white;
+		}
+
+		.buttonContainer {
+			text-align:center;
+		}
+
+		.overlayCloseButton {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+    		font-size:14pt;
+    		padding:5px;
+    		margin-top:10px;
+    		background-color:#8833bb;
+    		border-radius:7px;
+    		cursor:pointer;
+    		color:white;
+		}
+
+		.scoreImg {
+			height: 1.2em;
+			margin-right: 4px;
+			margin-bottom:-0.2em;
+		}
+
+
 		</style>
 	<script src="jquery.js"></script>
 </head>
 <body style="overflow-y:scroll;text-align:center;">
 	<span class="widthTest" id="widthTestValue">A</span>
 	<span class="widthTest" id="widthTestSuit">♣</span>
-	<img id="bgPhoto" src="LivingRoom6.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
+	<img id="bgPhoto" src="LivingRoom_1.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
 	<div id="playTableContainer">
 		<table id="playTable">
 			<tr>
@@ -409,9 +487,29 @@
 			</tr>
 		</table>
 	</div>
-	<div id="instructionsContainer">
-		<div id="instructionsBackground"></div>
-		<span id="instructions">
+	<div id="overlayContainer">
+		<div id="overlayBackground"></div>
+		<span id="roundByRound" class="overlayContent">
+			<table id="roundByRoundTable">
+				<tr>
+					<th>Player</th>
+					<th>Total</th>
+					<th>1</th>
+					<th>2</th>
+					<th>3</th>
+					<th>4</th>
+					<th>5</th>
+					<th>6</th>
+					<th>7</th>
+					<th>8</th>
+					<th>9</th>
+				</tr>
+			</table>
+			<div class="buttonContainer">
+				<button class="overlayCloseButton" id="roundByRoundCloseButton" onclick="RoundByRoundClose()">Begin Next Round</button>
+			</div>
+		</span>
+		<span id="instructions" class="overlayContent">
 			<u><i><strong>GOLF</strong></i></u>
 			<ul class="scoringSettings">
 			  <li>
@@ -484,7 +582,7 @@
 			PLAYERS.push({
 				name: NAMES[i],
 				scores: [0,0,0,0,0,0,0,0,0],
-				isLive: Math.random() < 0.15
+				isLive: Math.random() < 0.1
 			});
 		}
 	}
@@ -496,6 +594,7 @@
 	var SEATS = [];
 	var DEALER = null;
 	var CURRENT_SEAT = null;
+	var START_SEAT = null;
 	var END_SEAT = null;
 
 	var SUITS = ["♥", "♠", "♦", "♣"];
@@ -509,7 +608,56 @@
 	var LAST_WINDOW_SIZE = window.innerWidth;
 
 	Setup();
-	ShuffleUpAndDeal();
+	DrawRoundByRound();
+	//BeginNextRound();
+
+	function ChooseLivePlayers() {
+
+	}
+
+	function DrawRoundByRound() {
+		var PlayerScores = [];
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			if (SEATS[i] !== null) {
+				var total = 0;
+				for (var r = 0; r < 9; r++) {
+					total += SEATS[i].scores[r];
+				}
+				PlayerScores.push({
+					name: SEATS[i].name,
+					scores: SEATS[i].scores,
+					total: total,
+					isLive: SEATS[i].isLive
+				});
+			}
+		}
+
+		PlayerScores.sort(function(a, b) {
+			return (a.total > b.total ? -1 : (a.total < b.total ? 1 : (a.name < b.name ? -1 : 1)));
+		});
+
+		var lastPlaceScore = (ROUND_NUM < 1 ? 1 : PlayerScores[0].total);
+
+		$("#roundByRoundTable tr").each(function(index) {
+			if (index <= 0) return;
+
+			var player = PlayerScores[index - 1];
+			$(this).find("td").eq(0).html((player.total >= lastPlaceScore ? "<img src='trophy.png' class='scoreImg'>" : "") + player.name);
+			$(this).find("td").eq(1).html(player.total);
+			$(this).find("td").css("background-color", "");
+			for (var r = 0; r < 9; r++) {
+				$(this).find("td").eq(2 + r).html(r < ROUND_NUM ? player.scores[r] : "");
+			}
+
+			if (player.isLive) {
+				$(this).find("td").each(function(index) {
+					$(this).css("background-color", (index % 2 === 0 ? "#ffdddd" : (index === 1 ? "#aa0000" : "#ff9999")));
+				});
+			}
+		});
+
+		ShowRoundByRound();
+	}
 
 	function Setup() {
 		$(window).resize(SafeFitToWindow);
@@ -525,6 +673,12 @@
 			}
 
 			SEATS[seat] = PLAYERS[i];
+
+			var round = $("<tr></tr>");
+			for (var col = 0; col < 11; col++) {
+				round.append("<td></td>");
+			}
+			$("#roundByRoundTable").append(round);
 		}
 
 		$(".playerInfo").each(function() {
@@ -594,11 +748,6 @@
 		$("#centerCell").append(span);
 		$("#centerCell").append(status);
 
-		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").css("left", "125px").css("top", "11px");
-		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").css("left", "-123px").css("top", "11px");
-		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").css("top", "100px");
-		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img, .dealerLabel").css("top", "-80px");
-
 		$("#statusText").hide();
 
 		for (var i = 0; i < TOTAL_SEATS; i++) {
@@ -633,19 +782,45 @@
 		$("#centerCell>span").hide();
 	}
 
+	function BeginNextRound() {
+		ROUND_NUM++;
+		if (ROUND_NUM <= 9) {
+			ShuffleUpAndDeal();
+		}
+	}
+
+	function RoundByRoundClose() {
+		HideOverlay();
+		BeginNextRound();
+	}
 
 	function ShuffleUpAndDeal() {
 		END_SEAT = null;
-		CURRENT_SEAT = Math.floor(Math.random() * TOTAL_SEATS);
+		if (START_SEAT === null) {
+			START_SEAT = Math.floor(Math.random() * TOTAL_SEATS);
+			IncrementCurrent(false);
+			DEALER = CURRENT_SEAT;
+		}
+		else {
+			// Round 2 or later - dealer was last hand's first player
+			DEALER = START_SEAT;
+		}
+
+		CURRENT_SEAT = DEALER;
 		IncrementCurrent(false);
-		DEALER = CURRENT_SEAT;
-		IncrementCurrent(false);
+		START_SEAT = CURRENT_SEAT;
 
 		setTimeout(function() {
 			FitToWindow(true);
 		}, 500);
 
-		ROUND_NUM++;
+		$(".card").css("opacity", 0);
+		$(".playerName").hide();
+		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").css("left", "125px").css("top", "11px");
+		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").css("left", "-123px").css("top", "11px");
+		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").css("top", "100px");
+		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img, .dealerLabel").css("top", "-80px");
+
 		$("#statusText").html("Shuffling").hide();
 		$("#toggleScoresBox").prop("checked", SHOW_SCORES);
 		$("#toggleNamesBox").prop("checked", SHOW_NAMES);
@@ -885,11 +1060,12 @@
 			$(".endplayer").removeClass("endplayer");
 			CURRENT_SEAT === null;
 			ShowHideNames();
-			if (ROUND_NUM < 9) {
+			if (ROUND_NUM <= 9) {
 				$("#centerCell>span").hide();
 				PREV_SHOW_SCORES = SHOW_SCORES;
 				SHOW_SCORES = true;
 				ShowHideNames();
+				setTimeout(DrawRoundByRound, 2500);
 				/*$("#statusText").html("End of Round " + ROUND_NUM).show();
 				COUNTDOWN_TIME = (new Date()).getTime() + (121 * 1000); 
 				CLOCK_INTERVAL = setInterval(Countdown, 100);*/
@@ -1094,7 +1270,7 @@
 	}
 
 	function GetOpponentWaitDelay() {
-		return (END_SEAT === null ? 1000 : 2500);
+		return (END_SEAT === null ? 500 : 500);
 	}
 
 	function OpponentDrawCard() {
@@ -1576,6 +1752,26 @@
 		$(".jokerText").css("font-size", (scale * 8) + "pt");
 		$(".suit").css("font-size", (scale * suitScale * 24) + "pt");
 		$(".joker>span").not(".jokerText").css("font-size", (scale * suitScale * 12) + "pt");
+	}
+
+	function ShowRoundByRound() {
+		$("#roundByRoundCloseButton").html(ROUND_NUM < 9 ? ("Begin Round " + (ROUND_NUM + 1)) : "Close");
+		$(".overlayContent").hide();
+		$("#roundByRound").show();
+		ShowOverlay();
+	}
+
+	function ShowOverlay() {
+		var imageHeight = $("#bgPhoto").height();
+		var windowHeight = window.innerHeight;
+		var overlayHeight = (imageHeight > windowHeight ? imageHeight : windowHeight);
+		$(".overlayContent").css("top", window.scrollY);
+		$("#overlayContainer").css("height", "" + overlayHeight + "px").fadeIn(500);
+	}
+
+	function HideOverlay() {
+		$("#overlayContainer").fadeOut(500);
+		SafeFitToWindow();
 	}
 </script>
 
