@@ -317,7 +317,6 @@
 		}
 
 		#rulesStandings {
-    		opacity:100%;
     		text-align:left;
     		display:inline-block;
     		border: 4px solid black;
@@ -328,19 +327,52 @@
     		position:relative;
 		}
 
-    	/*#instructions {
-    		opacity:100%;
-    		text-align:left;
-    		width:13em;
+		#playerChoose {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+    		text-align:center;
     		display:inline-block;
-    		padding:1.7em;
-    		border: 4px solid black;
     		border-radius:10px;
-    		background-color:white;
-    		font-family:'Times New Roman';
-    		font-size:24pt;
-    		line-height:150%;
-    	}*/
+    		border: 4px solid #006600;
+    		background-color:#77cc77;
+    		padding:1em;
+    		margin-top:1em;
+    		position:relative;
+    		max-width:75%;
+		}
+
+		#playerChoose h1 {
+			font-size:20pt;
+			margin-top:0px;
+			margin-bottom:0px;
+		}
+		#playerChoose h2 {
+			margin-top:0px;
+			font-size:14pt;
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+		}
+
+		#playerChoose img.livePlayer {
+			border:8px solid #000099;
+			margin:0px;
+		}
+
+		#playerChoose img.livePlayer:hover {
+			border:8px solid #000099;
+			margin:0px;
+		}
+
+		#playerChoose img:hover {
+			border:6px solid #6666bb;
+			margin:2px;
+		}
+
+		#playerChoose img {
+			height:130px;
+			margin:5px;
+			border:3px solid white;
+			border-radius:15px;
+			cursor:pointer;
+		}
 
     	#instructions {
     		text-align:left;
@@ -561,6 +593,14 @@
 	</div>
 	<div id="overlayContainer">
 		<div id="overlayBackground"></div>
+		<span id="playerChoose" class="overlayContent">
+			<h1>Who is playing on this device?</h1>
+			<h2>(You can select more than one person)</h2>
+			<div id="playerPhotos"></div>
+			<div class="buttonContainer">
+				<button class="overlayCloseButton" onclick="PlayerSelectDone()">Play Golf!</button>
+			</div>
+		</span>
 		<span id="rulesStandings" class="overlayContent">
 			<div class="buttonContainer">
 				<button id='instructionsButton' class="rulesStandingsButton selected" onclick="ShowInstructions()">Scoring Rules</button>
@@ -625,7 +665,7 @@
 				</tr>
 			</table>
 			<div class="buttonContainer">
-				<button class="overlayCloseButton" id="roundByRoundCloseButton" onclick="RoundByRoundClose()">Close</button>
+				<button class="overlayCloseButton" onclick="OverlayClose()">Close</button>
 			</div>
 		</span>
 	</div>
@@ -633,36 +673,26 @@
 <script>
 	var DECK = [];
 	var NAMES = [
+		"Nicole",
 		"Samantha",
-		"Diane",
-		"Tracy",
-		"David",
-		"Jeff",
-		"Lauren",
-		"Michael",
+		"Justin",
 		"Elizabeth",
 		"Nicholas",
-		"Justin",
-		"Michelle",
-		"Nicole",
+		"Lauren",
+		"Michael",
 		"Angela",
 		"Ray",
+		"Tracy",
+		"Jeff",
+		"David",
+		"Michelle",
+		"Diane",
 	];
 	var ROUND_NUM = 0;
 	var DRAW_INDEX = 0;
 	var PLAYERS = [];
 	var SELECTED_CARD = null;
 	var DRAWING_TWO = false;
-
-	for (var i = 0; i < NAMES.length; i++) {
-		if (Math.random() < 0.99) {
-			PLAYERS.push({
-				name: NAMES[i],
-				scores: [0,0,0,0,0,0,0,0,0],
-				isLive: Math.random() < 0.15
-			});
-		}
-	}
 
 	var CLOCK_INTERVAL = null;
 	var COUNTDOWN_TIME = null;
@@ -684,15 +714,36 @@
 	var LAST_RESIZE = new Date();
 	var LAST_WINDOW_SIZE = window.innerWidth;
 
-	Setup();
-	FitToWindow(true);
-	DrawRoundByRound(false);
-	ShowNextRoundButton();
-	$(".startRoundButton").hide();
+	ChooseLivePlayers();
 	//BeginNextRound();
 
 	function ChooseLivePlayers() {
+		for (var i = 0; i < NAMES.length; i++) {
+			var img = $("<img>");
+			img.attr("nameIndex", i);
+			img.attr("src", "players/" + NAMES[i] + ".jpg");
+			img.attr("onclick", "ClickedPlayer(this)");
+			$("#playerPhotos").append(img);
+		}
+		ShowPlayerSelection();
+	}
 
+	function ClickedPlayer(el) {
+		if ($(el).hasClass("livePlayer")) {
+			$(el).removeClass("livePlayer");
+		}
+		else {
+			$(el).addClass("livePlayer");
+		}
+	}
+
+	function PlayerSelectDone() {
+		OverlayClose();
+		Setup();
+		FitToWindow(true);
+		DrawRoundByRound(false);
+		ShowNextRoundButton();
+		$(".startRoundButton").hide();
 	}
 
 	function DrawRoundByRound(pShow = true) {
@@ -744,6 +795,18 @@
 	function Setup() {
 		$(window).resize(SafeFitToWindow);
 		$(".centerInfo").hide();
+
+		for (var i = 0; i < NAMES.length; i++) {
+			var isLive = $("#playerChoose img").eq(i).hasClass("livePlayer");
+			if (isLive || Math.random() < 0.99) {
+				PLAYERS.push({
+					name: NAMES[i],
+					scores: [0,0,0,0,0,0,0,0,0],
+					isLive: isLive
+				});
+			}
+		}
+
 
 		for (var i = 0; i < TOTAL_SEATS; i++) {
 			SEATS.push(null);
@@ -883,7 +946,7 @@
 		}
 	}
 
-	function RoundByRoundClose() {
+	function OverlayClose() {
 		HideOverlay();
 	}
 
@@ -1043,7 +1106,7 @@
 	}
 
 	function FlipTwoCards(pSeatNum, pNow) {
-		var delay = (pNow === true ? 0 : 1000 + Math.floor(Math.random() * 2000));
+		var delay = (pNow === true ? 0 : 2000 + Math.floor(Math.random() * 4000));
 		setTimeout(function() {
 			var upCardIndex = null;
 			if (pNow === true) {
@@ -1363,7 +1426,7 @@
 	}
 
 	function GetOpponentWaitDelay() {
-		return (END_SEAT === null ? 500 : 500);
+		return (END_SEAT === null ? 700 : 1000);
 	}
 
 	function OpponentDrawCard() {
@@ -1809,6 +1872,10 @@
 		var actualWidth = window.innerWidth;
 		var scale = (actualWidth / idealWidth);
 
+		if (scale > 1.1) {
+			scale = 1.1;
+		}
+
 		var photoHeight = scale * 80;
 		if (photoHeight > 100) {
 			photoHeight = 100;
@@ -1852,7 +1919,16 @@
 		$(".joker>span").not(".jokerText").css("font-size", (scale * suitScale * 12) + "pt");
 	}
 
+	function ShowPlayerSelection() {
+		$(".overlayContent").hide();
+		$("#playerChoose").show();
+		ShowOverlay();
+	}
+
 	function ShowRulesInstructions() {
+		$(".overlayContent").hide();
+		$("#rulesStandings").show();
+
 		if ($("#instructionsButton").hasClass("selected")) {
 			ShowInstructions();
 		}
@@ -1862,8 +1938,6 @@
 	}
 
 	function ShowRoundByRound() {
-		$(".overlayContent").hide();
-		$("#rulesStandings").show();
 		$("#instructions").hide();
 		$("#roundByRoundTable").show();
 		$("#instructionsButton").removeClass("selected");
@@ -1872,8 +1946,6 @@
 	}
 
 	function ShowInstructions() {
-		$(".overlayContent").hide();
-		$("#rulesStandings").show();
 		$("#instructions").show();
 		$("#roundByRoundTable").hide();
 		$("#instructionsButton").addClass("selected");
