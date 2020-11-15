@@ -27,6 +27,7 @@
 		#playTable {
 			width:100%;
 			border-collapse:collapse;
+			table-layout:fixed;
 		}
 		.dealerLabel {
 			display:none;
@@ -237,14 +238,17 @@
     		padding-top:5px;
     		padding-bottom:3px;
     	}
+    	#leftCenterCell {
+    		text-align:right;
+    	}
     	#centerCell {
     		text-align:center;
     	}
-    	#toggleNamesBox {
-    		margin-right:6px;
+    	#rightCenterCell {
+    		text-align:left;
     	}
-    	#toggleScoresBox {
-    		margin-left:6px;
+    	#toggleNamesBox, #toggleScoresBox {
+    		margin-right:6px;
     	}
     	#toggleScoresBox, #toggleNamesBox {
     		height:20px;
@@ -271,7 +275,7 @@
     		width:100%;
     		position:absolute;
     		left:0;
-    		z-index:100;
+    		z-index:120;
     		display:none;
     		top:0;
     	}
@@ -283,19 +287,6 @@
     		background-color:black;
     		opacity:50%;
     		z-index:-1;
-    	}
-    	#instructions {
-    		opacity:100%;
-    		text-align:left;
-    		width:13em;
-    		display:inline-block;
-    		padding:1.7em;
-    		border: 4px solid black;
-    		border-radius:10px;
-    		background-color:white;
-    		font-family:'Times New Roman';
-    		font-size:24pt;
-    		line-height:150%;
     	}
     	.scoringSettings {
 			padding:0px;
@@ -325,7 +316,7 @@
 			margin-right:0.1em;
 		}
 
-		#roundByRound {
+		#rulesStandings {
     		opacity:100%;
     		text-align:left;
     		display:inline-block;
@@ -337,9 +328,33 @@
     		position:relative;
 		}
 
+    	/*#instructions {
+    		opacity:100%;
+    		text-align:left;
+    		width:13em;
+    		display:inline-block;
+    		padding:1.7em;
+    		border: 4px solid black;
+    		border-radius:10px;
+    		background-color:white;
+    		font-family:'Times New Roman';
+    		font-size:24pt;
+    		line-height:150%;
+    	}*/
+
+    	#instructions {
+    		text-align:left;
+    		width:13em;
+    		display:inline-block;
+    		padding:1em 2em 1em 2em;
+    		font-family:'Times New Roman';
+    		font-size:22pt;
+    		line-height:150%;
+    	}
+
 		#roundByRoundTable {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
-    		font-size:20pt;
+    		font-size:18pt;
     		border-collapse:collapse;
     		display:inline-block;
 		}
@@ -362,6 +377,11 @@
 			color:#000000;
 		}
 
+		/*#roundByRoundTable tr td:nth-child(odd) {
+			background-color:#eeaaaa;
+			color:#000000;
+		}*/
+
 		#roundByRoundTable tr td:nth-child(2) {
 			background-color:#006600;
 			color:white !important;
@@ -383,14 +403,50 @@
 			text-align:center;
 		}
 
-		.overlayCloseButton {
+		.buttonContainer button {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
     		font-size:14pt;
     		padding:5px;
     		margin-top:10px;
-    		background-color:#8833bb;
     		border-radius:7px;
     		cursor:pointer;
+		}
+
+		.rulesStandingsButton:hover {
+    		background-color:#6666ff;
+		}
+		.rulesStandingsButton.selected {
+    		color:#9999ff;
+    		background-color:#000066;
+		}
+		.rulesStandingsButton {
+    		background-color:#bbbbff;
+    		color:#000066;
+    		margin-bottom:10px;
+		}
+
+		#instructionsButton {
+			border-top-right-radius:0px;
+			border-bottom-right-radius:0px;
+			margin-right:-3px;
+		}
+		#standingsButton {
+			border-top-left-radius:0px;
+			border-bottom-left-radius:0px;
+			margin-left:-3px;
+		}
+
+		.startRoundButton:hover {
+    		color:#003300;
+    		background-color:#44bb44;
+		}
+		.startRoundButton {
+    		background-color:#006600;
+    		color:white;
+		}
+
+		.overlayCloseButton {
+    		background-color:#8833bb;
     		color:white;
 		}
 
@@ -400,6 +456,15 @@
 			margin-bottom:-0.2em;
 		}
 
+		#clipboard:hover {
+			cursor:pointer;
+			-webkit-filter: drop-shadow(0px 0px 30px #aa7744);
+			filter: drop-shadow(0px 0px 30px #aa7744);
+		}
+
+		#clipboard {
+			max-width:85%;
+		}
 
 		</style>
 	<script src="jquery.js"></script>
@@ -447,7 +512,14 @@
 				</td>
 				<td class="playerCards cellComponent" id="playerCards12">
 				</td>
-				<td colspan="4" id="centerCell"></td>
+				<td id="leftCenterCell">
+					<span id='toggleNames' class="centerInfo"><label class='toggleLabel' for='toggleNamesBox'>Show names</label><input type='checkbox' id='toggleNamesBox' onclick='ToggleNames()' /></span>
+					<span id='toggleScores' class="centerInfo"><label class='toggleLabel' for='toggleScoresBox'>Show scores</label><input type='checkbox' id='toggleScoresBox' onclick='ToggleScores()' /></span>
+				</td>
+				<td colspan="2" id="centerCell"></td>
+				<td id="rightCenterCell">
+					<img id="clipboard" class="centerInfo" src="clipboard2.png" onclick="ShowRulesInstructions()">
+				</td>
 				<td class="playerCards cellComponent" id="playerCards5">
 				</td>
 				<td class="playerInfo cellComponent left" id="playerInfo5">
@@ -489,7 +561,54 @@
 	</div>
 	<div id="overlayContainer">
 		<div id="overlayBackground"></div>
-		<span id="roundByRound" class="overlayContent">
+		<span id="rulesStandings" class="overlayContent">
+			<div class="buttonContainer">
+				<button id='instructionsButton' class="rulesStandingsButton selected" onclick="ShowInstructions()">Scoring Rules</button>
+				<button id='standingsButton' class="rulesStandingsButton" onclick="ShowRoundByRound()">Current Standings</button>
+			</div>
+			<span id="instructions">
+				<u><i><strong>GOLF</strong></i></u>
+				<ul class="scoringSettings">
+				  <li>
+				    <span class="cardType">Ace</span>
+				    <span class="cardPoints"><strong>1</strong> point</span>
+				  </li>
+				  <li>
+				    <span class="cardType">King</span>
+				    <span class="cardPoints"><strong>0</strong> points</span>
+				  </li>
+				  <li>
+				    <span class="cardType">Queen</span>
+				    <span class="cardPoints"><strong>10</strong> points</span>
+				  </li>
+				  <li>
+				    <span class="cardType">Jack</span>
+				    <span class="cardPoints"><strong>20</strong> points</span>
+				  </li>
+				  <li>
+				    <span class="cardType">Joker</span>
+				    <span class="cardPoints"><strong>-3</strong> points</span>
+				  </li>
+				  <li>
+				    <span class="cardType">All others</span>
+				    <span class="cardPoints"><strong>face</strong> value</span>
+				  </li>
+				  <!--span style="font-size:8pt">(Ugh, I hate using Times New Roman. Thanks, Rousseau's...)</span-->
+				  <br>
+				  <li>
+				    <span class="cardType">All 4 corners</span>
+				    <span class="cardPoints"><strong>-20</strong> points</span>
+				  </li>
+				  <li>
+				    <span class="cardType">4 next to each other</span>
+				    <span class="cardPoints"><strong>-20</strong> points</span>
+				  </li>
+				  <li>
+				    <span class="cardType">All 6</span>
+				    <span class="cardPoints"><strong>-30</strong> points</span>
+				  </li>
+				</ul>
+			</span>
 			<table id="roundByRoundTable">
 				<tr>
 					<th>Player</th>
@@ -506,50 +625,8 @@
 				</tr>
 			</table>
 			<div class="buttonContainer">
-				<button class="overlayCloseButton" id="roundByRoundCloseButton" onclick="RoundByRoundClose()">Begin Next Round</button>
+				<button class="overlayCloseButton" id="roundByRoundCloseButton" onclick="RoundByRoundClose()">Close</button>
 			</div>
-		</span>
-		<span id="instructions" class="overlayContent">
-			<u><i><strong>GOLF</strong></i></u>
-			<ul class="scoringSettings">
-			  <li>
-			    <span class="cardType">Ace</span>
-			    <span class="cardPoints"><strong>1</strong> point</span>
-			  </li>
-			  <li>
-			    <span class="cardType">King</span>
-			    <span class="cardPoints"><strong>0</strong> points</span>
-			  </li>
-			  <li>
-			    <span class="cardType">Queen</span>
-			    <span class="cardPoints"><strong>10</strong> points</span>
-			  </li>
-			  <li>
-			    <span class="cardType">Jack</span>
-			    <span class="cardPoints"><strong>20</strong> points</span>
-			  </li>
-			  <li>
-			    <span class="cardType">Joker</span>
-			    <span class="cardPoints"><strong>-3</strong> points</span>
-			  </li>
-			  <li>
-			    <span class="cardType">All others</span>
-			    <span class="cardPoints"><strong>face</strong> value</span>
-			  </li>
-			  <br>
-			  <li>
-			    <span class="cardType">All 4 corners</span>
-			    <span class="cardPoints"><strong>-20</strong> points</span>
-			  </li>
-			  <li>
-			    <span class="cardType">4 next to each other</span>
-			    <span class="cardPoints"><strong>-20</strong> points</span>
-			  </li>
-			  <li>
-			    <span class="cardType">All 6</span>
-			    <span class="cardPoints"><strong>-30</strong> points</span>
-			  </li>
-			</ul>
 		</span>
 	</div>
 </body>
@@ -582,7 +659,7 @@
 			PLAYERS.push({
 				name: NAMES[i],
 				scores: [0,0,0,0,0,0,0,0,0],
-				isLive: Math.random() < 0.1
+				isLive: Math.random() < 0.15
 			});
 		}
 	}
@@ -608,14 +685,17 @@
 	var LAST_WINDOW_SIZE = window.innerWidth;
 
 	Setup();
-	DrawRoundByRound();
+	FitToWindow(true);
+	DrawRoundByRound(false);
+	ShowNextRoundButton();
+	$(".startRoundButton").hide();
 	//BeginNextRound();
 
 	function ChooseLivePlayers() {
 
 	}
 
-	function DrawRoundByRound() {
+	function DrawRoundByRound(pShow = true) {
 		var PlayerScores = [];
 		for (var i = 0; i < TOTAL_SEATS; i++) {
 			if (SEATS[i] !== null) {
@@ -649,18 +729,21 @@
 				$(this).find("td").eq(2 + r).html(r < ROUND_NUM ? player.scores[r] : "");
 			}
 
-			if (player.isLive) {
+			/*if (player.isLive) {
 				$(this).find("td").each(function(index) {
 					$(this).css("background-color", (index % 2 === 0 ? "#ffdddd" : (index === 1 ? "#aa0000" : "#ff9999")));
 				});
-			}
+			}*/
 		});
 
-		ShowRoundByRound();
+		if (pShow === true) {
+			ShowRoundByRound();
+		}
 	}
 
 	function Setup() {
 		$(window).resize(SafeFitToWindow);
+		$(".centerInfo").hide();
 
 		for (var i = 0; i < TOTAL_SEATS; i++) {
 			SEATS.push(null);
@@ -743,8 +826,6 @@
 		}
 		innerSpan.append(table);
 		span.append(innerSpan);
-		span.append("<span id='toggleNames'><label class='toggleLabel' for='toggleNamesBox'>Show names</label><input type='checkbox' id='toggleNamesBox' onclick='ToggleNames()' /></span>");
-		span.append("<span id='toggleScores'><input type='checkbox' id='toggleScoresBox' onclick='ToggleScores()' /><label class='toggleLabel' for='toggleScoresBox'>Show scores</label></span>");
 		$("#centerCell").append(span);
 		$("#centerCell").append(status);
 
@@ -770,19 +851,32 @@
 			}
 		}
 
-		if (SHOW_SCORES || SHOW_NAMES) {
-			$(".playerName").css("opacity", "0");
-		}
-		else {
-			$(".playerName").hide();
-		}
-
+		$(".playerName").hide();
 		$(".playerInfo, .playerName").css("opacity", "0");
 		$(".playerCards .card").css("opacity", "0");
+		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").css("left", "125px").css("top", "11px");
+		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").css("left", "-123px").css("top", "11px");
+		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").css("top", "100px");
+		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img, .dealerLabel").css("top", "-80px");
 		$("#centerCell>span").hide();
+
+		setTimeout(function() {
+			$(".playerInfo").animate({opacity:1}, 400);
+			$("#rightCenterCell .centerInfo, .startRoundButton").fadeIn(300);
+		}, 1000);
+	}
+
+	function ShowNextRoundButton() {
+		var buttonDiv = $("<div class='buttonContainer'></div>");
+		var button = $("<button class='startRoundButton'>Begin Round " + (ROUND_NUM + 1) + "</button>");
+		button.attr("onclick", "BeginNextRound()");
+		buttonDiv.append(button);
+		$("#centerCell").append(buttonDiv);
 	}
 
 	function BeginNextRound() {
+		$(".startRoundButton").parent().remove();
+
 		ROUND_NUM++;
 		if (ROUND_NUM <= 9) {
 			ShuffleUpAndDeal();
@@ -791,7 +885,6 @@
 
 	function RoundByRoundClose() {
 		HideOverlay();
-		BeginNextRound();
 	}
 
 	function ShuffleUpAndDeal() {
@@ -816,6 +909,7 @@
 
 		$(".card").css("opacity", 0);
 		$(".playerName").hide();
+		$("#leftCenterCell .centerInfo").hide();
 		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").css("left", "125px").css("top", "11px");
 		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").css("left", "-123px").css("top", "11px");
 		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").css("top", "100px");
@@ -862,8 +956,6 @@
 			RenderCard($("#centerCell .card").eq(i), DECK[DRAW_INDEX + i]);
 		}
 
-		setTimeout(function() {
-			$(".playerInfo").css("opacity", "1");
 		setTimeout(function() {
 			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
 			$("#playerInfo" + DEALER + " .dealerLabel").show();
@@ -915,6 +1007,7 @@
 				}
 
 				setTimeout(function() {
+					$("#leftCenterCell .centerInfo").show();
 					$(".playerName").css("opacity", "1");
 					$(".playerInfoWrapper img").css("border", "").css("margin", "");
 					$("#playerInfo" + DEALER + " .dealerLabel").hide();
@@ -931,8 +1024,7 @@
 		}, 100);
 		}, 100);
 		}, 100);
-		}, 700);
-		}, 1500);
+		}, 100);
 	}
 
 	function EveryoneDrawTwo() {
@@ -1065,7 +1157,8 @@
 				PREV_SHOW_SCORES = SHOW_SCORES;
 				SHOW_SCORES = true;
 				ShowHideNames();
-				setTimeout(DrawRoundByRound, 2500);
+				setTimeout(DrawRoundByRound, 2000);
+				setTimeout(ShowNextRoundButton, 2500);
 				/*$("#statusText").html("End of Round " + ROUND_NUM).show();
 				COUNTDOWN_TIME = (new Date()).getTime() + (121 * 1000); 
 				CLOCK_INTERVAL = setInterval(Countdown, 100);*/
@@ -1660,6 +1753,8 @@
 	            }*/
             }
 
+            FitOverlay();
+
 		}, 100);
 	}
 
@@ -1723,7 +1818,10 @@
 		}
 
 		$(".playerInfo img").css("max-height", photoHeight + "px");
-		$(".playerName, #centerCell").css("font-size", (scale * 12 < 10 ? 10 : scale * 12) + "pt");
+		$(".playerName, #centerCell, .centerInfo").css("font-size", (scale * 12 < 7 ? 7 : scale * 12) + "pt");
+		$("#roundByRoundTable").css("font-size", (scale * 18) + "pt");
+		$("#instructions").css("font-size", (scale * 22) + "pt");
+		$(".buttonContainer button").css("font-size", (scale * 14) + "pt");
 
 		ResizeCards();
 	}
@@ -1754,19 +1852,46 @@
 		$(".joker>span").not(".jokerText").css("font-size", (scale * suitScale * 12) + "pt");
 	}
 
+	function ShowRulesInstructions() {
+		if ($("#instructionsButton").hasClass("selected")) {
+			ShowInstructions();
+		}
+		else {
+			ShowRoundByRound();
+		}
+	}
+
 	function ShowRoundByRound() {
-		$("#roundByRoundCloseButton").html(ROUND_NUM < 9 ? ("Begin Round " + (ROUND_NUM + 1)) : "Close");
 		$(".overlayContent").hide();
-		$("#roundByRound").show();
+		$("#rulesStandings").show();
+		$("#instructions").hide();
+		$("#roundByRoundTable").show();
+		$("#instructionsButton").removeClass("selected");
+		$("#standingsButton").addClass("selected");
+		ShowOverlay();
+	}
+
+	function ShowInstructions() {
+		$(".overlayContent").hide();
+		$("#rulesStandings").show();
+		$("#instructions").show();
+		$("#roundByRoundTable").hide();
+		$("#instructionsButton").addClass("selected");
+		$("#standingsButton").removeClass("selected");
 		ShowOverlay();
 	}
 
 	function ShowOverlay() {
+		FitOverlay();
+		$("#overlayContainer").fadeIn(500);
+	}
+
+	function FitOverlay() {
 		var imageHeight = $("#bgPhoto").height();
 		var windowHeight = window.innerHeight;
 		var overlayHeight = (imageHeight > windowHeight ? imageHeight : windowHeight);
 		$(".overlayContent").css("top", window.scrollY);
-		$("#overlayContainer").css("height", "" + overlayHeight + "px").fadeIn(500);
+		$("#overlayContainer").css("height", "" + overlayHeight + "px");
 	}
 
 	function HideOverlay() {
