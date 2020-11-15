@@ -164,7 +164,7 @@
 			background-color:white;
 			border-radius:8px;
 			border:3px solid black;
-			max-height:80px;
+			max-height:100px;
 			position:relative;
 		}
 		.playerName {
@@ -498,6 +498,25 @@
 			max-width:85%;
 		}
 
+		#playButton:hover {
+    		color:#003300;
+    		background-color:#44bb44;
+		}
+
+		#playButton {
+			background-color:#006600;
+			color:white;
+			font-size:30pt;
+		}
+
+		#playButtonContainer {
+			position:relative;
+			text-align:center;
+			width:100%;
+			left:0;
+			top:0;
+		}
+
 		</style>
 	<script src="jquery.js"></script>
 </head>
@@ -545,7 +564,7 @@
 				<td class="playerCards cellComponent" id="playerCards12">
 				</td>
 				<td id="leftCenterCell">
-					<span id='toggleNames' class="centerInfo"><label class='toggleLabel' for='toggleNamesBox'>Show names</label><input type='checkbox' id='toggleNamesBox' onclick='ToggleNames()' /></span>
+					<span id='toggleNames' class="centerInfo"><label class='toggleLabel' for='toggleNamesBox'>Show names</label><input type='checkbox' id='toggleNamesBox' onclick='ToggleNames()' /></span><br>
 					<span id='toggleScores' class="centerInfo"><label class='toggleLabel' for='toggleScoresBox'>Show scores</label><input type='checkbox' id='toggleScoresBox' onclick='ToggleScores()' /></span>
 				</td>
 				<td colspan="2" id="centerCell"></td>
@@ -591,6 +610,9 @@
 			</tr>
 		</table>
 	</div>
+	<div class="buttonContainer" id="playButtonContainer">
+		<button id='playButton' onclick="ClickedPlayButton()">Play Golf!</button>
+	</div>
 	<div id="overlayContainer">
 		<div id="overlayBackground"></div>
 		<span id="playerChoose" class="overlayContent">
@@ -598,7 +620,7 @@
 			<h2>(You can select more than one person)</h2>
 			<div id="playerPhotos"></div>
 			<div class="buttonContainer">
-				<button class="overlayCloseButton" onclick="PlayerSelectDone()">Play Golf!</button>
+				<button class="overlayCloseButton" onclick="PlayerSelectDone()">Play</button>
 			</div>
 		</span>
 		<span id="rulesStandings" class="overlayContent">
@@ -714,8 +736,20 @@
 	var LAST_RESIZE = new Date();
 	var LAST_WINDOW_SIZE = window.innerWidth;
 
-	ChooseLivePlayers();
+	$(".centerInfo").hide();
+	$("#playButtonContainer").hide();
+	setTimeout(ShowPlayButton, 400);
 	//BeginNextRound();
+
+	function ShowPlayButton() {
+		var photoHeight = $("#bgPhoto").height();
+		$("#playButtonContainer").css("top", photoHeight * 0.35).fadeIn(300);
+	}
+
+	function ClickedPlayButton() {
+		$("#playButton").fadeOut(250);
+		ChooseLivePlayers();
+	}
 
 	function ChooseLivePlayers() {
 		for (var i = 0; i < NAMES.length; i++) {
@@ -1221,11 +1255,13 @@
 				SHOW_SCORES = true;
 				ShowHideNames();
 				setTimeout(DrawRoundByRound, 2000);
-				setTimeout(ShowNextRoundButton, 2500);
 				/*$("#statusText").html("End of Round " + ROUND_NUM).show();
 				COUNTDOWN_TIME = (new Date()).getTime() + (121 * 1000); 
 				CLOCK_INTERVAL = setInterval(Countdown, 100);*/
 				//setTimeout(ShuffleUpAndDeal, 10000);
+			}
+			if (ROUND_NUM <= 8) {
+				setTimeout(ShowNextRoundButton, 2500);
 			}
 			// End of hand
 			setTimeout(function() {
@@ -1872,11 +1908,11 @@
 		var actualWidth = window.innerWidth;
 		var scale = (actualWidth / idealWidth);
 
-		if (scale > 1.1) {
-			scale = 1.1;
+		if (scale > 1) {
+			scale = 1;
 		}
 
-		var photoHeight = scale * 80;
+		var photoHeight = scale * 100;
 		if (photoHeight > 100) {
 			photoHeight = 100;
 		}
