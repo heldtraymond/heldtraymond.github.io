@@ -65,9 +65,11 @@
 			border-color:red;
 			background-color:#ffdddd;
 		}
+		.card.showOutline {
+			border:2px solid black;
+		}
 		.card {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
-			border:2px solid black;
 			border-radius:6px;
 			background-color:white;
 			font-size:24pt;
@@ -617,7 +619,7 @@
 		<div id="overlayBackground"></div>
 		<span id="playerChoose" class="overlayContent">
 			<h1>Who is playing on this device?</h1>
-			<h2>(You can select more than one person)</h2>
+			<h2>(You can select multiple people)</h2>
 			<div id="playerPhotos"></div>
 			<div class="buttonContainer">
 				<button class="overlayCloseButton" onclick="PlayerSelectDone()">Play</button>
@@ -953,8 +955,9 @@
 		}
 
 		$(".playerName").hide();
-		$(".playerInfo, .playerName").css("opacity", "0");
-		$(".playerCards .card").css("opacity", "0");
+		$(".playerInfo, .playerName").css("opacity", 0);
+		$(".playerCards .card").css("opacity", 0);
+		$(".card").removeClass("showOutline");
 		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").css("left", "125px").css("top", "11px");
 		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").css("left", "-123px").css("top", "11px");
 		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").css("top", "100px");
@@ -975,6 +978,14 @@
 		$("#centerCell").append(buttonDiv);
 	}
 
+	function AnyLivePlayers() {
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			if (SEATS[i] === null) continue;
+			if (SEATS[i].isLive) return true;
+		}
+		return false;
+	}
+
 	function BeginNextRound() {
 		$(".startRoundButton").parent().remove();
 
@@ -991,7 +1002,7 @@
 	function ShuffleUpAndDeal() {
 		END_SEAT = null;
 		if (START_SEAT === null) {
-			START_SEAT = Math.floor(Math.random() * TOTAL_SEATS);
+			CURRENT_SEAT = Math.floor(Math.random() * TOTAL_SEATS);
 			IncrementCurrent(false);
 			DEALER = CURRENT_SEAT;
 		}
@@ -1008,54 +1019,21 @@
 			FitToWindow(true);
 		}, 500);
 
-		$(".card").css("opacity", 0);
 		$(".playerName").hide();
 		$("#leftCenterCell .centerInfo").hide();
-		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").css("left", "125px").css("top", "11px");
-		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").css("left", "-123px").css("top", "11px");
-		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").css("top", "100px");
-		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img, .dealerLabel").css("top", "-80px");
+
+		$.when($(".card").animate({opacity: 0}, 400)).then(function() {
+			$(".card").removeClass("showOutline");
+		});
+		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").animate({left:"125px", top: "11px"}, 1200);
+		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").animate({left:"-123px", top: "11px"}, 1200);
+		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").animate({top: "100px"}, 1200);
+		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img, .dealerLabel").animate({top: "-80px"}, 1200);
 
 		$("#statusText").html("Shuffling").hide();
 		$("#toggleScoresBox").prop("checked", SHOW_SCORES);
 		$("#toggleNamesBox").prop("checked", SHOW_NAMES);
 		$("#roundNum").html("Round " + ROUND_NUM + " of 9");
-		for (var i = 0; i < 108; i++) {
-			DECK[i] = -(i + 1);
-		}
-
-		for (var i = 0; i < 108; i++) {
-			var randInt = i + Math.floor(Math.random() * (108-i));
-			var temp = DECK[i];
-			DECK[i] = DECK[randInt];
-			DECK[randInt] = temp;
-		}
-
-		var prevPlayers = 0;
-		for (var i = 0; i < SEATS.length; i++) {
-			if (SEATS[i] === null) {
-				continue;
-			}
-
-			var info = $("#playerInfo" + i);
-			info.removeClass("current");
-			var cards = $("#playerCards" + i);
-
-			for (var c = 6 * prevPlayers; c < 6 * prevPlayers + 6; c++) {
-				var td = cards.find("td").eq(c % 6);
-				RenderCard(td, DECK[c]);
-			}
-
-			prevPlayers++;
-		}
-
-		DRAW_INDEX = (6 * PLAYERS.length) + 1;
-		DECK[DRAW_INDEX] = -DECK[DRAW_INDEX];
-
-		var totalDealt = PLAYERS.length * 6;
-		for (var i = 0; i < 2; i++) {
-			RenderCard($("#centerCell .card").eq(i), DECK[DRAW_INDEX + i]);
-		}
 
 		setTimeout(function() {
 			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
@@ -1079,14 +1057,51 @@
 			}, 1500);
 			setTimeout(function() {
 				$("#statusText").html("Dealing").hide();
-				ShowHideNames();
+				//ShowHideNames();
 
 				var delayTime = 0;
 				var totalCards = 0;
 				var firstPlayerSeat = CURRENT_SEAT;
 				DRAWING_TWO = true;
-				COUNTDOWN_TIME = (new Date()).getTime() + (31 * 1000);
+				COUNTDOWN_TIME = (new Date()).getTime() + (61 * 1000);
 				CLOCK_INTERVAL = setInterval(Countdown, 100);
+
+				for (var i = 0; i < 108; i++) {
+					DECK[i] = -(i + 1);
+				}
+
+				for (var i = 0; i < 108; i++) {
+					var randInt = i + Math.floor(Math.random() * (108-i));
+					var temp = DECK[i];
+					DECK[i] = DECK[randInt];
+					DECK[randInt] = temp;
+				}
+
+				var prevPlayers = 0;
+				for (var i = 0; i < SEATS.length; i++) {
+					if (SEATS[i] === null) {
+						continue;
+					}
+
+					var info = $("#playerInfo" + i);
+					info.removeClass("current");
+					var cards = $("#playerCards" + i);
+
+					for (var c = 6 * prevPlayers; c < 6 * prevPlayers + 6; c++) {
+						var td = cards.find("td").eq(c % 6);
+						RenderCard(td, DECK[c]);
+					}
+
+					prevPlayers++;
+				}
+
+				DRAW_INDEX = (6 * PLAYERS.length) + 1;
+				DECK[DRAW_INDEX] = -DECK[DRAW_INDEX];
+
+				var totalDealt = PLAYERS.length * 6;
+				for (var i = 0; i < 2; i++) {
+					RenderCard($("#centerCell .card").eq(i), DECK[DRAW_INDEX + i]);
+				}
 
 				for (var q = 0; q < 6; q++) {
 					for (var p = 0; p < SEATS.length; p++) {
@@ -1114,7 +1129,8 @@
 					$("#playerInfo" + DEALER + " .dealerLabel").hide();
 					$("#playerInfo" + firstPlayerSeat).addClass("firstPlayer");
 					$("#playerCards" + firstPlayerSeat).addClass("firstPlayer");
-
+					$("#centerCell .card").addClass("showOutline");
+					ShowHideNames();
 					EveryoneDrawTwo();
 				}, delayTime + 1000);
 	  		}, 1500);
@@ -1125,7 +1141,7 @@
 		}, 100);
 		}, 100);
 		}, 100);
-		}, 100);
+		}, (ROUND_NUM <= 1 ? 450 : 2000));
 	}
 
 	function EveryoneDrawTwo() {
@@ -1144,7 +1160,7 @@
 	}
 
 	function FlipTwoCards(pSeatNum, pNow) {
-		var delay = (pNow === true ? 0 : 2000 + Math.floor(Math.random() * 4000));
+		var delay = (pNow === true ? 0 : 1000 + Math.floor(Math.random() * (AnyLivePlayers() ? 15000 : 1000)));
 		setTimeout(function() {
 			var upCardIndex = null;
 			if (pNow === true) {
@@ -1250,7 +1266,6 @@
 		IncrementCurrent(true);
 		if (END_SEAT !== null && END_SEAT === CURRENT_SEAT) {
 			$(".current").removeClass("current");
-			$(".endplayer").removeClass("endplayer");
 			CURRENT_SEAT === null;
 			ShowHideNames();
 			if (ROUND_NUM <= 9) {
@@ -1269,8 +1284,10 @@
 			}
 			// End of hand
 			setTimeout(function() {
+				$(".endplayer").removeClass("endplayer");
 				$(".playerInfo .playerName span").css("background-color", "").css("border-color", "");
-			}, 1500);
+				$(".playerCards .card").css("opacity", 0.5);
+			}, 1000);
 		}
 		else {
 			if (SEATS[CURRENT_SEAT].isLive) {
@@ -1309,8 +1326,8 @@
 			var seconds = totalSeconds % 60;
 			var timeString = ("" + minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
 
-			var displayString = "Round " + (ROUND_NUM) + " begins in " + timeString;			
-			displayString += "<br><br>You can use this time to flip<br>your 2 cards over, otherwise<br>2 random cards will be flipped.";
+			var displayString = timeString;			
+			displayString += " remaining to<br>flip over 2 cards";
 			$("#statusText").html(displayString).show();
 		}
 	}
@@ -1349,7 +1366,7 @@
 			setTimeout(function() {
 				labelEl.html(GetPlayerLabelText(pSeatNum)).css("background-color", "#ffaaaa").css("border-color", "red");
 				labelEl.fadeIn(200);
-			}, 201);
+			}, 1);
 		});
 	}
 
@@ -1454,7 +1471,7 @@
 		if (swapIndex !== null) {
 			OpponentTakeDiscard(swapIndex);
 		}
-		else if (facedownIndices.length > 0 && randNum < 0.35) {
+		else if (facedownIndices.length > 0 && randNum < (AnyLivePlayers() ? 0.35 : 0.7)) {
 			FlipOverCard(CURRENT_SEAT, facedownIndices[Math.floor(Math.random() * facedownIndices.length)]);
 		}
 		else if (Math.random() < 0.5 || swappable.length <= 0) {
@@ -1466,7 +1483,7 @@
 	}
 
 	function GetOpponentWaitDelay() {
-		return (END_SEAT === null ? 700 : 1000);
+		return (AnyLivePlayers() ? (END_SEAT === null ? 700 : 1000) : 100);
 	}
 
 	function OpponentDrawCard() {
@@ -1699,7 +1716,7 @@
 
 	function DealCard(card, delayTime) {
 		setTimeout(function() {
-			card.css("opacity", "1");
+			card.css("opacity", 1).addClass("showOutline");
 		}, delayTime);
 	}
 
