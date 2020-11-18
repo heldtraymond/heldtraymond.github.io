@@ -9,6 +9,10 @@
 			text-align:center;
 			font-family:'Tahoma', Verdana, sans-serif;
 		}
+		#fullScreen {
+			color:blue;
+			cursor:pointer;
+		}
 		.widthTest {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
 			font-size:50pt;
@@ -260,17 +264,19 @@
     		vertical-align:middle;
     		cursor:pointer;
     	}
-    	#toggleScores:hover, #toggleNames:hover {
+    	#leftCenterCell .centerInfo:hover {
     		cursor:pointer;
     		background-color:#bbbbff;
     		border:2px solid #000088;
-    		border-radius:6px;
-    		padding-top:2px;
-    		padding-right:4px;
-    		padding-left:4px;
+    		border-radius:4px;
+    		padding:0px 1px 2px 0px;
     	}
-    	#toggleScores, #toggleNames {
-    		padding:6px;
+    	#leftCenterCell .centerInfo {
+    		padding:2px 3px 4px 2px;
+    	}
+    	#toggleNames, #toggleScores {
+    		width:100%;
+    		display:inline-block;
     	}
     	#overlayContainer {
     		text-align:center;
@@ -339,7 +345,7 @@
     		padding:1em;
     		margin-top:1em;
     		position:relative;
-    		max-width:75%;
+    		max-width:620px;
 		}
 
 		#playerChoose h1 {
@@ -525,7 +531,7 @@
 <body style="overflow-y:scroll;text-align:center;">
 	<span class="widthTest" id="widthTestValue">A</span>
 	<span class="widthTest" id="widthTestSuit">♣</span>
-	<img id="bgPhoto" src="LivingRoom_1.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
+	<img id="bgPhoto" src="LivingRoomThansgiving.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
 	<div id="playTableContainer">
 		<table id="playTable">
 			<tr>
@@ -566,12 +572,13 @@
 				<td class="playerCards cellComponent" id="playerCards12">
 				</td>
 				<td id="leftCenterCell">
-					<span id='toggleNames' class="centerInfo"><label class='toggleLabel' for='toggleNamesBox'>Show names</label><input type='checkbox' id='toggleNamesBox' onclick='ToggleNames()' /></span><br>
+					<span id='toggleNames' class="centerInfo"><label class='toggleLabel' for='toggleNamesBox'>Show names</label><input type='checkbox' id='toggleNamesBox' onclick='ToggleNames()' /></span>
 					<span id='toggleScores' class="centerInfo"><label class='toggleLabel' for='toggleScoresBox'>Show scores</label><input type='checkbox' id='toggleScoresBox' onclick='ToggleScores()' /></span>
+					<span id='fullScreen' class="centerInfo alwaysClickable"><u onclick="ToggleFullScreen()">Full-Screen</u></span>
 				</td>
 				<td colspan="2" id="centerCell"></td>
 				<td id="rightCenterCell">
-					<img id="clipboard" class="centerInfo" src="clipboard2.png" onclick="ShowRulesStandings()">
+					<img id="clipboard" class="centerInfo alwaysClickable" src="clipboard2.png" onclick="ShowRulesStandings()">
 				</td>
 				<td class="playerCards cellComponent" id="playerCards5">
 				</td>
@@ -728,6 +735,8 @@
 	var START_SEAT = null;
 	var END_SEAT = null;
 
+	var IS_FULLSCREEN = false;
+
 	var SUITS = ["♥", "♠", "♦", "♣"];
 	var VALS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
 
@@ -741,6 +750,16 @@
 	$(".centerInfo").hide();
 	$("#playButtonContainer").hide();
 	setTimeout(ShowPlayButton, 400);
+
+	// Load the images now so they're ready to display when user clicks Play Golf!
+	for (var i = 0; i < NAMES.length; i++) {
+		var img = $("<img>");
+		img.attr("nameIndex", i);
+		img.attr("src", "players/" + NAMES[i] + ".jpg");
+		img.attr("onclick", "ClickedPlayer(this)");
+		$("#playerPhotos").append(img);
+	}
+
 	//BeginNextRound();
 
 	function ShowPlayButton() {
@@ -754,13 +773,6 @@
 	}
 
 	function ChooseLivePlayers() {
-		for (var i = 0; i < NAMES.length; i++) {
-			var img = $("<img>");
-			img.attr("nameIndex", i);
-			img.attr("src", "players/" + NAMES[i] + ".jpg");
-			img.attr("onclick", "ClickedPlayer(this)");
-			$("#playerPhotos").append(img);
-		}
 		ShowPlayerSelection();
 	}
 
@@ -847,7 +859,6 @@
 			}
 		}
 
-
 		for (var i = 0; i < TOTAL_SEATS; i++) {
 			SEATS.push(null);
 		}
@@ -910,6 +921,7 @@
 		});
 		var status = $("<span id='statusText'></span>");
 		var span = $("<span style='display:inline-block;text-align:center;'><span id='roundNum'></span></span>");
+		var turnSpan = $("<span id='whoseTurn'></span>");
 		var innerSpan = $("<span></span>");
 		var table = $("<table align='center'></table>");
 		var tr = $("<tr></tr>");
@@ -929,6 +941,7 @@
 		}
 		innerSpan.append(table);
 		span.append(innerSpan);
+		span.append(turnSpan);
 		$("#centerCell").append(span);
 		$("#centerCell").append(status);
 
@@ -966,7 +979,7 @@
 
 		setTimeout(function() {
 			$(".playerInfo").animate({opacity:1}, 400);
-			$("#rightCenterCell .centerInfo, .startRoundButton").fadeIn(300);
+			$("#clipboard, #fullScreen, .startRoundButton").fadeIn(300);
 		}, 1000);
 	}
 
@@ -1020,7 +1033,7 @@
 		}, 500);
 
 		$(".playerName").hide();
-		$("#leftCenterCell .centerInfo").hide();
+		$("#leftCenterCell .centerInfo").not("#fullScreen").hide();
 
 		$.when($(".card").animate({opacity: 0}, 400)).then(function() {
 			$(".card").removeClass("showOutline");
@@ -1290,6 +1303,7 @@
 			}, 1000);
 		}
 		else {
+			$("#whoseTurn").html(SEATS[CURRENT_SEAT].name + "'s turn");
 			if (SEATS[CURRENT_SEAT].isLive) {
 				// Set playable cards for live player
 				var cards = GetPlayerCards(CURRENT_SEAT);
@@ -1889,10 +1903,45 @@
 		return playerNum;
 	}
 
+	function ToggleFullScreen() {
+	/*	var body = $("body")[0];
+		if (body.requestFullscreen) {
+			body.requestFullscreen();
+		} else if (body.webkitRequestFullscreen) { // Safari 
+			body.webkitRequestFullscreen();
+		} else if (elem.msRequestFullscreen) { // IE11
+			body.msRequestFullscreen();
+		}*/
+
+		if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {  // current working methods
+			if (document.documentElement.requestFullscreen) {
+				document.documentElement.requestFullscreen();
+			} else if (document.documentElement.msRequestFullscreen) {
+				document.documentElement.msRequestFullscreen();
+			} else if (document.documentElement.mozRequestFullScreen) {
+				document.documentElement.mozRequestFullScreen();
+			} else if (document.documentElement.webkitRequestFullscreen) {
+				document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+			}
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document.msExitFullscreen) {
+				document.msExitFullscreen();
+			} else if (document.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			} else if (document.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			}
+		}
+  		FitToWindow(true);
+	}
+
 	function FlipOverCard(pSeatNum, pCardNum) {
 		console.log(SEATS[pSeatNum].name + ": Flip over card #" + (pCardNum + 1));
 		var cards = $("#playerCards" + pSeatNum);
 		var card = cards.find(".card").eq(pCardNum);
+		card.removeClass("playableCard");
 		var deckIndex = 6 * GetPlayerIndex(pSeatNum) + pCardNum;
 		var value = -DECK[deckIndex];
 		DECK[deckIndex] = value;
