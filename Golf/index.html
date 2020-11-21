@@ -9,10 +9,10 @@
 			text-align:center;
 			font-family:'Tahoma', Verdana, sans-serif;
 		}
-		#fullScreen {
+		/*#fullScreen {
 			color:blue;
 			cursor:pointer;
-		}
+		}*/
 		.widthTest {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
 			font-size:50pt;
@@ -115,11 +115,11 @@
 			background-position:center;
 		}
 		.facedown.deck1 {
-			background-image:url('cardBackBicycle.png');
+			background-image:url('cardBackBicycle.gif');
 			background-color:#252760;
 		}
 		.facedown.deck2 {
-			background-image:url('cardBackDominos2.png');
+			background-image:url('cardBackDominos.gif');
 			background-color:#000000;
 		}
 		.playerCell {
@@ -217,6 +217,22 @@
     	.card.selectedCard {
     		background-color:#aaaaff !important;
     	}
+    	@media (hover: none) {
+			.playableCard.faceup:not(.discard):not(.selectedCard) {
+				background-color:white !important;
+			}
+			.card.discard {
+	    		background-color:#ff0000 !important;
+			}
+			#playerChoose img:not(.livePlayer):hover {
+				margin:4px !important;
+				border:3px solid white !important;
+			}
+			#playerChoose img.livePlayer:hover {
+				border:8px solid #000099 !important;
+				margin:1px !important;
+			}
+		}
     	.card.playableCard:hover {
     		cursor:pointer;
     		background-color:#66dd66;
@@ -253,14 +269,12 @@
     	#rightCenterCell {
     		text-align:left;
     	}
-    	#toggleNamesBox, #toggleScoresBox {
+    	#leftCenterCell input {
     		margin-right:6px;
-    	}
-    	#toggleScoresBox, #toggleNamesBox {
     		height:20px;
     		width:20px;
     	}
-    	#toggleScoresBox, #toggleNamesBox, .toggleLabel {
+    	.toggleLabel, #leftCenterCell input {
     		vertical-align:middle;
     		cursor:pointer;
     	}
@@ -274,7 +288,7 @@
     	#leftCenterCell .centerInfo {
     		padding:2px 3px 4px 2px;
     	}
-    	#toggleNames, #toggleScores {
+    	#leftCenterCell span {
     		width:100%;
     		display:inline-block;
     	}
@@ -293,7 +307,7 @@
     		height:100%;
     		left:0;
     		background-color:black;
-    		opacity:50%;
+    		opacity:0.5;
     		z-index:-1;
     	}
     	.scoringSettings {
@@ -335,17 +349,73 @@
     		position:relative;
 		}
 
-		#playerChoose {
+		.startSelectionScreen {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
     		text-align:center;
     		display:inline-block;
     		border-radius:10px;
     		border: 4px solid #006600;
-    		background-color:#77cc77;
     		padding:1em;
     		margin-top:1em;
     		position:relative;
-    		max-width:620px;
+		}
+
+		#playerChoose {
+    		background-color:#77cc77;
+    		max-width:630px;
+		}
+
+		#deviceChoose {
+			background-color:#ccccff;
+			border-color:#000099;
+			max-width:75%;
+		}
+
+		#deviceChoose h1 {
+			margin-top:0px;
+			margin-bottom:0px;
+		}
+
+		#deviceChoose table {
+			table-layout:fixed;
+		}
+
+		#deviceChoose td {
+			width:50%;
+		}
+
+		.deviceOption.selectedDevice {
+			border:8px solid #000099 !important;
+			margin:1px !important;
+			background-color:#7777cc !important;
+		}
+
+		.deviceOption p {
+			margin:0px;
+			font-size:24pt;
+		}
+
+		.deviceOption:hover {
+			cursor:pointer;
+			border:6px solid #6666bb;
+			margin:3px;
+			background-color:#aaaaee;
+		}
+
+		.deviceOption {
+			border:3px solid white;
+			margin:6px;
+			border-radius:10px;
+			padding:10px 0px 10px 0px;
+			text-align:center;
+		}
+
+		.deviceOption img {
+			max-height:150px;
+		}
+
+		#deviceSelectDoneButton {
+			margin-top:30px;
 		}
 
 		#playerChoose h1 {
@@ -361,22 +431,22 @@
 
 		#playerChoose img.livePlayer {
 			border:8px solid #000099;
-			margin:0px;
+			margin:1px;
 		}
 
 		#playerChoose img.livePlayer:hover {
 			border:8px solid #000099;
-			margin:0px;
+			margin:1px;
 		}
 
 		#playerChoose img:hover {
 			border:6px solid #6666bb;
-			margin:2px;
+			margin:3px;
 		}
 
 		#playerChoose img {
 			height:130px;
-			margin:5px;
+			margin:6px;
 			border:3px solid white;
 			border-radius:15px;
 			cursor:pointer;
@@ -445,8 +515,8 @@
 
 		.buttonContainer button {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
-    		font-size:14pt;
-    		padding:5px;
+    		font-size:20pt;
+    		padding:15px;
     		margin-top:10px;
     		border-radius:7px;
     		cursor:pointer;
@@ -477,7 +547,6 @@
 		}
 
 		.startRoundButton:hover {
-    		color:#003300;
     		background-color:#44bb44;
 		}
 		.startRoundButton {
@@ -485,6 +554,10 @@
     		color:white;
 		}
 
+		.overlayCloseButton:hover {
+			cursor:pointer;
+			background-color:#bb44ff;
+		}
 		.overlayCloseButton {
     		background-color:#8833bb;
     		color:white;
@@ -507,7 +580,6 @@
 		}
 
 		#playButton:hover {
-    		color:#003300;
     		background-color:#44bb44;
 		}
 
@@ -515,6 +587,8 @@
 			background-color:#006600;
 			color:white;
 			font-size:30pt;
+			padding-top:5px;
+			padding-bottom:5px;
 		}
 
 		#playButtonContainer {
@@ -574,7 +648,8 @@
 				<td id="leftCenterCell">
 					<span id='toggleNames' class="centerInfo"><label class='toggleLabel' for='toggleNamesBox'>Show names</label><input type='checkbox' id='toggleNamesBox' onclick='ToggleNames()' /></span>
 					<span id='toggleScores' class="centerInfo"><label class='toggleLabel' for='toggleScoresBox'>Show scores</label><input type='checkbox' id='toggleScoresBox' onclick='ToggleScores()' /></span>
-					<span id='fullScreen' class="centerInfo alwaysClickable"><u onclick="ToggleFullScreen()">Full-Screen</u></span>
+					<span id='fullScreen' style="display:none" class="centerInfo"><label class='toggleLabel' for='toggleFullScreenBox'>Full-Screen</label><input type='checkbox' id='toggleFullScreenBox' onclick='ToggleFullScreen()' /></span>
+					<!--span id='fullScreen' class="centerInfo alwaysClickable"><u onclick="ToggleFullScreen()">Full-Screen</u></span-->
 				</td>
 				<td colspan="2" id="centerCell"></td>
 				<td id="rightCenterCell">
@@ -624,12 +699,38 @@
 	</div>
 	<div id="overlayContainer">
 		<div id="overlayBackground"></div>
-		<span id="playerChoose" class="overlayContent">
+		<span id="playerChoose" class="overlayContent startSelectionScreen">
 			<h1>Who is playing on this device?</h1>
 			<h2>(You can select multiple people)</h2>
 			<div id="playerPhotos"></div>
 			<div class="buttonContainer">
 				<button class="overlayCloseButton" onclick="PlayerSelectDone()">Play</button>
+			</div>
+		</span>
+		<span id="deviceChoose" class="overlayContent startSelectionScreen">
+			<h1>What kind of device are you playing on?</h1>
+			<table id="devices">
+				<tr>
+					<td>
+						<div class="deviceOption" onclick="ClickedDevice(this)">
+							<img src="artwork/pc.png">
+							<p>Computer/Laptop</p>
+						</div>
+					</td>
+					<td>
+						<div class="deviceOption" id="deviceOptionMobile" onclick="ClickedDevice(this)">
+							<img src="artwork/mobile.png">
+							<p>Phone/Tablet</p>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:center;vertical-align:top;">(Excellent choice!)</td>
+					<td style="text-align:center;vertical-align:top;">This option will make your cards display bigger when it's your turn so you don't accidentally tap the wrong one and say "Wait, I didn't mean to do that!"</td>
+				</tr>
+			</table>
+			<div class="buttonContainer">
+				<button id="deviceSelectDoneButton" style="display:none" class="overlayCloseButton" onclick="DeviceSelectDone()">Continue</button>
 			</div>
 		</span>
 		<span id="rulesStandings" class="overlayContent">
@@ -719,6 +820,8 @@
 		"Michelle",
 		"Diane",
 	];
+
+	var IS_TOUCHSCREEN = false;
 	var ROUND_NUM = 0;
 	var DRAW_INDEX = 0;
 	var PLAYERS = [];
@@ -760,7 +863,12 @@
 		$("#playerPhotos").append(img);
 	}
 
+	$("body").animate({scrollTop:0},700);
+
 	//BeginNextRound();
+	function OnTouchScreen() {
+		IS_TOUCHSCREEN = !IS_TOUCHSCREEN;
+	}
 
 	function ShowPlayButton() {
 		var photoHeight = $("#bgPhoto").height();
@@ -769,11 +877,29 @@
 
 	function ClickedPlayButton() {
 		$("#playButton").fadeOut(250);
-		ChooseLivePlayers();
+		ShowDeviceSelection();
 	}
 
-	function ChooseLivePlayers() {
-		ShowPlayerSelection();
+	function ClickedDevice(el) {
+		if ($(el).hasClass("selectedDevice")) {
+			$(el).removeClass("selectedDevice");
+		}
+		else {
+			$(".selectedDevice").removeClass("selectedDevice");
+			$(el).addClass("selectedDevice");
+		}
+
+		$("#deviceSelectDoneButton").toggle($(".selectedDevice").length > 0);
+	}
+
+	function DeviceSelectDone() {
+		IS_TOUCHSCREEN = $("#deviceOptionMobile").hasClass("selectedDevice");
+		if (IS_TOUCHSCREEN) {
+			$("#playerChoose h2").hide();
+		}
+
+		OverlayClose();
+		setTimeout(ShowPlayerSelection, 500);
 	}
 
 	function ClickedPlayer(el) {
@@ -781,6 +907,9 @@
 			$(el).removeClass("livePlayer");
 		}
 		else {
+			if (IS_TOUCHSCREEN) {
+				$(".livePlayer").removeClass("livePlayer");
+			}
 			$(el).addClass("livePlayer");
 		}
 	}
@@ -791,7 +920,7 @@
 		FitToWindow(true);
 		DrawRoundByRound(false);
 		ShowNextRoundButton();
-		$(".startRoundButton").hide();
+		$(".startRoundButton").hide();		
 	}
 
 	function DrawRoundByRound(pShow = true) {
@@ -845,7 +974,10 @@
 			return;
 		}
 
-		$(window).resize(SafeFitToWindow);
+		if (!IS_TOUCHSCREEN) {
+			$(window).resize(SafeFitToWindow);
+		}
+
 		$(".centerInfo").hide();
 
 		for (var i = 0; i < NAMES.length; i++) {
@@ -979,7 +1111,11 @@
 
 		setTimeout(function() {
 			$(".playerInfo").animate({opacity:1}, 400);
-			$("#clipboard, #fullScreen, .startRoundButton").fadeIn(300);
+			$("#clipboard, .startRoundButton").fadeIn(300);
+
+			if (!IS_TOUCHSCREEN) {
+				$("#fullScreen").fadeIn(300);
+			}
 		}, 1000);
 	}
 
@@ -1076,8 +1212,6 @@
 				var totalCards = 0;
 				var firstPlayerSeat = CURRENT_SEAT;
 				DRAWING_TWO = true;
-				COUNTDOWN_TIME = (new Date()).getTime() + (61 * 1000);
-				CLOCK_INTERVAL = setInterval(Countdown, 100);
 
 				for (var i = 0; i < 108; i++) {
 					DECK[i] = -(i + 1);
@@ -1137,6 +1271,9 @@
 
 				setTimeout(function() {
 					$("#leftCenterCell .centerInfo").show();
+					if (IS_TOUCHSCREEN) {
+						$("#fullScreen").hide();
+					}
 					$(".playerName").css("opacity", "1");
 					$(".playerInfoWrapper img").css("border", "").css("margin", "");
 					$("#playerInfo" + DEALER + " .dealerLabel").hide();
@@ -1145,6 +1282,8 @@
 					$("#centerCell .card").addClass("showOutline");
 					ShowHideNames();
 					EveryoneDrawTwo();
+					COUNTDOWN_TIME = (new Date()).getTime() + (61 * 1000);
+					CLOCK_INTERVAL = setInterval(Countdown, 100);
 				}, delayTime + 1000);
 	  		}, 1500);
 		}, 700);
@@ -1169,6 +1308,10 @@
 			else {
 				FlipTwoCards(i, false);
 			}
+		}
+
+		if (IS_TOUCHSCREEN) {
+			ZoomInPlayableCards();
 		}
 	}
 
@@ -1247,6 +1390,10 @@
 	}
 
 	function AdvanceToNextPlayer() {
+		if (IS_TOUCHSCREEN && SEATS[CURRENT_SEAT].isLive) {
+			ZoomOutPlayableCards(CURRENT_SEAT);
+		}
+
 		DRAWING_TWO = false;
 
 		var cards = GetPlayerCards(CURRENT_SEAT);
@@ -1269,14 +1416,17 @@
 		}
 
 		// END OF PREVIOUS TURN - BEGIN NEXT TURN
+		$("#roundNum").click();
 		$(".playableCard").removeClass("playableCard");
 		$(".selectedCard").removeClass("selectedCard");
 		$(".discard").removeClass("discard");
 		$(".card").css("opacity", 1);
+
 		SELECTED_CARD = null;
 		CheckAllCards();
 
 		IncrementCurrent(true);
+
 		if (END_SEAT !== null && END_SEAT === CURRENT_SEAT) {
 			$(".current").removeClass("current");
 			CURRENT_SEAT === null;
@@ -1314,11 +1464,62 @@
 				}
 
 				$("#centerCell .card").addClass("playableCard");
+
+				if (IS_TOUCHSCREEN) {
+					ZoomInPlayableCards();
+				}
 			}
 			else {
 				setTimeout(OpponentMove, GetOpponentWaitDelay());
 			}
 		}
+	}
+
+	function ZoomInPlayableCards() {
+		$("#playTable").css("table-layout", "auto");
+		var zoomSeats = [CURRENT_SEAT];
+		if (DRAWING_TWO) {
+			zoomSeats = [];
+			for (var i = 0; i < TOTAL_SEATS; i++) {
+				if (SEATS[i] != null && SEATS[i].isLive) {
+					zoomSeats.push(i);
+				}
+			}
+		}
+		else {
+			$("#centerCell .card").animate({
+				height:"3.7em",
+				width:"2.7em"
+			}, 200);
+		}
+
+		for (var i = 0; i < zoomSeats.length; i++) {
+			$("#playerCards" + zoomSeats[i] + " .card").animate({
+				height:"3.7em",
+				width:"2.7em"
+			}, 200);
+		}
+
+		var drawCardTop = $("#centerCell").position().top;
+		var playerCardTop = $("#playerCards" + i).position().top;
+		var scrollTo = (drawCardTop < playerCardTop && DRAWING_TWO === false ? drawCardTop : playerCardTop);
+		var extraMargin = (CURRENT_SEAT <= 3 ? 80 : 10);
+		$("body").animate({scrollTop: scrollTo - extraMargin}, 600);
+	}
+
+	function ZoomOutPlayableCards(pSeatNum) {
+		$("#playTable").css("table-layout", "fixed");
+		$("#playerCards" + pSeatNum + " .card").animate({
+			height:"2.2em",
+			width:"33%"
+		}, 200);
+		$("#centerCell .card").animate({
+			height:"2.2em",
+			width:"1.4em"
+		}, 200);
+		setTimeout(function() {
+			FitToWindow(true);
+		}, 410);
 	}
 
 	function Countdown() {
@@ -1949,7 +2150,22 @@
 			RenderCard(card, value);
 		});
 		card.fadeIn(200, function() {
-			if (!DRAWING_TWO) {
+			if (DRAWING_TWO) {
+				if (SEATS[pSeatNum].isLive && IS_TOUCHSCREEN) {
+					var seatCards = GetPlayerCards(pSeatNum);
+					var faceUpCount = 0;
+					for (var i = 0; i < 6; i++) {
+						if (seatCards[i] > 0) {
+							faceUpCount++;
+						}
+					}
+
+					if (faceUpCount >= 2) {
+						ZoomOutPlayableCards(pSeatNum);
+					}
+				}
+			}
+			else {
 				AdvanceToNextPlayer();
 			}
 		});
@@ -2028,6 +2244,12 @@
 	function ShowPlayerSelection() {
 		$(".overlayContent").hide();
 		$("#playerChoose").show();
+		ShowOverlay();
+	}
+
+	function ShowDeviceSelection() {
+		$(".overlayContent").hide();
+		$("#deviceChoose").show();
 		ShowOverlay();
 	}
 
