@@ -920,7 +920,7 @@
 		FitToWindow(true);
 		DrawRoundByRound(false);
 		ShowNextRoundButton();
-		$(".startRoundButton").hide();		
+		$("#centerCell button").hide();		
 	}
 
 	function DrawRoundByRound(pShow = true) {
@@ -982,7 +982,7 @@
 
 		for (var i = 0; i < NAMES.length; i++) {
 			var isLive = $("#playerChoose img").eq(i).hasClass("livePlayer");
-			if (isLive || Math.random() < 0.99) {
+			if (isLive || Math.random() < 1.00) {
 				PLAYERS.push({
 					name: NAMES[i],
 					scores: [0,0,0,0,0,0,0,0,0],
@@ -1079,25 +1079,7 @@
 
 		$("#statusText").hide();
 
-		for (var i = 0; i < TOTAL_SEATS; i++) {
-			if (SEATS[i] === null) {
-				$("#playerInfo" + i + " img").hide();
-				$("#playerInfo" + i + " .playerName").hide();
-				$("#playerCards" + i + " table").hide();
-			}
-			else {
-				if (SEATS[i].isLive) {
-					$("#playerInfo" + i).addClass("live");
-					$("#playerCards" + i).addClass("live");
-				}
-				//if (SEATS[i].name === "Angela" || SEATS[i].name === "Ray") {
-					$("#playerInfo" + i + " img").attr("src", "players/" + SEATS[i].name + ".jpg");
-				//}
-				//else {
-				//	$("#playerInfo" + i + " img").attr("src", "User.png");
-				//}
-			}
-		}
+		DrawPlayerInfos();
 
 		$(".playerName").hide();
 		$(".playerInfo, .playerName").css("opacity", 0);
@@ -1111,7 +1093,7 @@
 
 		setTimeout(function() {
 			$(".playerInfo").animate({opacity:1}, 400);
-			$("#clipboard, .startRoundButton").fadeIn(300);
+			$("#clipboard, #centerCell button").fadeIn(300);
 
 			if (!IS_TOUCHSCREEN) {
 				$("#fullScreen").fadeIn(300);
@@ -1124,7 +1106,55 @@
 		var button = $("<button class='startRoundButton'>Begin Round " + (ROUND_NUM + 1) + "</button>");
 		button.attr("onclick", "BeginNextRound()");
 		buttonDiv.append(button);
+		if (ROUND_NUM < 1) {
+			buttonDiv.append("<button class='changeSeatsButton' style='padding:3px;font-size:11pt' onclick='ChangeSeats()'>This seating arrangement<br>sucks, change it</button>");
+		}
+
 		$("#centerCell").append(buttonDiv);
+	}
+
+	function ChangeSeats() {
+		SEATS = [];
+
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			SEATS.push(null);
+		}
+
+		for (var i = 0; i < PLAYERS.length; i++) {
+			var seat = -1;
+			while (seat < 0 || SEATS[seat] !== null) {
+				seat = Math.floor(Math.random() * TOTAL_SEATS);
+			}
+
+			SEATS[seat] = PLAYERS[i];
+		}
+
+		$.when($(".playerInfo").fadeOut(300)).then(function() {
+			$(".live").removeClass("live");
+			DrawPlayerInfos();
+			$(".playerInfo").fadeIn(300);
+		});
+	}
+
+	function DrawPlayerInfos() {
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			if (SEATS[i] === null) {
+				$("#playerInfo" + i + " img").hide();
+				$("#playerInfo" + i + " .playerName").hide();
+				$("#playerCards" + i + " table").hide();
+			}
+			else {
+				$("#playerInfo" + i + " img").show();
+				$("#playerInfo" + i + " .playerName").show();
+				$("#playerCards" + i + " table").show();
+
+				if (SEATS[i].isLive) {
+					$("#playerInfo" + i).addClass("live");
+					$("#playerCards" + i).addClass("live");
+				}
+				$("#playerInfo" + i + " img").attr("src", "players/" + SEATS[i].name + ".jpg");
+			}
+		}
 	}
 
 	function AnyLivePlayers() {
@@ -2211,6 +2241,7 @@
 		$("#roundByRoundTable").css("font-size", (scale * 18) + "pt");
 		$("#instructions").css("font-size", (scale * 22) + "pt");
 		$(".buttonContainer button").css("font-size", (scale * 14) + "pt");
+		$(".changeSeatsButton").css("font-size", (scale * 11) + "pt");
 
 		ResizeCards();
 	}
