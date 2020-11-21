@@ -923,7 +923,7 @@
 		$("#centerCell button").hide();		
 	}
 
-	function DrawRoundByRound(pShow = true) {
+	function DrawRoundByRound(pShow) {
 		var PlayerScores = [];
 		for (var i = 0; i < TOTAL_SEATS; i++) {
 			if (SEATS[i] !== null) {
@@ -1106,11 +1106,14 @@
 		var button = $("<button class='startRoundButton'>Begin Round " + (ROUND_NUM + 1) + "</button>");
 		button.attr("onclick", "BeginNextRound()");
 		buttonDiv.append(button);
+		$("#centerCell").append(buttonDiv);
+
 		if (ROUND_NUM < 1) {
-			buttonDiv.append("<button class='changeSeatsButton' style='padding:3px;font-size:11pt' onclick='ChangeSeats()'>This seating arrangement<br>sucks, change it</button>");
+			var buttonDiv2 = $("<div class='buttonContainer'></div>");
+			buttonDiv2.append("<button class='changeSeatsButton' style='padding:3px;font-size:11pt' onclick='ChangeSeats()'>This seating arrangement<br>sucks, change it</button>");
+			$("#centerCell").append(buttonDiv2);
 		}
 
-		$("#centerCell").append(buttonDiv);
 	}
 
 	function ChangeSeats() {
@@ -1166,7 +1169,7 @@
 	}
 
 	function BeginNextRound() {
-		$(".startRoundButton").parent().remove();
+		$("#centerCell .buttonContainer").remove();
 
 		ROUND_NUM++;
 		if (ROUND_NUM <= 9) {
@@ -1466,7 +1469,9 @@
 				PREV_SHOW_SCORES = SHOW_SCORES;
 				SHOW_SCORES = true;
 				ShowHideNames();
-				setTimeout(DrawRoundByRound, 2000);
+				setTimeout(function() {
+					DrawRoundByRound(true);
+				}, 2000);
 				/*$("#statusText").html("End of Round " + ROUND_NUM).show();
 				COUNTDOWN_TIME = (new Date()).getTime() + (121 * 1000); 
 				CLOCK_INTERVAL = setInterval(Countdown, 100);*/
