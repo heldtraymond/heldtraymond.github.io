@@ -8,6 +8,7 @@
 		body {
 			text-align:center;
 			font-family:'Tahoma', Verdana, sans-serif;
+			overflow:auto;
 		}
 		/*#fullScreen {
 			color:blue;
@@ -362,7 +363,7 @@
 
 		#playerChoose {
     		background-color:#77cc77;
-    		max-width:630px;
+    		max-width:920px;
 		}
 
 		#deviceChoose {
@@ -1349,7 +1350,7 @@
 	}
 
 	function FlipTwoCards(pSeatNum, pNow) {
-		var delay = (pNow === true ? 0 : 1000 + Math.floor(Math.random() * (AnyLivePlayers() ? 15000 : 1000)));
+		var delay = (pNow === true ? 0 : 1000 + Math.floor(Math.random() * (AnyLivePlayers() ? 9000 : 1000)));
 		setTimeout(function() {
 			var upCardIndex = null;
 			if (pNow === true) {
@@ -1674,61 +1675,181 @@
 
 	function OpponentMove() {
 		var cards = GetPlayerCards(CURRENT_SEAT);
+		var values = [0,0,0,0,0,0];
+		var pairedIndices = [];
+		var pairableIndices = [];
 		var facedownIndices = [];
-		var swapIndex = null;
+		var maxNonPairedPoints = -3;
+		var maxNonPairedIndex = null;
+		var chosenFacedownIndex = null;
 		var faceUpVal = GetCardValue(DECK[DRAW_INDEX]);
+		var faceUpPoints = GetCardPoints(faceUpVal);
+		var minAdditionalTurnsLeft = 6;
+		var showingPoints = 0;
+
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			if (SEATS[i] === null || i === CURRENT_SEAT) continue;
+
+			var numFacedown = 0;
+			var oppCards = GetPlayerCards(i);
+			for (var c = 0; c < 6; c++) {
+				if (oppCards[c] < 0) {
+					numFacedown++;
+				}
+			}
+
+			if (numFacedown < minAdditionalTurnsLeft) {
+				minAdditionalTurnsLeft = numFacedown;
+			}
+		}
+
 		for (var i = 0; i < 6; i++) {
-			if (cards[i] < 0) {
+			var cardVal = GetCardValue(cards[i]);
+			var cardPoints = GetCardPoints(cardVal);
+			var oppoCardVal = GetCardValue(cards[(i + 3) % 6]);
+
+			values[i] = cardVal;
+
+			if (cardVal < 0) {
 				facedownIndices.push(i);
 			}
+			else if (cardVal === oppoCardVal) {
+				pairedIndices.push(i);
+			}
 			else {
-				var cardVal = GetCardValue(cards[i]);
-				if (cardVal === faceUpVal && cardVal !== 0) {
-					var oppositeIndex = (i + 3) % 6;
-					var oppositeCard = cards[oppositeIndex];
-					if (oppositeCard < 0) {
-						swapIndex = oppositeIndex;
-						break;
-					}
-					else {
-						var oppositeVal = GetCardValue(oppositeCard);
-						if ((oppositeVal !== 0 || (cardVal > 3 && cardVal < 13)) && oppositeVal !== cardVal) {
-							swapIndex = oppositeIndex;
-							break;
-						}
-					}
+				showingPoints += cardPoints;
+
+				if (cardPoints > maxNonPairedPoints) {
+					maxNonPairedPoints = cardPoints;
+					maxNonPairedIndex = i;
 				}
+			}
+
+			if (faceUpVal === oppoCardVal && cardVal !== oppoCardVal && oppoCardVal > 0) {
+				pairableIndices.push(i);
 			}
 		}
 
-		if (swapIndex !== null) {
-			//console.log("Pair of " + faceUpVal + "'s to swap at " + (swapIndex + 1));
+		/*console.log("CARDS: " + JSON.stringify(values));
+		console.log("AVAILABLE: " + faceUpVal);
+		console.log("PAIRED: " + JSON.stringify(pairedIndices));
+		console.log("PAIRABLE: " + JSON.stringify(pairableIndices));
+		console.log("FACEDOWN: " + JSON.stringify(facedownIndices));
+		console.log("MAX: " + maxNonPairedPoints + " at index " + maxNonPairedIndex);
+		console.log("Showing " + showingPoints + ", min turns left = " + minAdditionalTurnsLeft);*/
+
+		var facedownCount = facedownIndices.length;
+		if (facedownCount > 0) {
+			bestFacedownIndices = [];
+			for (var i = 0; i < facedownIndices.length; i++) {
+				// Ideally, choose one in a new column where neither is flipped
+				var index = facedownIndices[i];
+				var correspondingIndex = (index + 3) % 6;
+				if (facedownIndices.indexOf(correspondingIndex) >= 0) {
+					bestFacedownIndices.push(index);
+				}
+			}
+
+			if (bestFacedownIndices.length > 0) {
+				chosenFacedownIndex = bestFacedownIndices[Math.floor(Math.random() * bestFacedownIndices.length)];
+			} else {
+				chosenFacedownIndex = facedownIndices[Math.floor(Math.random() * facedownIndices.length)];
+			}
 		}
 		else {
-			var swappable = [];
-			for (var i = 0; i < 3; i++) {
-				var A = GetCardValue(cards[i]);
-				var B = GetCardValue(cards[i + 3]);
-
-				if (A !== B || A < 0) {
-					swappable.push(i);
-					swappable.push(i + 3);
-				}
+			if (pairedIndices.length >= 6) {
+				// 3 pairs showing - draw/discard
+				//console.log("3 pairs already");
+				OpponentDrawCard();
+				return;
 			}
 		}
 
-		var randNum = Math.random();
-		if (swapIndex !== null) {
-			OpponentTakeDiscard(swapIndex);
+		if (pairableIndices.length > 0) {
+			//console.log("Easy pair");
+			// Make non-joker pair
+			OpponentTakeDiscard(pairableIndices[Math.floor(Math.random() * pairableIndices.length)]);
+			return;
 		}
-		else if (facedownIndices.length > 0 && randNum < (AnyLivePlayers() ? 0.35 : 0.7)) {
-			FlipOverCard(CURRENT_SEAT, facedownIndices[Math.floor(Math.random() * facedownIndices.length)]);
-		}
-		else if (Math.random() < 0.5 || swappable.length <= 0) {
+
+		if (facedownCount <= 0 && faceUpPoints > maxNonPairedPoints) {
+			//console.log("Last round and can't use take card, so draw");
+			// Last round and up card can't pair and is worse than all showing - draw
 			OpponentDrawCard();
+			return;
+		}
+
+		var _TakeUpCard = false;
+		if (faceUpPoints <= 2 && (faceUpPoints < maxNonPairedPoints || facedownCount > 0)) {
+			// Take a 2 or lower if there's either a facedown card or worse faceup card to swap it with
+			//console.log("Take a 2 or lower");
+			_TakeUpCard = true;
+		}
+		else if (faceUpPoints <= 4 && Math.random() > (0.25 * (faceUpPoints - 1)) && (faceUpPoints < maxNonPairedPoints || (facedownCount > 0 && showingPoints + faceUpPoints < 10))) {
+			// Take a 3/4 if there's a worse faceup card or can swap a facedown card to show <10 total points
+			//console.log("Take a 3 or 4");
+			_TakeUpCard = true;
+		}
+		else if (facedownCount === 1 && faceUpPoints + showingPoints <= 8 && faceUpPoints < 8) {
+			// Take card to end round with <8 points
+			_TakeUpCard = true;
+		}
+
+		if (_TakeUpCard) {
+			if (facedownCount === 1 && faceUpPoints + showingPoints <= 8) {
+				//console.log("Take to end the round with a low score");
+				OpponentTakeDiscard(chosenFacedownIndex);
+				return;
+			}
+
+			var swappable = [];
+			if (maxNonPairedIndex !== null && maxNonPairedPoints > faceUpPoints && (maxNonPairedPoints > 3 || facedownCount >= 1)) {
+				swappable.push(maxNonPairedIndex);
+			}
+			if (chosenFacedownIndex !== null && (facedownCount > 1 || maxNonPairedPoints <= 5)) {
+				swappable.push(chosenFacedownIndex);
+			}
+
+			if (swappable.length > 0) {
+				OpponentTakeDiscard(swappable[Math.floor(Math.random() * swappable.length)]);
+				return;
+			}
+		}
+
+		if (facedownCount === 1) {
+			// Only one face down card left - draw
+			//console.log("Only one facedown left, so draw");
+			OpponentDrawCard();
+			return;
+		}
+		else if (maxNonPairedPoints >= 20 && minAdditionalTurnsLeft <= 1) {
+			// Get rid of Jack if last round or any opponent has only one facedown card left
+			if (faceUpPoints <= 5) {
+				//console.log("Take 5 or less to get rid of jack late");
+				OpponentTakeDiscard(maxNonPairedIndex);
+				return;
+			}
+			//console.log("Draw to get rid of jack late");
+			OpponentDrawCard();
+			return;
+		}
+
+		if (facedownCount > 2 && maxNonPairedPoints >= 7) {
+			//console.log("Got a 7+ card showing - draw");
+			OpponentDrawCard();
+			return;
+		}
+		else if (Math.random() < 0.5 || facedownCount <= 0) {
+			// Could either draw or flip - choose randomly
+			//console.log("Random draw");
+			OpponentDrawCard();
+			return;
 		}
 		else {
-			OpponentTakeDiscard(swappable[Math.floor(Math.random() * swappable.length)]);
+			//console.log("Random flip");
+			// Flip over a random card
+			FlipOverCard(CURRENT_SEAT, chosenFacedownIndex);
+			return;
 		}
 	}
 
@@ -1741,49 +1862,200 @@
 	}
 
 	function OpponentUseDrawCard() {
-		var swapIndex = null;
-		var drawVal = GetCardValue(DECK[DRAW_INDEX + 1]);
 		var cards = GetPlayerCards(CURRENT_SEAT);
+		var values = [0,0,0,0,0,0];
+		var pairedIndices = [];
+		var pairableIndices = [];
+		var facedownIndices = [];
+		var maxNonPairedPoints = -3;
+		var maxNonPairedIndex = null;
+		var chosenFacedownIndex = null;
+		var drawCardVal = GetCardValue(DECK[DRAW_INDEX + 1]);
+		var drawCardPoints = GetCardPoints(drawCardVal);
+		var minAdditionalTurnsLeft = 6;
+		var showingPoints = 0;
+
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			if (SEATS[i] === null || i === CURRENT_SEAT) continue;
+
+			var numFacedown = 0;
+			var oppCards = GetPlayerCards(i);
+			for (var c = 0; c < 6; c++) {
+				if (oppCards[c] < 0) {
+					numFacedown++;
+				}
+			}
+
+			if (numFacedown < minAdditionalTurnsLeft) {
+				minAdditionalTurnsLeft = numFacedown;
+			}
+		}
 
 		for (var i = 0; i < 6; i++) {
-			if (cards[i] > 0) {
-				var cardVal = GetCardValue(cards[i]);
-				if (cardVal === drawVal && cardVal !== 0) {
-					var oppositeIndex = (i + 3) % 6;
-					var oppositeCard = cards[oppositeIndex];
-					if (oppositeCard < 0) {
-						swapIndex = oppositeIndex;
-						break;
-					}
-					else {
-						var oppositeVal = GetCardValue(oppositeCard);
-						if ((oppositeVal !== 0 || (cardVal > 3 && cardVal < 13)) && oppositeVal !== cardVal) {
-							swapIndex = oppositeIndex;
-							break;
-						}
-					}
+			var cardVal = GetCardValue(cards[i]);
+			var cardPoints = GetCardPoints(cardVal);
+			var oppoCardVal = GetCardValue(cards[(i + 3) % 6]);
+
+			values[i] = cardVal;
+
+			if (cardVal < 0) {
+				facedownIndices.push(i);
+			}
+			else if (cardVal === oppoCardVal) {
+				pairedIndices.push(i);
+			}
+			else {
+				showingPoints += cardPoints;
+
+				if (cardPoints > maxNonPairedPoints) {
+					maxNonPairedPoints = cardPoints;
+					maxNonPairedIndex = i;
 				}
+			}
+
+			if (drawCardVal === oppoCardVal && cardVal !== oppoCardVal && oppoCardVal > 0) {
+				pairableIndices.push(i);
 			}
 		}
 
-		if (swapIndex !== null) {
-			//console.log("Pair of " + drawVal + "'s to swap at " + (swapIndex + 1));
+		//console.log("Draw pairable: " + JSON.stringify(pairableIndices));
+
+		var facedownCount = facedownIndices.length;
+		if (facedownCount > 0) {
+			bestFacedownIndices = [];
+			for (var i = 0; i < facedownIndices.length; i++) {
+				// Ideally, choose one in a new column where neither is flipped
+				var index = facedownIndices[i];
+				var correspondingIndex = (index + 3) % 6;
+				if (facedownIndices.indexOf(correspondingIndex) >= 0) {
+					bestFacedownIndices.push(index);
+				}
+			}
+
+			if (bestFacedownIndices.length > 0) {
+				chosenFacedownIndex = bestFacedownIndices[Math.floor(Math.random() * bestFacedownIndices.length)];
+			} else {
+				chosenFacedownIndex = facedownIndices[Math.floor(Math.random() * facedownIndices.length)];
+			}
 		}
 		else {
-			var swappable = [6];
-			for (var i = 0; i < 3; i++) {
-				var A = GetCardValue(cards[i]);
-				var B = GetCardValue(cards[i + 3]);
-
-				if (A !== B || A < 0) {
-					swappable.push(i);
-					swappable.push(i + 3);
-				}
+			if (pairedIndices.length >= 6) {
+				// 3 pairs showing - discard
+				//console.log("All pairs");
+				PlayDrawCard(6);
+				return;
 			}
 		}
 
-		var swapWith = (swapIndex === null ? swappable[Math.floor(Math.random() * swappable.length)] : swapIndex);
-		PlayDrawCard(swapWith);
+		if (pairableIndices.length > 0) {
+			// Make non-joker pair
+			//console.log("Easy drawn pair");
+			PlayDrawCard(pairableIndices[Math.floor(Math.random() * pairableIndices.length)]);
+			return;
+		}
+
+		if (facedownCount <= 0) {
+			// Last round, can't pair - either discard or swap for highest upcard
+
+			if (drawCardPoints > maxNonPairedPoints) {
+				// This card would be worse than all the upcards - discard
+				PlayDrawCard(6);
+				return;
+			}
+			else {
+				// Swap out for the highest remaining
+				PlayDrawCard(maxNonPairedIndex);
+				return;
+			}
+		}
+
+		if (drawCardPoints >= 20) {
+			// Discard non-pairable jack
+			PlayDrawCard(6);
+			return;
+		}
+		else if (facedownCount >= 4 && drawCardPoints <= 9 && minAdditionalTurnsLeft >= 3) {
+			// Swap a 9 or lower for a facedown card if it's the first turn
+			PlayDrawCard(chosenFacedownIndex);
+			return;
+		}
+		else if (facedownCount >= 3 && drawCardPoints <= 7 && minAdditionalTurnsLeft > 1) {
+			// Swap a 7 or lower for a facedown card if there's at least one extra facedown turn left and still have 3 face down
+			PlayDrawCard(chosenFacedownIndex);
+			return;
+		}
+		else if (facedownCount >= 2 && (drawCardPoints <= 5) && minAdditionalTurnsLeft > 1) {
+			// Swap a 5 or lower for a facedown card if there's at least one extra facedown turn left
+			PlayDrawCard(chosenFacedownIndex);
+			return;
+		}
+		else if (drawCardPoints >= 9 && maxNonPairedPoints > drawCardPoints) {
+			// Swap a 9 or higher for a worse faceup card
+			PlayDrawCard(maxNonPairedIndex);
+			return;
+		}
+		else if (drawCardPoints >= 9) {
+			// Discard non-pairable 9+ if it's after the first turn
+			PlayDrawCard(6);
+			return;
+		}
+
+		// Have a 8 or lower draw card
+		if (facedownCount === 1 && drawCardPoints + showingPoints <= 10) {
+			// Flip over last facedown card to end round with <=10 points
+			PlayDrawCard(chosenFacedownIndex);
+			return;
+		}
+
+		if (minAdditionalTurnsLeft <= 1) {
+			if (maxNonPairedPoints >= 20) {
+				// Swap out a jack if someone else only has one facedown card left
+				PlayDrawCard(maxNonPairedIndex);
+				return;
+			}
+			else if (maxNonPairedPoints >= 7 && ((maxNonPairedPoints - drawCardPoints) > 5)) {
+				// Swap out a 7 or higher if you can subtract at least 5 points and someone else only has one facedown card left
+				PlayDrawCard(maxNonPairedIndex);
+				return;
+			}
+		}
+
+		if (maxNonPairedPoints < drawCardPoints) {
+			// No lower upcard or swap it for
+			if (facedownCount <= 1) {
+				// Only one down card left - discard
+				PlayDrawCard(6);
+				return;
+			}
+			else {
+				PlayDrawCard(chosenFacedownIndex);
+				return;
+			}
+		}
+		else if (facedownCount <= 1) {
+			// Only one down card left - swap out the highest showing up card
+			PlayDrawCard(maxNonPairedIndex);
+		}
+		else {
+			// Could go either way - randomly either swap out the highest, or a down card, or discard
+			var swappable = [];
+			if (maxNonPairedIndex !== null) {
+				swappable.push(maxNonPairedIndex);
+			}
+			if (chosenFacedownIndex !== null) {
+				swappable.push(chosenFacedownIndex);
+			}
+
+			if (swappable.length > 0) {
+				PlayDrawCard(swappable[Math.floor(Math.random() * swappable.length)]);
+				return;
+			}
+			else {
+				// Shouldn't happen but just in case - default of discarding
+				PlayDrawCard(6);
+				return;
+			}
+		}
 	}
 
 	function CheckForReshuffle() {
@@ -1885,6 +2157,7 @@
 		var deckIndex = DRAW_INDEX + 1;
 		var value = -DECK[deckIndex];
 		DECK[deckIndex] = value;
+		console.log("DRAW CARD: " + GetCardValue(value));
 		$.when(drawCard.fadeOut(200)).then(function() {
 			//drawCard.css("background-color", "white");
 			RenderCard(drawCard, value);
@@ -2152,6 +2425,8 @@
 		if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {  // current working methods
 			if (document.documentElement.requestFullscreen) {
 				document.documentElement.requestFullscreen();
+			} else if (document.body.msRequestFullscreen) {
+				document.body.msRequestFullscreen();
 			} else if (document.documentElement.msRequestFullscreen) {
 				document.documentElement.msRequestFullscreen();
 			} else if (document.documentElement.mozRequestFullScreen) {
