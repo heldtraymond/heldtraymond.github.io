@@ -849,7 +849,7 @@
 	var PREV_SHOW_SCORES = SHOW_SCORES;
 
 	var LAST_RESIZE = new Date();
-	var LAST_WINDOW_SIZE = window.innerWidth;
+	var LAST_WINDOW_SIZE = $("#bgPhoto").width();
 
 	$(".centerInfo").hide();
 	$("#playButtonContainer").hide();
@@ -2332,7 +2332,7 @@
 	}
 
 	function FitToWindow(pOnPageLoad) {
-		var currWindowSize = window.innerWidth;
+		var currWindowSize = $("#bgPhoto").width();
 
 		if (currWindowSize === LAST_WINDOW_SIZE && pOnPageLoad !== true) {
 			return;
@@ -2345,7 +2345,7 @@
 			if (currTime !== LAST_RESIZE) {
 				return;
 			}
-			LAST_WINDOW_SIZE = window.innerWidth;
+			LAST_WINDOW_SIZE = $("#bgPhoto").width();
 			ResizeText();
 			var idealMiddle = 0.575;
 			var tableHeight = $("#playTable").height();
@@ -2501,11 +2501,11 @@
 
 	function ResizeText() {
 		var idealWidth = 1270;
-		var actualWidth = window.innerWidth;
+		var actualWidth = $("#bgPhoto").width();
 		var scale = (actualWidth / idealWidth);
 
-		if (scale > 1) {
-			scale = 1;
+		if (scale > 1.25) {
+			scale = 1.25;
 		}
 
 		var photoHeight = scale * 100;
@@ -2528,7 +2528,7 @@
 
 	function ResizeCards() {
 		var idealWidth = 1270;
-		var actualWidth = window.innerWidth;
+		var actualWidth = $("#bgPhoto").width();
 		var scale = (actualWidth / idealWidth);
 
 		// Compensate for line thickness
