@@ -14,6 +14,53 @@
 			color:blue;
 			cursor:pointer;
 		}*/
+		.deviceDescription {
+			text-align:center;
+			vertical-align:top;
+			font-family:Tahoma, sans-serif;
+			font-size:14pt;
+		}
+		#mobileDescription {
+			text-align:center;
+			font-family:Tahoma, sans-serif;
+			font-size:14pt;
+			margin-top:13px;
+		}
+		#howToPlay {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+			font-size:30pt;
+			display:inline-block;
+			text-align:center;
+			margin-left:-2%;
+		}
+		.howToPlayHalf {
+			width:46%;
+			margin: 0% 1% 1% 1%;
+			display:inline-block;
+			vertical-align:top;
+		}
+		.howToPlaySubsection {
+			border:4px solid #006600;
+			border-radius:6px;
+			width:100%;
+			padding:5px;
+			font-family:Tahoma, sans-serif;
+			font-size:12pt;
+			display:inline-block;
+			text-align:center;
+			margin-top:10px;
+		}
+		.howToPlaySubtitle {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+			font-size:21pt;
+			margin: 0px;
+		}
+		.howToPlaySubsection img {
+			max-width:95%;
+			max-height:95%;
+			display:inline-block;
+			margin-top:10px;
+		}
 		.widthTest {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
 			font-size:50pt;
@@ -331,7 +378,7 @@
 
 		.scoringSettings li::after {
 			content: "";
-			border-bottom: 4px dotted;
+			border-bottom: 3px dotted;
 			flex-grow: 1;
 			order: 2;
 			margin-bottom:0.4em;
@@ -348,6 +395,7 @@
     		padding:1em;
     		margin-top:1em;
     		position:relative;
+    		max-width:830px;
 		}
 
 		.startSelectionScreen {
@@ -453,7 +501,7 @@
 			cursor:pointer;
 		}
 
-    	#instructions {
+    	#scoringRules {
     		text-align:left;
     		width:13em;
     		display:inline-block;
@@ -536,9 +584,17 @@
     		margin-bottom:10px;
 		}
 
-		#instructionsButton {
+		#scoringRulesButton {
 			border-top-right-radius:0px;
 			border-bottom-right-radius:0px;
+			margin-right:-3px;
+		}
+		#howToPlayButton {
+			border-top-left-radius:0px;
+			border-bottom-left-radius:0px;
+			border-top-right-radius:0px;
+			border-bottom-right-radius:0px;
+			margin-left:-3px;
 			margin-right:-3px;
 		}
 		#standingsButton {
@@ -562,6 +618,21 @@
 		.overlayCloseButton {
     		background-color:#8833bb;
     		color:white;
+		}
+
+		#rulesStandingsTopCloseButton {
+			font-size:20pt;
+			font-family:sans-serif;
+			font-weight:bold;
+			position:absolute;
+			top:-20px;
+			left:100%;
+			margin-left:-30px;
+			min-width:50px;
+			min-height:50px;
+			padding: 4px 13px 7px 13px;
+			border:3px solid #440066;
+			border-radius:25px;
 		}
 
 		.scoreImg {
@@ -715,7 +786,7 @@
 					<td>
 						<div class="deviceOption" onclick="ClickedDevice(this)">
 							<img src="pc.png">
-							<p>Computer/Laptop</p>
+							<p>Laptop/Computer</p>
 						</div>
 					</td>
 					<td>
@@ -726,20 +797,49 @@
 					</td>
 				</tr>
 				<tr>
-					<td style="text-align:center;vertical-align:top;">(Excellent choice!)</td>
-					<td style="text-align:center;vertical-align:top;">This option will make your cards display bigger when it's your turn so you don't accidentally tap the wrong one and say "Wait, I didn't mean to do that!"</td>
+					<td class="deviceDescription">Excellent choice!</td>
+					<td class="deviceDescription">Turn your device horizontally to landscape for best results</td>
 				</tr>
 			</table>
+			<div id="mobileDescription" style="display:none">On a mobile device, your cards will automatically display larger on your turn so you don't accidentally tap on the wrong one and say "Wait, I didn't mean to do that!"</div>
 			<div class="buttonContainer">
 				<button id="deviceSelectDoneButton" style="display:none" class="overlayCloseButton" onclick="DeviceSelectDone()">Continue</button>
 			</div>
 		</span>
 		<span id="rulesStandings" class="overlayContent">
+			<button class="overlayCloseButton" id="rulesStandingsTopCloseButton" title="Close" onclick="OverlayClose()">x<img src=""></button>
 			<div class="buttonContainer">
-				<button id='instructionsButton' class="rulesStandingsButton selected" onclick="ShowInstructions()">Scoring Rules</button>
+				<button id='scoringRulesButton' class="rulesStandingsButton selected" onclick="ShowScoringRules()">Scoring Rules</button>
+				<button id='howToPlayButton' class="rulesStandingsButton" onclick="ShowHowToPlay()">How to Play</button>
 				<button id='standingsButton' class="rulesStandingsButton" onclick="ShowRoundByRound()">Current Standings</button>
 			</div>
-			<span id="instructions">
+			<span id="howToPlay">
+				<span class="howToPlayHalf">
+					<span class="howToPlaySubsection" id="howToPlayFlip">
+						<p class="howToPlaySubtitle">Flip over card</p>
+						<span>To flip over one of your face-down cards, click on it.</span>
+						<img src="howToPlay/flip.png">
+					</span>
+					<span class="howToPlaySubsection" id="howToPlayTake">
+						<p class="howToPlaySubtitle">Take the card in the middle</p>
+						<span>To take the face-up card in the middle, (1) click on it so it gets highlighted in blue, and then (2) click on the card in your hand that you want to trade it for.</span>
+						<img src="howToPlay/take.png">
+					</span>
+				</span>
+				<span class="howToPlayHalf">
+					<span class="howToPlaySubsection" id="howToPlayDraw">
+						<p class="howToPlaySubtitle">Draw a card</p>
+						<span>To draw the top card from the face-down pile in the middle, (1) click on the draw card to flip it over, and then (2) if you want to keep it, click on the card in your hand that you want to trade it for.</span>
+						<img src="howToPlay/draw.png">
+					</span>
+					<span class="howToPlaySubsection" id="howToPlayDiscard">
+						<p class="howToPlaySubtitle">Discard the draw card</p>
+						<span>If you flipped over the draw card and decide you don't want it, click the red Discard button to get rid of it and end your turn.</span>
+						<img src="howToPlay/discard.png">
+					</span>
+				</span>
+			</span>
+			<span id="scoringRules">
 				<u><i><strong>GOLF</strong></i></u>
 				<ul class="scoringSettings">
 				  <li>
@@ -849,7 +949,7 @@
 	var PREV_SHOW_SCORES = SHOW_SCORES;
 
 	var LAST_RESIZE = new Date();
-	var LAST_WINDOW_SIZE = $("#bgPhoto").width();
+	var LAST_WINDOW_SIZE = window.innerWidth;
 
 	$(".centerInfo").hide();
 	$("#playButtonContainer").hide();
@@ -890,6 +990,7 @@
 			$(el).addClass("selectedDevice");
 		}
 
+		$("#mobileDescription").toggle($("#deviceOptionMobile").hasClass("selectedDevice"));
 		$("#deviceSelectDoneButton").toggle($(".selectedDevice").length > 0);
 	}
 
@@ -897,6 +998,13 @@
 		IS_TOUCHSCREEN = $("#deviceOptionMobile").hasClass("selectedDevice");
 		if (IS_TOUCHSCREEN) {
 			$("#playerChoose h2").hide();
+			$(".howToPlaySubsection span").each(function() {
+				$(this).html($(this).html().replace("click", "tap").replace("click", "tap"));
+			});
+			$(".howToPlaySubsection img").each(function() {
+				var src = $(this).attr("src");
+				$(this).attr("src", src.substring(0, src.length - 4) + "_mobile.png");
+			});
 		}
 
 		OverlayClose();
@@ -1111,7 +1219,7 @@
 
 		if (ROUND_NUM < 1) {
 			var buttonDiv2 = $("<div class='buttonContainer'></div>");
-			buttonDiv2.append("<button class='changeSeatsButton' style='padding:3px;font-size:11pt' onclick='ChangeSeats()'>This seating arrangement<br>sucks, change it</button>");
+			buttonDiv2.append("<button class='changeSeatsButton' style='padding:3px;font-size:11pt;background-color:white' onclick='ChangeSeats()'>This seating arrangement<br>sucks, change it</button>");
 			$("#centerCell").append(buttonDiv2);
 		}
 
@@ -2332,7 +2440,7 @@
 	}
 
 	function FitToWindow(pOnPageLoad) {
-		var currWindowSize = $("#bgPhoto").width();
+		var currWindowSize = window.innerWidth;
 
 		if (currWindowSize === LAST_WINDOW_SIZE && pOnPageLoad !== true) {
 			return;
@@ -2345,7 +2453,7 @@
 			if (currTime !== LAST_RESIZE) {
 				return;
 			}
-			LAST_WINDOW_SIZE = $("#bgPhoto").width();
+			LAST_WINDOW_SIZE = window.innerWidth;
 			ResizeText();
 			var idealMiddle = 0.575;
 			var tableHeight = $("#playTable").height();
@@ -2501,11 +2609,11 @@
 
 	function ResizeText() {
 		var idealWidth = 1270;
-		var actualWidth = $("#bgPhoto").width();
+		var actualWidth = window.innerWidth;
 		var scale = (actualWidth / idealWidth);
 
-		if (scale > 1.25) {
-			scale = 1.25;
+		if (scale > 1) {
+			scale = 1;
 		}
 
 		var photoHeight = scale * 100;
@@ -2519,7 +2627,7 @@
 		$(".playerInfo img").css("max-height", photoHeight + "px");
 		$(".playerName, #centerCell, .centerInfo").css("font-size", (scale * 12 < 7 ? 7 : scale * 12) + "pt");
 		$("#roundByRoundTable").css("font-size", (scale * 18) + "pt");
-		$("#instructions").css("font-size", (scale * 22) + "pt");
+		$("#scoringRules").css("font-size", (scale * 22) + "pt");
 		$(".buttonContainer button").css("font-size", (scale * 14) + "pt");
 		$(".changeSeatsButton").css("font-size", (scale * 11) + "pt");
 
@@ -2528,7 +2636,7 @@
 
 	function ResizeCards() {
 		var idealWidth = 1270;
-		var actualWidth = $("#bgPhoto").width();
+		var actualWidth = window.innerWidth;
 		var scale = (actualWidth / idealWidth);
 
 		// Compensate for line thickness
@@ -2565,44 +2673,93 @@
 	}
 
 	function ShowRulesStandings() {
-		if ($("#instructionsButton").hasClass("selected")) {
-			ShowInstructions();
+		if ($("#howToPlayButton").hasClass("selected")) {
+			ShowHowToPlay();
+		}
+		else if ($("#scoringRulesButton").hasClass("selected")) {
+			ShowScoringRules();
 		}
 		else {
 			ShowRoundByRound();
 		}
 	}
 
-	function ShowRoundByRound() {
+	function ShowHowToPlay() {
 		$(".overlayContent").hide();
 		$("#rulesStandings").show();
-		$("#instructions").hide();
-		$("#roundByRoundTable").show();
-		$("#instructionsButton").removeClass("selected");
-		$("#standingsButton").addClass("selected");
-		ShowOverlay();
-	}
-
-	function ShowInstructions() {
-		$(".overlayContent").hide();
-		$("#rulesStandings").show();
-		$("#instructions").show();
+		$("#howToPlay").show();
+		$("#scoringRules").hide();
 		$("#roundByRoundTable").hide();
-		$("#instructionsButton").addClass("selected");
+		$("#howToPlayButton").addClass("selected");
+		$("#scoringRulesButton").removeClass("selected");
 		$("#standingsButton").removeClass("selected");
 		ShowOverlay();
 	}
 
+	function ShowScoringRules() {
+		$(".overlayContent").hide();
+		$("#rulesStandings").show();
+		$("#howToPlay").hide();
+		$("#scoringRules").show();
+		$("#roundByRoundTable").hide();
+		$("#howToPlayButton").removeClass("selected");
+		$("#scoringRulesButton").addClass("selected");
+		$("#standingsButton").removeClass("selected");
+		ShowOverlay();
+	}
+
+	function ShowRoundByRound() {
+		$(".overlayContent").hide();
+		$("#rulesStandings").show();
+		$("#howToPlay").hide();
+		$("#scoringRules").hide();
+		$("#roundByRoundTable").show();
+		$("#howToPlayButton").removeClass("selected");
+		$("#scoringRulesButton").removeClass("selected");
+		$("#standingsButton").addClass("selected");
+		ShowOverlay();
+	}
+
 	function ShowOverlay() {
-		FitOverlay();
-		$("#overlayContainer").fadeIn(500);
+		setTimeout(function() {
+			FitOverlay();
+			var scrollTo = parseInt($(".overlayContent:visible").css("top")) - 5;
+			var imageHeight = $("#bgPhoto").height();
+			var windowHeight = window.innerHeight;
+			if (scrollTo + windowHeight > imageHeight) {
+				scrollTo = imageHeight - windowHeight;
+			}
+			if (scrollTo < 0) {
+				scrollTo = 0;
+			}
+
+			$("body").animate({scrollTop: scrollTo}, 500);
+		}, 10);
+		$("#overlayContainer").fadeIn(500);		
 	}
 
 	function FitOverlay() {
 		var imageHeight = $("#bgPhoto").height();
 		var windowHeight = window.innerHeight;
+		var contentHeight = $(".overlayContent:visible").outerHeight() + 20;
 		var overlayHeight = (imageHeight > windowHeight ? imageHeight : windowHeight);
-		$(".overlayContent").css("top", window.scrollY);
+		var targetTop = window.scrollY;
+
+		console.log(targetTop);
+		console.log(contentHeight);
+		console.log(windowHeight);
+		console.log(overlayHeight);
+
+		if (targetTop + contentHeight > overlayHeight) {
+			console.log("part 1");
+			targetTop = overlayHeight - contentHeight;
+		}
+		if (targetTop < 0) {
+			console.log("part 2");
+			targetTop = 0;
+		}
+
+		$(".overlayContent").css("top", targetTop + 5);
 		$("#overlayContainer").css("height", "" + overlayHeight + "px");
 	}
 
