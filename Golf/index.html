@@ -25,6 +25,8 @@
 			font-family:Tahoma, sans-serif;
 			font-size:14pt;
 			margin-top:13px;
+			display:inline-block;
+			max-width:750px;
 		}
 		#howToPlay {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
@@ -52,12 +54,11 @@
 		}
 		.howToPlaySubtitle {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
-			font-size:21pt;
+			font-size:20.5pt;
 			margin: 0px;
 		}
 		.howToPlaySubsection img {
-			max-width:95%;
-			max-height:95%;
+			max-width:100%;
 			display:inline-block;
 			margin-top:10px;
 		}
@@ -118,7 +119,7 @@
 			background-color:#ffdddd;
 		}
 		.card.showOutline {
-			border:2px solid black;
+			border:1px solid black;
 		}
 		.card {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
@@ -273,7 +274,7 @@
 	    		background-color:#ff0000 !important;
 			}
 			#playerChoose img:not(.livePlayer):hover {
-				margin:4px !important;
+				margin:6px !important;
 				border:3px solid white !important;
 			}
 			#playerChoose img.livePlayer:hover {
@@ -387,7 +388,7 @@
 		}
 
 		#rulesStandings {
-    		text-align:left;
+    		text-align:center;
     		display:inline-block;
     		border: 4px solid black;
     		border-radius:10px;
@@ -564,7 +565,7 @@
 
 		.buttonContainer button {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
-    		font-size:20pt;
+    		font-size:15pt;
     		padding:15px;
     		margin-top:10px;
     		border-radius:7px;
@@ -618,6 +619,7 @@
 		.overlayCloseButton {
     		background-color:#8833bb;
     		color:white;
+    		font-size:15pt;
 		}
 
 		#rulesStandingsTopCloseButton {
@@ -817,7 +819,7 @@
 				<span class="howToPlayHalf">
 					<span class="howToPlaySubsection" id="howToPlayFlip">
 						<p class="howToPlaySubtitle">Flip over card</p>
-						<span>To flip over one of your face-down cards, click on it.</span>
+						<span>To flip over one of your face-down cards, click on it.</span><br>
 						<img src="howToPlay/flip.png">
 					</span>
 					<span class="howToPlaySubsection" id="howToPlayTake">
@@ -2626,9 +2628,9 @@
 
 		$(".playerInfo img").css("max-height", photoHeight + "px");
 		$(".playerName, #centerCell, .centerInfo").css("font-size", (scale * 12 < 7 ? 7 : scale * 12) + "pt");
-		$("#roundByRoundTable").css("font-size", (scale * 18) + "pt");
-		$("#scoringRules").css("font-size", (scale * 22) + "pt");
-		$(".buttonContainer button").css("font-size", (scale * 14) + "pt");
+		//$("#roundByRoundTable").css("font-size", (scale * 18) + "pt");
+		//$("#scoringRules").css("font-size", (scale * 22) + "pt");
+		//$(".buttonContainer button").css("font-size", (scale * 16) + "pt");
 		$(".changeSeatsButton").css("font-size", (scale * 11) + "pt");
 
 		ResizeCards();
@@ -2654,7 +2656,8 @@
 		// Joker 8 pt
 		// Name 12 pt
 
-		$(".card").css("font-size", (scale * 24) + "pt").css("padding-bottom", (scale * 5) + "px");
+		$(".card").css("font-size", (scale * 24) + "pt").css("padding-bottom", (scale * 5) + "px").css("border-radius", (scale * 6) + "px");
+		$(".showOutline").css("border-width", (scale * 1.8) + "px");
 		$(".jokerText").css("font-size", (scale * 8) + "pt");
 		$(".suit").css("font-size", (scale * suitScale * 24) + "pt");
 		$(".joker>span").not(".jokerText").css("font-size", (scale * suitScale * 12) + "pt");
