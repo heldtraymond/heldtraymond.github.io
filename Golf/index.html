@@ -825,7 +825,7 @@
 			</div>
 		</span>
 		<span id="rulesStandings" class="overlayContent">
-			<button class="overlayCloseButton" id="rulesStandingsTopCloseButton" title="Close" onclick="OverlayClose()">x<img src=""></button>
+			<button class="overlayCloseButton" id="rulesStandingsTopCloseButton" title="Close" onclick="OverlayClose()">x</button>
 			<div class="buttonContainer">
 				<button id='scoringRulesButton' class="rulesStandingsButton selected" onclick="ShowScoringRules()">Scoring Rules</button>
 				<button id='howToPlayButton' class="rulesStandingsButton" onclick="ShowHowToPlay()">How to Play</button>
@@ -938,6 +938,40 @@
 		"David",
 		"Michelle",
 		"Diane",
+	];
+
+	var NICKNAMES = [
+		"Nikki",
+		"Sami",
+		"Guy who won't send out the Secret Santa email",
+		"Queen Elizabeth",
+		"Buddy's 2nd favorite",
+		"Ms. Straley",
+		"El Jefe",
+		"Miss Keller",
+		"Ray",
+		"Dave's sister",
+		"Uncle Jeff",
+		"Dave",
+		"Buddy's favorite",
+		"Bogie",
+	];
+
+	var ANGELA = [
+		"Angela's cousin",
+		"Angela's cousin",
+		"Angela's cousin",
+		"Angela's sister",
+		"Angela's brother",
+		"Angela's sister-in-law",
+		"Angela's brother",
+		"Angela",
+		"Angela's boyfriend",
+		"Angela's aunt",
+		"Angela's uncle",
+		"Angela's dad",
+		"Angela's mom",
+		"Angela's grandma",
 	];
 
 	var IS_TOUCHSCREEN = false;
@@ -1063,7 +1097,7 @@
 					total += SEATS[i].scores[r];
 				}
 				PlayerScores.push({
-					name: SEATS[i].name,
+					name: (ROUND_NUM === 3 ? NICKNAMES[NAMES.indexOf(SEATS[i].name)] : SEATS[i].name),
 					scores: SEATS[i].scores,
 					total: total,
 					isLive: SEATS[i].isLive
@@ -1620,7 +1654,14 @@
 			}, 1000);
 		}
 		else {
-			$("#whoseTurn").html(SEATS[CURRENT_SEAT].name + "'s turn");
+			var turnName = SEATS[CURRENT_SEAT].name;
+			if (ROUND_NUM === 3) {
+				turnName = ANGELA[NAMES.indexOf(turnName)];
+			}
+			else if (ROUND_NUM > 3 && Math.random() < (0.03 * ROUND_NUM)) {
+				turnName = NICKNAMES[NAMES.indexOf(turnName)];
+			}
+			$("#whoseTurn").html(turnName + "'s turn");
 			if (SEATS[CURRENT_SEAT].isLive) {
 				// Set playable cards for live player
 				var cards = GetPlayerCards(CURRENT_SEAT);
