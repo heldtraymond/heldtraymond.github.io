@@ -16,6 +16,17 @@
 			color:blue;
 			cursor:pointer;
 		}*/
+		.changeSeatsButton:hover {
+			background-color:#88ff88;
+		}
+		.changeSeatsButton {
+			padding:3px !important;
+			margin-top:0px !important;
+			font-size:12pt !important;
+			background-color:#ffffff;
+			color:#006600;
+			font-family:Tahoma,sans-serif !important;
+		}
 		.deviceDescription {
 			text-align:center;
 			vertical-align:top;
@@ -607,8 +618,6 @@
 		#howToPlayButton {
 			border-top-left-radius:0px;
 			border-bottom-left-radius:0px;
-			border-top-right-radius:0px;
-			border-bottom-right-radius:0px;
 			margin-left:-3px;
 			margin-right:-3px;
 		}
@@ -675,6 +684,18 @@
 			background-color:#006600;
 			color:white;
 			font-size:30pt;
+			padding-top:5px;
+			padding-bottom:5px;
+		}
+
+		#mainHowToPlayButton:hover {
+    		background-color:#88ff88;
+		}
+
+		#mainHowToPlayButton {
+			background-color:#ffffff;
+			color:#006600;
+			font-size:18pt;
 			padding-top:5px;
 			padding-bottom:5px;
 		}
@@ -785,7 +806,8 @@
 		</table>
 	</div>
 	<div class="buttonContainer" id="playButtonContainer">
-		<button id='playButton' onclick="ClickedPlayButton()">Play Golf!</button>
+		<button id='playButton' onclick="ClickedPlayButton()">Play Golf!</button><br>
+		<button id='mainHowToPlayButton' onclick="ShowScoringRules()">Rules and How To Play</button>
 	</div>
 	<div id="overlayContainer">
 		<div id="overlayBackground"></div>
@@ -943,7 +965,7 @@
 	var NICKNAMES = [
 		"Nikki",
 		"Sami",
-		"Guy who won't send out the Secret Santa email",
+		"Eagle scout",
 		"Queen Elizabeth",
 		"Buddy's 2nd favorite",
 		"Ms. Straley",
@@ -998,7 +1020,7 @@
 	var VALS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
 
 	var SHOW_SCORES = true; // (Math.random() > 0.5);	
-	var SHOW_NAMES = (Math.random() > 0.5);
+	var SHOW_NAMES = true; //(Math.random() > 0.5);
 	var PREV_SHOW_SCORES = SHOW_SCORES;
 
 	var LAST_RESIZE = new Date();
@@ -1006,6 +1028,7 @@
 
 	$(".centerInfo").hide();
 	$("#playButtonContainer").hide();
+	$("#standingsButton").hide();
 	setTimeout(ShowPlayButton, 400);
 
 	// Load the images now so they're ready to display when user clicks Play Golf!
@@ -1025,7 +1048,7 @@
 	}
 
 	function ClickedPlayButton() {
-		$("#playButton").fadeOut(250);
+		$("#playButtonContainer").fadeOut(250);
 		ShowDeviceSelection();
 	}
 
@@ -1085,6 +1108,8 @@
 		FitToWindow(true);
 		DrawRoundByRound(false);
 		ShowNextRoundButton();
+		$("#howToPlayButton").css("border-top-right-radius","0px").css("border-bottom-right-radius","0px");
+		$("#standingsButton").show();
 		$("#centerCell button").hide();
 	}
 
@@ -1278,7 +1303,7 @@
 
 		if (ROUND_NUM < 1) {
 			var buttonDiv2 = $("<div class='buttonContainer'></div>");
-			buttonDiv2.append("<button class='changeSeatsButton' style='padding:3px;margin-top:0px;font-size:12pt;background-color:white;font-family:Tahoma,sans-serif' onclick='ChangeSeats()'>This seating arrangement<br>sucks, change it</button>");
+			buttonDiv2.append("<button class='changeSeatsButton' onclick='ChangeSeats()'>This seating arrangement<br>sucks, change it</button>");
 			$("#centerCell").append(buttonDiv2);
 		}
 
@@ -2562,7 +2587,6 @@
 			return;
 		}
 
-
 		LAST_RESIZE = new Date();
 		var currTime = LAST_RESIZE; 
 		setTimeout(function() {
@@ -2594,6 +2618,11 @@
 			console.log(marginTopPercent);
 			console.log(marginTopPixels);*/
 			$("#playTableContainer").css("margin-top", marginTopPixels + "px");
+			
+			var ua = window.navigator.userAgent.toLowerCase();
+	        if (ua.indexOf("trident") >= 0 || ua.indexOf("edge") >= 0) {
+				$("#playTableContainer").css("max-height", "200px");
+			}
 
 			var scrollTo = marginTopPixels + tableHeight - windowHeight + 10;
 
@@ -2687,7 +2716,10 @@
 				document.webkitExitFullscreen();
 			}
 		}
-  		FitToWindow(true);
+
+		setTimeout(function() {
+	  		FitToWindow(true);
+		}, 100);
 	}
 
 	function FlipOverCard(pSeatNum, pCardNum) {
@@ -2874,7 +2906,7 @@
 			}
 
 			$("body").animate({scrollTop: scrollTo}, 500);
-		}, 10);
+		}, 100);
 		$("#overlayContainer").fadeIn(500);		
 	}
 
