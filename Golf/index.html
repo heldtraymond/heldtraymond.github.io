@@ -2570,7 +2570,7 @@
 			}
 			else {
 				var suit = Math.floor(cardVal / 13);
-				td.html("<span>" + VALS[cardVal % 13] + "</span>" + '<div class="suit">' + SUITS[suit] + '</div>')
+				td.html("<span>" + VALS[cardVal % 13] + "</span><br>" + '<span class="suit">' + SUITS[suit] + '</span>')
 				  .addClass(suit % 2 == 1 ? "black" : "red");
 			}
 		}
