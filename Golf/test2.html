@@ -1,0 +1,2945 @@
+<html>
+<head>
+	<title>Golf</title>
+	<!--meta name="viewport" content="width=device-width,initial-scale=1.0"-->
+	<meta charset="UTF-8">
+	<link rel="icon" href="trophyicon.png">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@800&display=swap" rel="stylesheet">
+	<style>
+		body {
+			text-align:center;
+			font-family:'Tahoma', Verdana, sans-serif;
+			overflow:auto;
+			margin-left:0px;
+			margin-right:0px;
+		}
+		/*#fullScreen {
+			color:blue;
+			cursor:pointer;
+		}*/
+		.changeSeatsButton:hover {
+			background-color:#88ff88;
+		}
+		.changeSeatsButton {
+			padding:3px !important;
+			margin-top:0px !important;
+			font-size:12pt !important;
+			background-color:#ffffff;
+			color:#006600;
+			font-family:Tahoma,sans-serif !important;
+		}
+		.deviceDescription {
+			text-align:center;
+			vertical-align:top;
+			font-family:Tahoma, sans-serif;
+			font-size:14pt;
+		}
+		#mobileDescription {
+			text-align:center;
+			font-family:Tahoma, sans-serif;
+			font-size:14pt;
+			margin-top:13px;
+			display:inline-block;
+			max-width:750px;
+		}
+		#howToPlay {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+			font-size:30pt;
+			display:inline-block;
+			text-align:center;
+			margin-left:-2%;
+		}
+		.howToPlayHalf {
+			width:46%;
+			margin: 0% 1% 1% 1%;
+			display:inline-block;
+			vertical-align:top;
+		}
+		.howToPlaySubsection {
+			border:4px solid #006600;
+			border-radius:6px;
+			width:100%;
+			padding:3px;
+			font-family:Tahoma, sans-serif;
+			font-size:12pt;
+			display:inline-block;
+			text-align:center;
+			margin-top:10px;
+		}
+		.howToPlaySubtitle {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+			font-size:20pt;
+			margin: 0px;
+		}
+		.howToPlaySubsection img {
+			max-width:100%;
+			display:inline-block;
+			margin-top:10px;
+		}
+		.widthTest {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+			font-size:50pt;
+			opacity:0;
+			position:absolute;
+			left:0px;
+			top:0px;
+			z-index:-2;
+		}
+		#playTableContainer {
+			width:100%;
+			display:inline-block;
+			/*padding-left:30px;
+			padding-right:30px;*/
+		}
+		#playTable {
+			width:100%;
+			border-collapse:collapse;
+			table-layout:fixed;
+		}
+		.dealerLabel {
+			display:none;
+			font-weight:bold;
+			position:relative;
+			margin-bottom:-1.5em;
+			margin-top:0px;
+			height:1.5em;
+			z-index:104;
+		}
+		.dealerLabel span {
+			color:white;
+			border:5px solid #ff0000;
+			border-radius:5px;
+			background-color:#ff0000;
+		}
+		/*#playTable tr, #playTable td {
+			border:none;
+		}*/
+		.infoOnly {
+			width:11%;
+		}
+		.playerCards {
+			width:13%;
+			padding-left:10px;
+			padding-right:10px;
+		}
+		#centerCell .card {
+			width:1.4em;
+		}
+		#centerCell {
+			font-size:12pt;
+		}
+		.endplayer .card {
+			border-color:red;
+			background-color:#ffdddd;
+		}
+		.card.showOutline {
+			border:1px solid black;
+		}
+		.card {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+			border-radius:6px;
+			background-color:white;
+			font-size:24pt;
+			font-weight:bolder;
+			width:33%;
+			text-align:center;
+			line-height:87%;
+			letter-spacing:-3;
+			padding-right:3px;
+			padding-top:0px;
+			padding-bottom:5px;
+			height:2.2em;
+		}
+		#playTable tr td {
+			/*padding-bottom:8px;*/
+		}
+		.red {
+			color:red;
+		}
+		.black {
+			color:black;
+		}
+		.joker {
+			color:black;
+			letter-spacing:0;
+			padding-right:0px;
+			line-height:65%;
+		}
+		.jokerText {
+			font-size:8pt;
+		}
+		.suit {
+			width:100%;
+			font-size:33pt;
+		}
+		.facedown {
+			background-repeat:no-repeat;
+			background-size:contain;
+			background-position:center;
+		}
+		.facedown.deck1 {
+			background-image:url('cardBackBicycle.gif');
+			background-color:#252760;
+		}
+		.facedown.deck2 {
+			background-image:url('cardBackDominos.gif');
+			background-color:#000000;
+		}
+		.playerCell {
+			font-style:bold;
+		}
+		.playerInfo {
+			text-align:center;
+		}
+		.playerInfoWrapper {
+			max-width:80px;
+		}
+		/*.cellComponent.endplayer {
+			background-color:#ff0000;
+		}*/
+		.playerCards.live.current {
+			background-color:blue;
+			border-radius:6px;
+		}
+		/*.playerInfo.live.current img {
+			border-color:#8833bb;
+		}
+		.playerInfo.live.firstPlayer img {
+			border-color:#8833bb;
+		}*/
+		.playerCards.current {
+			background-color:#8833bb;
+			border-radius:6px;
+		}
+		.playerInfo.live.firstPlayer img {
+			border-color:#8833bb;
+		}
+		.playerInfo.firstPlayer img {
+			border:5px solid #8833bb;
+			margin:-2px -2px -2px -2px;
+		}
+		.playerInfo.current img {
+			border:7px solid #8833bb;
+			margin:-5px -5px -5px -5px;
+		}
+		/*.playerInfo.live {
+			background-color:#77ff77;
+		}*/
+		.playerInfo.live img {
+			border:8px solid blue;
+			margin:-5px -5px -5px -5px;
+		}
+		.playerInfo img {
+			background-color:white;
+			border-radius:8px;
+			border:3px solid black;
+			max-height:100px;
+			position:relative;
+		}
+		.playerName {
+			margin-top:0px;
+			margin-bottom:0px;
+    		font-size:12pt;
+			position:relative;
+			z-index:100;
+		}
+		.endplayer .playerName span {
+			background-color:#ffdddd;
+			border-color:red;
+		}
+		.playerName span {
+			color:black;
+			border-radius:4px;
+			background-color:#ccccff;
+			border:2px solid #000088;
+			padding-left:2px;
+			padding-right:2px;
+			display:inline-block;
+			margin-top:-1.3em;
+			margin-bottom:-1.3em;
+			min-height:1.3em;
+			min-width:1.3em;
+		}
+    	.playerCards table {
+    		width:100%;
+    		/*table-layout:fixed;*/
+    	}
+    	.card.discard {
+    		background-color:#ff8888;
+    		background-image:url('discard.png');
+			background-repeat:no-repeat;
+			background-size:contain;
+			background-position:center;
+    	}
+    	.card.discard:hover {
+    		background-color:#ff0000 !important;
+    	}
+    	.card.selectedCard:hover {
+    		background-color:#aaaaff !important;
+    	}
+    	.card.selectedCard {
+    		background-color:#aaaaff !important;
+    	}
+    	@media (hover: none) {
+			.playableCard.faceup:not(.discard):not(.selectedCard) {
+				background-color:white !important;
+			}
+			.card.discard {
+	    		background-color:#ff0000 !important;
+			}
+			#playerChoose img:not(.livePlayer):hover {
+				margin:6px !important;
+				border:3px solid white !important;
+			}
+			#playerChoose img.livePlayer:hover {
+				border:8px solid #000099 !important;
+				margin:1px !important;
+			}
+		}
+    	.card.playableCard:hover {
+    		cursor:pointer;
+    		background-color:#66dd66;
+    		/*border-color:green;*/
+    	}
+    	/*.playerCards.live .facedown:hover {
+    		cursor:pointer;
+    		background-color:#66dd66;
+    		border-color:#ffff88;
+    		background-image:none;
+    	}*/
+    	.card:hover {
+    		cursor:not-allowed;
+    	}
+    	.playerInfo.right {
+    		text-align:right;
+    	}
+    	.playerInfo.left {
+    		text-align:left;
+    	}
+    	.playerInfoWrapper br {
+			display:none;
+    	}
+    	#middleRow, #middleRow > td {
+    		padding-top:5px;
+    		padding-bottom:3px;
+    	}
+    	#leftCenterCell {
+    		text-align:right;
+    	}
+    	#centerCell {
+    		text-align:center;
+    	}
+    	#rightCenterCell {
+    		text-align:left;
+    	}
+    	#leftCenterCell input {
+    		margin-right:6px;
+    		height:20px;
+    		width:20px;
+    	}
+    	.toggleLabel, #leftCenterCell input {
+    		vertical-align:middle;
+    		cursor:pointer;
+    	}
+    	#toggleEnlargeCards {
+    		background-color:#bbbbff;
+    		display:inline-block;
+    		width:90%;
+    		padding:4px;
+    		border: 2px solid #000066;
+    		border-radius:7px;
+    		display:center;
+    		font-size:14pt;
+    		font-family:Tahoma,sans-serif;
+    		line-height:85%;
+    	}
+    	#leftCenterCell .centerInfo:hover {
+    		cursor:pointer;
+    		background-color:#bbbbff;
+    		border:2px solid #000088;
+    		border-radius:4px;
+    		padding:0px 1px 2px 0px;
+    	}
+    	#leftCenterCell .centerInfo {
+    		padding:2px 3px 4px 2px;
+    	}
+    	#leftCenterCell span {
+    		width:100%;
+    		display:inline-block;
+    	}
+    	#overlayContainer {
+    		text-align:center;
+    		width:100%;
+    		position:absolute;
+    		left:0;
+    		z-index:120;
+    		display:none;
+    		top:0;
+    	}
+    	#overlayBackground {
+    		width:100%;
+    		position:absolute;
+    		height:100%;
+    		left:0;
+    		background-color:black;
+    		opacity:0.5;
+    		z-index:-1;
+    	}
+    	.scoringSettings {
+			padding:0px;
+			margin:0px;
+    	}
+		.scoringSettings li {
+			display: flex;
+			padding-left:0px;
+			margin-left:0px;
+		}
+
+		.scoringSettings li .cardType {
+			order: 1;
+		}
+
+		.scoringSettings li .cardPoints {
+			order: 3;
+		}
+
+		.scoringSettings li::after {
+			content: "";
+			border-bottom: 3px dotted;
+			flex-grow: 1;
+			order: 2;
+			margin-bottom:0.4em;
+			margin-left:0.1em;
+			margin-right:0.1em;
+		}
+
+		#rulesStandings {
+    		text-align:center;
+    		display:inline-block;
+    		border: 4px solid black;
+    		border-radius:10px;
+    		background-color:white;
+    		padding:1em;
+    		margin-top:1em;
+    		position:relative;
+    		max-width:830px;
+		}
+
+		.startSelectionScreen {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+    		text-align:center;
+    		display:inline-block;
+    		border-radius:10px;
+    		border: 4px solid #006600;
+    		padding:1em;
+    		margin-top:1em;
+    		position:relative;
+		}
+
+		#playerChoose {
+    		background-color:#77cc77;
+    		max-width:850px;
+		}
+
+		#deviceChoose {
+			background-color:#ccccff;
+			border-color:#000099;
+			max-width:75%;
+		}
+
+		#deviceChoose h1 {
+			margin-top:0px;
+			margin-bottom:0px;
+		}
+
+		#deviceChoose table {
+			table-layout:fixed;
+		}
+
+		#deviceChoose td {
+			width:50%;
+		}
+
+		.deviceOption.selectedDevice {
+			border:8px solid #000099 !important;
+			margin:1px !important;
+			background-color:#7777cc !important;
+		}
+
+		.deviceOption p {
+			margin:0px;
+			font-size:24pt;
+		}
+
+		.deviceOption:hover {
+			cursor:pointer;
+			border:6px solid #6666bb;
+			margin:3px;
+			background-color:#aaaaee;
+		}
+
+		.deviceOption {
+			border:3px solid white;
+			margin:6px;
+			border-radius:10px;
+			padding:10px 0px 10px 0px;
+			text-align:center;
+		}
+
+		.deviceOption img {
+			max-height:150px;
+		}
+
+		#deviceSelectDoneButton {
+			margin-top:30px;
+		}
+
+		#playerChoose h1 {
+			font-size:20pt;
+			margin-top:0px;
+			margin-bottom:0px;
+		}
+		#playerChoose h2 {
+			margin-top:0px;
+			font-size:14pt;
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+		}
+
+		#playerChoose img.livePlayer {
+			border:8px solid #000099;
+			margin:1px;
+		}
+
+		#playerChoose img.livePlayer:hover {
+			border:8px solid #000099;
+			margin:1px;
+		}
+
+		#playerChoose img:hover {
+			border:6px solid #6666bb;
+			margin:3px;
+		}
+
+		#playerChoose img {
+			height:130px;
+			margin:6px;
+			border:3px solid white;
+			border-radius:15px;
+			cursor:pointer;
+		}
+
+    	#scoringRules {
+    		text-align:left;
+    		width:13em;
+    		display:inline-block;
+    		padding:1em 2em 1em 2em;
+    		font-family:'Times New Roman';
+    		font-size:22pt;
+    		line-height:150%;
+    	}
+
+		#roundByRoundTable {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+    		font-size:18pt;
+    		border-collapse:collapse;
+    		display:inline-block;
+		}
+
+		#roundByRoundTable td {
+			border-top:1px solid #006600;
+			border-bottom:1px solid #006600;
+		}
+
+		#roundByRoundTable tr td:nth-child(1) {
+			text-align:right;
+			/*background-color:#88bb88 !important;*/
+		}
+		#roundByRoundTable tr th:nth-child(1) {
+			text-align:right;
+		}
+
+		#roundByRoundTable tr td:nth-child(even) {
+			background-color:#aaeeaa;
+			color:#000000;
+		}
+
+		/*#roundByRoundTable tr td:nth-child(odd) {
+			background-color:#eeaaaa;
+			color:#000000;
+		}*/
+
+		#roundByRoundTable tr td:nth-child(2) {
+			background-color:#006600;
+			color:white !important;
+			/*border-right:3px solid black !important;*/
+		}
+
+		#roundByRoundTable th, #roundByRoundTable td {
+			padding:3px 7px 3px 7px;
+			text-align:center;
+			min-width:1em;
+		}
+
+		#roundByRoundTable th {
+			background-color:#006600;
+			color:white;
+		}
+
+		.buttonContainer {
+			text-align:center;
+		}
+
+		.buttonContainer button {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+    		font-size:15pt;
+    		padding:15px;
+    		margin-top:10px;
+    		border-radius:7px;
+    		cursor:pointer;
+		}
+
+		.rulesStandingsButton:hover {
+    		background-color:#6666ff;
+		}
+		.rulesStandingsButton.selected {
+    		color:#9999ff;
+    		background-color:#000066;
+		}
+		.rulesStandingsButton {
+    		background-color:#bbbbff;
+    		color:#000066;
+    		margin-bottom:10px;
+		}
+
+		#scoringRulesButton {
+			border-top-right-radius:0px;
+			border-bottom-right-radius:0px;
+			margin-right:-3px;
+		}
+		#howToPlayButton {
+			border-top-left-radius:0px;
+			border-bottom-left-radius:0px;
+			margin-left:-3px;
+			margin-right:-3px;
+		}
+		#standingsButton {
+			border-top-left-radius:0px;
+			border-bottom-left-radius:0px;
+			margin-left:-3px;
+		}
+
+		.startRoundButton:hover {
+    		background-color:#44bb44;
+		}
+		.startRoundButton {
+    		background-color:#006600;
+    		color:white;
+		}
+
+		.overlayCloseButton:hover {
+			cursor:pointer;
+			background-color:#bb44ff;
+		}
+		.overlayCloseButton {
+    		background-color:#8833bb;
+    		color:white;
+    		font-size:15pt;
+		}
+
+		#rulesStandingsTopCloseButton {
+			font-size:20pt;
+			font-family:sans-serif;
+			font-weight:bold;
+			position:absolute;
+			top:-20px;
+			left:100%;
+			margin-left:-30px;
+			min-width:50px;
+			min-height:50px;
+			padding: 4px 13px 7px 13px;
+			border:3px solid #440066;
+			border-radius:25px;
+		}
+
+		.scoreImg {
+			height: 1.2em;
+			margin-right: 4px;
+			margin-bottom:-0.2em;
+		}
+
+		#clipboard:hover {
+			cursor:pointer;
+			-webkit-filter: drop-shadow(0px 0px 30px #aa7744);
+			filter: drop-shadow(0px 0px 30px #aa7744);
+		}
+
+		#clipboard {
+			max-width:85%;
+		}
+
+		#playButton:hover {
+    		background-color:#44bb44;
+		}
+
+		#playButton {
+			background-color:#006600;
+			color:white;
+			font-size:30pt;
+			padding-top:5px;
+			padding-bottom:5px;
+		}
+
+		#mainHowToPlayButton:hover {
+    		background-color:#88ff88;
+		}
+
+		#mainHowToPlayButton {
+			background-color:#ffffff;
+			color:#006600;
+			font-size:18pt;
+			padding-top:5px;
+			padding-bottom:5px;
+		}
+
+		#playButtonContainer {
+			position:relative;
+			text-align:center;
+			width:100%;
+			left:0;
+			top:0;
+		}
+
+		</style>
+	<script src="jquery.js"></script>
+</head>
+<body style="overflow-y:scroll;text-align:center;">
+	<span class="widthTest" id="widthTestValue">A</span>
+	<span class="widthTest" id="widthTestSuit">♣</span>
+	<img id="bgPhoto" src="LivingRoomThanksgiving.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1">
+	<div id="playTableContainer">
+		<table id="playTable">
+			<tr>
+				<td class="infoOnly"></td>
+				<td></td>
+				<td class="playerInfo cellComponent" id="playerInfo0">
+				</td>
+				<td class="playerInfo cellComponent" id="playerInfo1">
+				</td>
+				<td class="playerInfo cellComponent" id="playerInfo2">
+				</td>
+				<td class="playerInfo cellComponent" id="playerInfo3">
+				</td>
+				<td></td>
+				<td class="infoOnly"></td>
+			</tr>
+			<tr>
+				<td class="playerInfo cellComponent right" id="playerInfo13">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards13">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards0">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards1">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards2">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards3">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards4">
+				</td>
+				<td class="playerInfo cellComponent left" id="playerInfo4">
+				</td>
+			</tr>
+			<tr id="middleRow">
+				<td class="playerInfo cellComponent right" id="playerInfo12">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards12">
+				</td>
+				<td id="leftCenterCell">
+					<span id='toggleNames' class="centerInfo"><label class='toggleLabel' for='toggleNamesBox'>Show names</label><input type='checkbox' id='toggleNamesBox' onclick='ToggleNames()' /></span>
+					<span id='toggleScores' class="centerInfo"><label class='toggleLabel' for='toggleScoresBox'>Show scores</label><input type='checkbox' id='toggleScoresBox' onclick='ToggleScores()' /></span>
+					<span id='fullScreen' style="display:none" class="centerInfo"><label class='toggleLabel' for='toggleFullScreenBox'>Full-Screen</label><input type='checkbox' id='toggleFullScreenBox' onclick='ToggleFullScreen()' /></span>
+					<button id='toggleEnlargeCards' style="display:none" onclick="ToggleEnlargeCards()">
+						<input type='checkbox' id='toggleEnlargeCardsBox' style="margin:0px 3px 0px 0px" />Enlarge my cards on my turn
+					</button>
+				</td>
+				<td colspan="2" id="centerCell"></td>
+				<td id="rightCenterCell">
+					<img id="clipboard" class="centerInfo alwaysClickable" src="clipboard2.png" onclick="ShowRulesStandings()">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards5">
+				</td>
+				<td class="playerInfo cellComponent left" id="playerInfo5">
+				</td>
+			</tr>
+			<tr>
+				<td class="playerInfo cellComponent right" id="playerInfo11">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards11">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards10">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards9">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards8">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards7">
+				</td>
+				<td class="playerCards cellComponent" id="playerCards6">
+				</td>
+				<td class="playerInfo cellComponent left" id="playerInfo6">
+				</td>
+			</tr>
+			<tr>
+				<td class="infoOnly"></td>
+				<td></td>
+				<td class="playerInfo cellComponent" id="playerInfo10">
+				</td>
+				<td class="playerInfo cellComponent" id="playerInfo9">
+				</td>
+				<td class="playerInfo cellComponent" id="playerInfo8">
+				</td>
+				<td class="playerInfo cellComponent" id="playerInfo7">
+				</td>
+				<td></td>
+				<td class="infoOnly"></td>
+			</tr>
+		</table>
+	</div>
+	<div class="buttonContainer" id="playButtonContainer">
+		<button id='playButton' onclick="ClickedPlayButton()">Play Golf!<br><span style="font-size:14pt">(vs. computer)</span></button><br>
+		<button id='mainHowToPlayButton' onclick="ShowScoringRules()">Rules and How To Play</button>
+	</div>
+	<div id="overlayContainer">
+		<div id="overlayBackground"></div>
+		<span id="playerChoose" class="overlayContent startSelectionScreen">
+			<h1>Who is playing on this device?</h1>
+			<h2>(You can select multiple people)</h2>
+			<div id="playerPhotos"></div>
+			<div class="buttonContainer">
+				<button class="overlayCloseButton" onclick="PlayerSelectDone()">Play</button>
+			</div>
+		</span>
+		<span id="deviceChoose" class="overlayContent startSelectionScreen">
+			<h1>What kind of device are you playing on?</h1>
+			<table id="devices">
+				<tr>
+					<td>
+						<div class="deviceOption" onclick="ClickedDevice(this)">
+							<img src="pc.png">
+							<p>Laptop/Computer</p>
+						</div>
+					</td>
+					<td>
+						<div class="deviceOption" id="deviceOptionMobile" onclick="ClickedDevice(this)">
+							<img src="mobile.png">
+							<p>Phone/Tablet</p>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="deviceDescription">Excellent choice!</td>
+					<td class="deviceDescription">Turn your device horizontally to landscape for best results</td>
+				</tr>
+			</table>
+			<div id="mobileDescription" style="display:none">On a mobile device, your cards will automatically display larger on your turn so you don't accidentally tap on the wrong one and say "Wait, I didn't mean to do that!"<br>(You can turn this option off if you don't like it)</div>
+			<div class="buttonContainer">
+				<button id="deviceSelectDoneButton" style="display:none" class="overlayCloseButton" onclick="DeviceSelectDone()">Continue</button>
+			</div>
+		</span>
+		<span id="rulesStandings" class="overlayContent">
+			<button class="overlayCloseButton" id="rulesStandingsTopCloseButton" title="Close" onclick="OverlayClose()">x</button>
+			<div class="buttonContainer">
+				<button id='scoringRulesButton' class="rulesStandingsButton selected" onclick="ShowScoringRules()">Scoring Rules</button>
+				<button id='howToPlayButton' class="rulesStandingsButton" onclick="ShowHowToPlay()">How to Play</button>
+				<button id='standingsButton' class="rulesStandingsButton" onclick="ShowRoundByRound()">Current Standings</button>
+			</div>
+			<span id="howToPlay">
+				<span class="howToPlayHalf">
+					<span class="howToPlaySubsection" id="howToPlayFlip">
+						<p class="howToPlaySubtitle">Flip over card</p>
+						<span>To flip over one of your face-down cards, click on it.</span><br>
+						<img src="howToPlay/flip.png">
+					</span>
+					<span class="howToPlaySubsection" id="howToPlayTake">
+						<p class="howToPlaySubtitle">Take the card in the middle</p>
+						<span>To take the face-up card in the middle, (1) click on it so it gets highlighted in blue, and then (2) click on the card in your hand that you want to trade it for.</span>
+						<img src="howToPlay/take.png">
+					</span>
+				</span>
+				<span class="howToPlayHalf">
+					<span class="howToPlaySubsection" id="howToPlayDraw">
+						<p class="howToPlaySubtitle">Draw a card</p>
+						<span>To draw the top card from the face-down pile in the middle, (1) click on the draw card to flip it over, and then (2) if you want to keep it, click on the card in your hand that you want to trade it for.</span>
+						<img src="howToPlay/draw.png">
+					</span>
+					<span class="howToPlaySubsection" id="howToPlayDiscard">
+						<p class="howToPlaySubtitle">Discard the draw card</p>
+						<span>If you flipped over the draw card and decide you don't want it, click the red Discard button to get rid of it and end your turn.</span>
+						<img src="howToPlay/discard.png">
+					</span>
+				</span>
+			</span>
+			<span id="scoringRules">
+				<u><i><strong>GOLF</strong></i></u>
+				<ul class="scoringSettings">
+				  <li>
+				    <span class="cardType">Ace</span>
+				    <span class="cardPoints"><strong>1</strong> point</span>
+				  </li>
+				  <li>
+				    <span class="cardType">King</span>
+				    <span class="cardPoints"><strong>0</strong> points</span>
+				  </li>
+				  <li>
+				    <span class="cardType">Queen</span>
+				    <span class="cardPoints"><strong>10</strong> points</span>
+				  </li>
+				  <li>
+				    <span class="cardType">Jack</span>
+				    <span class="cardPoints"><strong>20</strong> points</span>
+				  </li>
+				  <li>
+				    <span class="cardType">Joker</span>
+				    <span class="cardPoints"><strong>-3</strong> points</span>
+				  </li>
+				  <li>
+				    <span class="cardType">All others</span>
+				    <span class="cardPoints"><strong>face</strong> value</span>
+				  </li>
+				  <!--span style="font-size:8pt">(Ugh, I hate using Times New Roman. Thanks, Rousseau's...)</span-->
+				  <br>
+				  <li>
+				    <span class="cardType">All 4 corners</span>
+				    <span class="cardPoints"><strong>-20</strong> points</span>
+				  </li>
+				  <li>
+				    <span class="cardType">4 next to each other</span>
+				    <span class="cardPoints"><strong>-20</strong> points</span>
+				  </li>
+				  <li>
+				    <span class="cardType">All 6</span>
+				    <span class="cardPoints"><strong>-30</strong> points</span>
+				  </li>
+				</ul>
+			</span>
+			<table id="roundByRoundTable">
+				<tr>
+					<th>Player</th>
+					<th>Total</th>
+					<th>1</th>
+					<th>2</th>
+					<th>3</th>
+					<th>4</th>
+					<th>5</th>
+					<th>6</th>
+					<th>7</th>
+					<th>8</th>
+					<th>9</th>
+				</tr>
+			</table>
+			<div class="buttonContainer">
+				<button class="overlayCloseButton" onclick="OverlayClose()">Close</button>
+			</div>
+		</span>
+	</div>
+</body>
+<script>
+	var DECK = [];
+	var NAMES = [
+		"Nicole",
+		"Samantha",
+		"Justin",
+		"Elizabeth",
+		"Nicholas",
+		"Lauren",
+		"Michael",
+		"Angela",
+		"Ray",
+		"Tracy",
+		"Jeff",
+		"David",
+		"Michelle",
+		"Diane",
+	];
+
+	var NICKNAMES = [
+		"Nikki",
+		"Sami",
+		"Eagle scout",
+		"Queen Elizabeth",
+		"Buddy's 2nd favorite",
+		"Ms. Straley",
+		"El Jefe",
+		"Miss Keller",
+		"Ray",
+		"Dave's sister",
+		"Uncle Jeff",
+		"Dave",
+		"Buddy's favorite",
+		"Bogie",
+	];
+
+	var ANGELA = [
+		"Angela's cousin",
+		"Angela's cousin",
+		"Angela's cousin",
+		"Angela's sister",
+		"Angela's brother",
+		"Angela's sister-in-law",
+		"Angela's brother",
+		"Angela",
+		"Angela's boyfriend",
+		"Angela's aunt",
+		"Angela's uncle",
+		"Angela's dad",
+		"Angela's mom",
+		"Angela's grandma",
+	];
+
+	var IS_TOUCHSCREEN = false;
+	var ENLARGE_CARDS = false;
+	var ROUND_NUM = 0;
+	var DRAW_INDEX = 0;
+	var PLAYERS = [];
+	var SELECTED_CARD = null;
+	var DRAWING_TWO = false;
+
+	var CLOCK_INTERVAL = null;
+	var COUNTDOWN_TIME = null;
+
+	var TOTAL_SEATS = 14;
+	var SEATS = [];
+	var DEALER = null;
+	var CURRENT_SEAT = null;
+	var START_SEAT = null;
+	var END_SEAT = null;
+
+	var IS_FULLSCREEN = false;
+
+	var SUITS = ["♥", "♠", "♦", "♣"];
+	var VALS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+
+	var SHOW_SCORES = true; // (Math.random() > 0.5);	
+	var SHOW_NAMES = true; //(Math.random() > 0.5);
+	var PREV_SHOW_SCORES = SHOW_SCORES;
+
+	var LAST_RESIZE = new Date();
+	var LAST_WINDOW_SIZE = $("#bgPhoto").width();
+
+	$(".centerInfo").hide();
+	$("#playButtonContainer").hide();
+	$("#standingsButton").hide();
+	setTimeout(ShowPlayButton, 400);
+
+	// Load the images now so they're ready to display when user clicks Play Golf!
+	for (var i = 0; i < NAMES.length; i++) {
+		var img = $("<img>");
+		img.attr("nameIndex", i);
+		img.attr("src", "players/" + NAMES[i] + ".jpg");
+		img.attr("onclick", "ClickedPlayer(this)");
+		$("#playerPhotos").append(img);
+	}
+
+	$("body").animate({scrollTop:0},700);
+
+	function ShowPlayButton() {
+		var photoHeight = $("#bgPhoto").height();
+		$("#playButtonContainer").css("top", photoHeight * 0.35).fadeIn(300);
+	}
+
+	function ClickedPlayButton() {
+		$("#playButtonContainer").fadeOut(250);
+		ShowDeviceSelection();
+	}
+
+	function ClickedDevice(el) {
+		if ($(el).hasClass("selectedDevice")) {
+			$(el).removeClass("selectedDevice");
+		}
+		else {
+			$(".selectedDevice").removeClass("selectedDevice");
+			$(el).addClass("selectedDevice");
+		}
+
+		$("#mobileDescription").toggle($("#deviceOptionMobile").hasClass("selectedDevice"));
+		$("#deviceSelectDoneButton").toggle($(".selectedDevice").length > 0);
+	}
+
+	function DeviceSelectDone() {
+		IS_TOUCHSCREEN = $("#deviceOptionMobile").hasClass("selectedDevice");
+		if (IS_TOUCHSCREEN) {
+			$("#playerChoose h2").hide();
+			$(".howToPlaySubsection span").each(function() {
+				$(this).html($(this).html().replace("click", "tap").replace("click", "tap"));
+			});
+			$(".howToPlaySubsection img").each(function() {
+				var src = $(this).attr("src");
+				$(this).attr("src", src.substring(0, src.length - 4) + "_mobile.png");
+			});
+			SHOW_SCORES = true;
+			SHOW_NAMES = true;
+			ENLARGE_CARDS = true;
+			$("#toggleEnlargeCardsBox").prop("checked", true);
+			$("#toggleNames, #toggleScores, #fullScreen").remove();
+		}
+		else {
+			$("#toggleEnlargeCards").remove();
+		}
+
+		OverlayClose();
+		setTimeout(ShowPlayerSelection, 500);
+	}
+
+	function ClickedPlayer(el) {
+		if ($(el).hasClass("livePlayer")) {
+			$(el).removeClass("livePlayer");
+		}
+		else {
+			if (IS_TOUCHSCREEN) {
+				$(".livePlayer").removeClass("livePlayer");
+			}
+			$(el).addClass("livePlayer");
+		}
+	}
+
+	function PlayerSelectDone() {
+		OverlayClose();
+		Setup();
+		FitToWindow(true);
+		DrawRoundByRound(false);
+		ShowNextRoundButton();
+		$("#howToPlayButton").css("border-top-right-radius","0px").css("border-bottom-right-radius","0px");
+		$("#standingsButton").show();
+		$("#centerCell button").hide();
+	}
+
+	function DrawRoundByRound(pShow) {
+		var PlayerScores = [];
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			if (SEATS[i] !== null) {
+				var total = 0;
+				for (var r = 0; r < 9; r++) {
+					total += SEATS[i].scores[r];
+				}
+				PlayerScores.push({
+					name: (ROUND_NUM === 3 ? NICKNAMES[NAMES.indexOf(SEATS[i].name)] : SEATS[i].name),
+					scores: SEATS[i].scores,
+					total: total,
+					isLive: SEATS[i].isLive
+				});
+			}
+		}
+
+		PlayerScores.sort(function(a, b) {
+			return (a.total > b.total ? -1 : (a.total < b.total ? 1 : (a.name < b.name ? -1 : 1)));
+		});
+
+		var lastPlaceScore = (ROUND_NUM < 1 ? 1 : PlayerScores[0].total);
+
+		$("#roundByRoundTable tr").each(function(index) {
+			if (index <= 0) return;
+
+			var player = PlayerScores[index - 1];
+			$(this).find("td").eq(0).html((player.total >= lastPlaceScore ? "<img src='trophy.png' class='scoreImg'>" : "") + player.name);
+			$(this).find("td").eq(1).html(player.total);
+			$(this).find("td").css("background-color", "");
+			for (var r = 0; r < 9; r++) {
+				$(this).find("td").eq(2 + r).html(r < ROUND_NUM ? player.scores[r] : "");
+			}
+
+			/*if (player.isLive) {
+				$(this).find("td").each(function(index) {
+					$(this).css("background-color", (index % 2 === 0 ? "#ffdddd" : (index === 1 ? "#aa0000" : "#ff9999")));
+				});
+			}*/
+		});
+
+		if (pShow === true) {
+			ShowRoundByRound();
+		}
+	}
+
+	function Setup() {
+		if (PLAYERS.length > 0) {
+			return;
+		}
+
+		if (!IS_TOUCHSCREEN) {
+			$(window).resize(SafeFitToWindow);
+		}
+
+		$(".centerInfo").hide();
+
+		for (var i = 0; i < NAMES.length; i++) {
+			var isLive = $("#playerChoose img").eq(i).hasClass("livePlayer");
+			if (isLive || Math.random() < 1.00) {
+				PLAYERS.push({
+					name: NAMES[i],
+					scores: [0,0,0,0,0,0,0,0,0],
+					isLive: isLive
+				});
+			}
+		}
+
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			SEATS.push(null);
+		}
+
+		for (var i = 0; i < PLAYERS.length; i++) {
+			var seat = -1;
+			while (seat < 0 || SEATS[seat] !== null) {
+				seat = Math.floor(Math.random() * TOTAL_SEATS);
+			}
+
+			SEATS[seat] = PLAYERS[i];
+
+			var round = $("<tr></tr>");
+			for (var col = 0; col < 11; col++) {
+				round.append("<td></td>");
+			}
+			$("#roundByRoundTable").append(round);
+		}
+
+		$(".playerInfo").each(function() {
+			var span = $("<span></span>");
+			span.addClass("playerInfoWrapper");
+			var name = $("<p><span></span></p>");
+			name.addClass("playerName");
+			var img = $("<img>");
+			img.attr("src", "User.png");
+			var dealer = $("<p><span>DEALER</span></p>");
+			dealer.addClass("dealerLabel");
+			var id = parseInt($(this).attr("id").substring(10));
+			if (id >= 40 && id <= 3) {
+				span.append(name);
+				span.append(img);
+				span.append(dealer);
+			}
+			else {
+				span.append(img);
+				span.append(dealer);
+				span.append(name);
+			}
+			$(this).append(span);
+		});
+		$(".playerCards").each(function() {
+			var id = parseInt($(this).attr("id").substring(11));
+			var table = $("<table></table>");
+			for (var r = 0; r < 2; r++) {
+				var tr = $("<tr></tr>");
+				for (var c = 0; c < 3; c++) {
+					var td = $("<td></td>");
+					td.addClass("card");
+					td.attr("seatNum", id);
+					td.attr("cardNum", (r * 3 + c));
+					//if (id === livePlayer) {
+						td.attr("onclick", "ClickedCard(this," + id + "," + (r * 3 + c) + ")");
+					//}
+					tr.append(td);
+				}
+				table.append(tr);
+			}
+			$(this).append(table);
+		});
+		var status = $("<span id='statusText'></span>");
+		var span = $("<span style='display:inline-block;text-align:center;'><span id='roundNum'></span></span>");
+		var turnSpan = $("<span id='whoseTurn'></span>");
+		var innerSpan = $("<span></span>");
+		var table = $("<table align='center'></table>");
+		var tr = $("<tr></tr>");
+		table.append(tr);
+		for (var c = 0; c < 3; c++) {
+			var td = $("<td></td>");
+			if (c !== 1) {
+				td.addClass("card");
+			}
+			if (c === 0) {
+				td.attr("onclick", "ClickedDiscard()");
+			}
+			if (c === 2) {
+				td.attr("onclick", "ClickedDrawCard()");
+			}
+			tr.append(td);
+		}
+		innerSpan.append(table);
+		span.append(innerSpan);
+		span.append(turnSpan);
+		$("#centerCell").append(span);
+		$("#centerCell").append(status);
+
+		$("#statusText").hide();
+
+		DrawPlayerInfos();
+
+		$(".playerName").hide();
+		$(".playerInfo, .playerName").css("opacity", 0);
+		$(".playerCards .card").css("opacity", 0);
+		$(".card").removeClass("showOutline");
+		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").css("left", "125px").css("top", "11px");
+		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").css("left", "-123px").css("top", "11px");
+		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").css("top", "100px");
+		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img, .dealerLabel").css("top", "-80px");
+		$("#centerCell>span").hide();
+
+		setTimeout(function() {
+			$(".playerInfo").animate({opacity:1}, 400);
+			$("#clipboard, #centerCell button").fadeIn(300);
+
+			if (IS_TOUCHSCREEN) {
+				$("#toggleEnlargeCards").fadeIn(300);
+			}
+			else {
+				$("#fullScreen").fadeIn(300);
+			}
+		}, 1000);
+	}
+
+	function ShowNextRoundButton() {
+		var buttonDiv = $("<div class='buttonContainer'></div>");
+		var button = $("<button class='startRoundButton'>Begin Round " + (ROUND_NUM + 1) + "</button>");
+		button.attr("onclick", "BeginNextRound()");
+		buttonDiv.append(button);
+		$("#centerCell").append(buttonDiv);
+
+		if (ROUND_NUM < 1) {
+			var buttonDiv2 = $("<div class='buttonContainer'></div>");
+			buttonDiv2.append("<button class='changeSeatsButton' onclick='ChangeSeats()'>This seating arrangement<br>sucks, change it</button>");
+			$("#centerCell").append(buttonDiv2);
+		}
+
+	}
+
+	function ChangeSeats() {
+		SEATS = [];
+
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			SEATS.push(null);
+		}
+
+		for (var i = 0; i < PLAYERS.length; i++) {
+			var seat = -1;
+			while (seat < 0 || SEATS[seat] !== null) {
+				seat = Math.floor(Math.random() * TOTAL_SEATS);
+			}
+
+			SEATS[seat] = PLAYERS[i];
+		}
+
+		$.when($(".playerInfo").fadeOut(300)).then(function() {
+			$(".live").removeClass("live");
+			DrawPlayerInfos();
+			$(".playerInfo").fadeIn(300);
+		});
+	}
+
+	function DrawPlayerInfos() {
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			if (SEATS[i] === null) {
+				$("#playerInfo" + i + " img").hide();
+				$("#playerInfo" + i + " .playerName").hide();
+				$("#playerCards" + i + " table").hide();
+			}
+			else {
+				$("#playerInfo" + i + " img").show();
+				$("#playerInfo" + i + " .playerName").show();
+				$("#playerCards" + i + " table").show();
+
+				if (SEATS[i].isLive) {
+					$("#playerInfo" + i).addClass("live");
+					$("#playerCards" + i).addClass("live");
+				}
+				$("#playerInfo" + i + " img").attr("src", "players/" + SEATS[i].name + ".jpg");
+			}
+		}
+	}
+
+	function AnyLivePlayers() {
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			if (SEATS[i] === null) continue;
+			if (SEATS[i].isLive) return true;
+		}
+		return false;
+	}
+
+	function BeginNextRound() {
+		$("#centerCell .buttonContainer").remove();
+
+		ROUND_NUM++;
+		if (ROUND_NUM <= 9) {
+			ShuffleUpAndDeal();
+		}
+	}
+
+	function OverlayClose() {
+		HideOverlay();
+	}
+
+	function ShuffleUpAndDeal() {
+		END_SEAT = null;
+		if (START_SEAT === null) {
+			CURRENT_SEAT = Math.floor(Math.random() * TOTAL_SEATS);
+			IncrementCurrent(false);
+			DEALER = CURRENT_SEAT;
+		}
+		else {
+			// Round 2 or later - dealer was last hand's first player
+			DEALER = START_SEAT;
+		}
+
+		CURRENT_SEAT = DEALER;
+		IncrementCurrent(false);
+		START_SEAT = CURRENT_SEAT;
+
+		setTimeout(function() {
+			FitToWindow(true);
+		}, 500);
+
+		$(".playerName").hide();
+		$("#leftCenterCell .centerInfo").not("#fullScreen").hide();
+
+		$.when($(".card").animate({opacity: 0}, 400)).then(function() {
+			$(".card").removeClass("showOutline");
+		});
+		$("#playerInfo11, #playerInfo12, #playerInfo13").find("img, .dealerLabel").animate({left:"125px", top: "11px"}, 1200);
+		$("#playerInfo4, #playerInfo5, #playerInfo6").find("img, .dealerLabel").animate({left:"-123px", top: "11px"}, 1200);
+		$("#playerInfo0, #playerInfo1, #playerInfo2, #playerInfo3").find("img, .dealerLabel").animate({top: "100px"}, 1200);
+		$("#playerInfo7, #playerInfo8, #playerInfo9, #playerInfo10").find("img, .dealerLabel").animate({top: "-80px"}, 1200);
+
+		$("#statusText").html("Shuffling").hide();
+		$("#toggleScoresBox").prop("checked", SHOW_SCORES);
+		$("#toggleNamesBox").prop("checked", SHOW_NAMES);
+		$("#toggleEnlargeCardsBox").prop("checked", ENLARGE_CARDS);
+		$("#roundNum").html("Round " + ROUND_NUM + " of 9");
+
+		setTimeout(function() {
+			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
+			$("#playerInfo" + DEALER + " .dealerLabel").show();
+		setTimeout(function() {
+			$(".playerInfoWrapper img").css("border", "").css("margin", "");
+		setTimeout(function() {
+			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
+		setTimeout(function() {
+			$(".playerInfoWrapper img").css("border", "").css("margin", "");
+		setTimeout(function() {
+			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
+		setTimeout(function() {
+			$(".playerInfoWrapper img").css("border", "").css("margin", "");
+		setTimeout(function() {
+			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
+		setTimeout(function() {
+			$(".playerInfoWrapper img, .dealerLabel").animate({
+		    	left:'0px',
+		    	top:'0px',
+			}, 1500);
+			setTimeout(function() {
+				$("#statusText").html("Dealing").hide();
+				//ShowHideNames();
+
+				var delayTime = 0;
+				var totalCards = 0;
+				var firstPlayerSeat = CURRENT_SEAT;
+				DRAWING_TWO = true;
+
+				for (var i = 0; i < 108; i++) {
+					DECK[i] = -(i + 1);
+				}
+
+				for (var i = 0; i < 108; i++) {
+					var randInt = i + Math.floor(Math.random() * (108-i));
+					var temp = DECK[i];
+					DECK[i] = DECK[randInt];
+					DECK[randInt] = temp;
+				}
+
+				var prevPlayers = 0;
+				for (var i = 0; i < SEATS.length; i++) {
+					if (SEATS[i] === null) {
+						continue;
+					}
+
+					var info = $("#playerInfo" + i);
+					info.removeClass("current");
+					var cards = $("#playerCards" + i);
+
+					for (var c = 6 * prevPlayers; c < 6 * prevPlayers + 6; c++) {
+						var td = cards.find("td").eq(c % 6);
+						RenderCard(td, DECK[c]);
+					}
+
+					prevPlayers++;
+				}
+
+				DRAW_INDEX = (6 * PLAYERS.length) + 1;
+				DECK[DRAW_INDEX] = -DECK[DRAW_INDEX];
+
+				var totalDealt = PLAYERS.length * 6;
+				for (var i = 0; i < 2; i++) {
+					RenderCard($("#centerCell .card").eq(i), DECK[DRAW_INDEX + i]);
+				}
+
+				for (var q = 0; q < 6; q++) {
+					for (var p = 0; p < SEATS.length; p++) {
+						if (SEATS[p] === null) {
+							continue;
+						}
+
+						var delay = (totalCards <= 3 ? 400 : (totalCards < PLAYERS.length ? 60 : 30));
+						delayTime += delay;
+						totalCards++;
+						//console.log(CURRENT_SEAT);
+						//console.log(CURRENT_SEAT + "x" + q + " - " + totalCards);
+						DealCard($("#playerCards" + CURRENT_SEAT + " .card").eq(q), delayTime);
+
+						if (totalCards < (6 * PLAYERS.length)) {
+							IncrementCurrent(false);
+						}
+					}
+				}
+
+				setTimeout(function() {
+					$("#leftCenterCell .centerInfo").show();
+					$(".playerName").css("opacity", "1");
+					$(".playerInfoWrapper img").css("border", "").css("margin", "");
+					$("#playerInfo" + DEALER + " .dealerLabel").hide();
+					$("#playerInfo" + firstPlayerSeat).addClass("firstPlayer");
+					$("#playerCards" + firstPlayerSeat).addClass("firstPlayer");
+					$("#centerCell .card").addClass("showOutline");
+					ShowHideNames();
+					EveryoneDrawTwo();
+					COUNTDOWN_TIME = (new Date()).getTime() + (61 * 1000);
+					CLOCK_INTERVAL = setInterval(Countdown, 100);
+				}, delayTime + 1000);
+	  		}, 1500);
+		}, 700);
+		}, 100);
+		}, 100);
+		}, 100);
+		}, 100);
+		}, 100);
+		}, 100);
+		}, (ROUND_NUM <= 1 ? 450 : 2000));
+	}
+
+	function EveryoneDrawTwo() {
+		for (var i = 0; i < SEATS.length; i++) {
+			if (SEATS[i] === null) {
+				continue;
+			}
+
+			if (SEATS[i].isLive) {
+				$("#playerCards" + i + " .card").addClass("playableCard");
+			}
+			else {
+				FlipTwoCards(i, false);
+			}
+		}
+
+		if (ENLARGE_CARDS) {
+			ZoomInPlayableCards();
+		}
+	}
+
+	function FlipTwoCards(pSeatNum, pNow) {
+		var delay = (pNow === true ? 0 : 1000 + Math.floor(Math.random() * (AnyLivePlayers() ? 9000 : 1000)));
+		setTimeout(function() {
+			var upCardIndex = null;
+			if (pNow === true) {
+				var cards = GetPlayerCards(pSeatNum);
+				for (var c = 0; c < 6; c++) {
+					if (cards[c] > 0) {
+						upCardIndex = c;
+						break;
+					}
+				}
+			}
+
+			var rand1 = Math.floor(Math.random() * 6);
+			if (upCardIndex !== null) {
+				rand1 = upCardIndex;
+			}
+			var rand2 = null;
+			while (rand2 === null || rand2 === rand1) {
+				rand2 = Math.floor(Math.random() * 6);
+			}
+
+			if (upCardIndex === null) {
+				FlipOverCard(pSeatNum, rand1);
+			}
+
+			FlipOverCard(pSeatNum, rand2);
+
+			if (pNow !== true) {
+				CheckForFlipTwoDone(false);
+			}
+
+		}, delay);
+	}
+
+	function CheckForFlipTwoDone(pForce) {
+		var anyoneNotDone = false;
+		for (var i = 0; i < SEATS.length; i++) {
+			if (SEATS[i] === null) continue;
+			var cards = GetPlayerCards(i);
+			var numFaceUp = 0;
+
+			for (var c = 0; c < 6; c++) {
+				if (cards[c] > 0) {
+					numFaceUp++;
+				}
+			}
+
+			if (numFaceUp >= 2) {
+				$("#playerCards" + i + " .card").removeClass("playableCard");
+			}
+			else {
+				if (pForce) {
+					FlipTwoCards(i, true);
+				}
+				else {
+					anyoneNotDone = true;
+				}
+			}
+		}
+
+		if (!anyoneNotDone) {
+			clearInterval(CLOCK_INTERVAL);
+			setTimeout(function() {
+				$("#statusText").html("").hide();
+				$("#centerCell>span").show();
+				$(".playerInfoWrapper img").css("border", "").css("margin", "");
+				$(".firstPlayer").removeClass("firstPlayer");
+				AdvanceToNextPlayer();
+			}, 1000);
+		}
+	}
+
+	function AdvanceToNextPlayer() {
+		if (ENLARGE_CARDS && SEATS[CURRENT_SEAT].isLive) {
+			ZoomOutPlayableCards(CURRENT_SEAT);
+		}
+
+		DRAWING_TWO = false;
+
+		var cards = GetPlayerCards(CURRENT_SEAT);
+		var anyFacedown = false;
+		for (var i = 0; i < 6; i++) {
+			if (cards[i] < 0) {
+				anyFacedown = true;
+				break;
+			}
+		}
+
+		if (anyFacedown === false) {
+			if (END_SEAT === null) {
+				END_SEAT = CURRENT_SEAT;
+				ShowAllCards();
+			}
+			$("#playerInfo" + CURRENT_SEAT).addClass("endplayer");
+			$("#playerCards" + CURRENT_SEAT).addClass("endplayer");
+			UpdateScore(CURRENT_SEAT);
+		}
+
+		// END OF PREVIOUS TURN - BEGIN NEXT TURN
+		$("#roundNum").click();
+		$(".playableCard").removeClass("playableCard");
+		$(".selectedCard").removeClass("selectedCard");
+		$(".discard").removeClass("discard");
+		$(".card").css("opacity", 1);
+
+		SELECTED_CARD = null;
+		CheckAllCards();
+
+		IncrementCurrent(true);
+
+		if (END_SEAT !== null && END_SEAT === CURRENT_SEAT) {
+			$(".current").removeClass("current");
+			CURRENT_SEAT === null;
+			ShowHideNames();
+			if (ROUND_NUM <= 9) {
+				$("#centerCell>span").hide();
+				PREV_SHOW_SCORES = SHOW_SCORES;
+				SHOW_SCORES = true;
+				ShowHideNames();
+				setTimeout(function() {
+					DrawRoundByRound(true);
+				}, 2000);
+				/*$("#statusText").html("End of Round " + ROUND_NUM).show();
+				COUNTDOWN_TIME = (new Date()).getTime() + (121 * 1000); 
+				CLOCK_INTERVAL = setInterval(Countdown, 100);*/
+				//setTimeout(ShuffleUpAndDeal, 10000);
+			}
+			if (ROUND_NUM <= 8) {
+				setTimeout(ShowNextRoundButton, 2500);
+			}
+			// End of hand
+			setTimeout(function() {
+				$(".endplayer").removeClass("endplayer");
+				$(".playerInfo .playerName span").css("background-color", "").css("border-color", "");
+				$(".playerCards .card").css("opacity", 0.5);
+			}, 1000);
+		}
+		else {
+			var turnName = SEATS[CURRENT_SEAT].name;
+			/*if (ROUND_NUM === 3) {
+				turnName = ANGELA[NAMES.indexOf(turnName)];
+			}
+			else*/ if (ROUND_NUM > 3 && Math.random() < (0.03 * ROUND_NUM)) {
+				turnName = NICKNAMES[NAMES.indexOf(turnName)];
+			}
+			$("#whoseTurn").html(turnName + "'s turn");
+			if (SEATS[CURRENT_SEAT].isLive) {
+				// Set playable cards for live player
+				var cards = GetPlayerCards(CURRENT_SEAT);
+				for (var i = 0; i < 6; i++) {
+					if (cards[i] < 0) {
+						$("#playerCards" + CURRENT_SEAT + " .card").eq(i).addClass("playableCard");
+					}
+				}
+
+				$("#centerCell .card").addClass("playableCard");
+
+				if (ENLARGE_CARDS) {
+					ZoomInPlayableCards();
+				}
+			}
+			else {
+				setTimeout(OpponentMove, GetOpponentWaitDelay());
+			}
+		}
+	}
+
+	function ZoomInPlayableCards() {
+		var zoomSeats = [CURRENT_SEAT];
+		if (DRAWING_TWO) {
+			zoomSeats = [];
+			for (var i = 0; i < TOTAL_SEATS; i++) {
+				if (SEATS[i] != null && SEATS[i].isLive) {
+					zoomSeats.push(i);
+				}
+			}
+		}
+		else {
+			$("#centerCell .card").addClass("enlarged");
+		}
+
+		var sameSeatColumns = [
+			[11,12,13],
+			[0,10],
+			[1,9],
+			[2,8],
+			[3,7],
+			[4,5,6]
+		];
+
+		for (var i = 0; i < zoomSeats.length; i++) {
+			$("#playerCards" + zoomSeats[i]).addClass("enlargedPlayer");
+			$("#playerCards" + zoomSeats[i] + " .card").addClass("enlarged");
+
+			for (var c = 0; c < sameSeatColumns.length; c++) {
+				var col = sameSeatColumns[c]
+				if (col.indexOf(zoomSeats[i]) >= 0) {
+					for (var s = 0; s < col.length; s++) {
+						if (col[s] === zoomSeats[i]) continue;
+						$("#playerCards" + col[s]).addClass("sameColAsEnlarged");
+					}
+				}
+			}
+		}
+
+		$("#playTable").css("table-layout", "auto");
+		$(".playerCards").not(".enlargedPlayer").not("sameColAsEnlarged").css({
+			"width":"10%",
+			"padding-left":"4px",
+			"padding-right":"4px"
+		});
+		$(".playerCards.sameColAsEnlarged").not(".enlargedPlayer").css({
+			"width":"10%",
+			"padding-left":"9%",
+			"padding-right":"9%"
+		});
+		$(".enlargedPlayer").animate({
+			"width":"28%",
+		}, 100);
+		$(".enlarged").animate({
+			"height":"100px",
+			"width":"75px",
+		}, 200);
+
+		var drawCardTop = $("#centerCell").position().top;
+		var playerCardTop = $("#playerCards" + i).position().top;
+		var scrollTo = (drawCardTop < playerCardTop && DRAWING_TWO === false ? drawCardTop : playerCardTop);
+		var extraMargin = (CURRENT_SEAT <= 3 ? 80 : 10);
+		$("body").animate({scrollTop: scrollTo - extraMargin}, 600);
+		ResizeCards();
+	}
+
+	function ZoomOutPlayableCards(pSeatNum) {
+		$("#playTable").css("table-layout", "fixed");
+		$(".playerCards").not(".enlargedPlayer").css({
+			"width":"13%",
+			"padding-left":"10px",
+			"padding-right":"10px"
+		});
+		$(".enlargedPlayer").animate({
+			"width":"13%",
+		}, 200);
+
+		$(".enlargedPlayer").removeClass("enlargedPlayer");
+		$(".sameColAsEnlarged").removeClass("sameColAsEnlarged");
+		$("#playerCards" + pSeatNum + " .card").removeClass("enlarged");
+		$("#playerCards" + pSeatNum + " .card").animate({
+			height:"2.2em",
+			width:"33%"
+		}, 200);
+		$("#centerCell .card").removeClass("enlarged");
+		$("#centerCell .card").animate({
+			height:"2.2em",
+			width:"1.4em"
+		}, 200);
+
+		//$("#playerCards" + pSeatNum + " .card>span, #playerCards" + pSeatNum + " .card>div").css("transform","scale(1.0)");
+
+		//$("#centerCell table").css("transform", "scale(1.0)");
+		//$("#playerCards" + pSeatNum).css("transform", "scale(1.0)");
+
+		setTimeout(function() {
+			FitToWindow(true);
+		}, 410);
+	}
+
+	function Countdown() {
+		var current = new Date();
+		if (current >= COUNTDOWN_TIME) {
+			clearInterval(CLOCK_INTERVAL);
+			$("#statusText").html("").hide();
+			if (DRAWING_TWO) {
+				CheckForFlipTwoDone(true);
+			}
+			else {
+				ShuffleUpAndDeal();
+			}
+		}
+		else {
+			timeDiff = (COUNTDOWN_TIME - current);
+			var totalSeconds = Math.floor(timeDiff / 1000);
+			var minutes = Math.floor(totalSeconds / 60);
+			var seconds = totalSeconds % 60;
+			var timeString = ("" + minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
+
+			var displayString = timeString;			
+			displayString += " remaining to<br>flip over 2 cards";
+			$("#statusText").html(displayString).show();
+		}
+	}
+
+	function GetSeatScore(pSeatNum) {
+		var cards = GetPlayerCards(pSeatNum);
+		var A = GetCardValue(cards[0]);
+		var B = GetCardValue(cards[3]);
+		var C = GetCardValue(cards[1]);
+		var D = GetCardValue(cards[4]);
+		var E = GetCardValue(cards[2]);
+		var F = GetCardValue(cards[5]);
+
+		if (A === B && B === C && C === D && D === E && E === F) {
+			return -30;
+		}
+
+		scoresByColumn = [0,0,0];
+		if (A !== B) { scoresByColumn[0] = GetCardPoints(A) + GetCardPoints(B); }
+		if (C !== D) { scoresByColumn[1] = GetCardPoints(C) + GetCardPoints(D); }
+		if (E !== F) { scoresByColumn[2] = GetCardPoints(E) + GetCardPoints(F); }
+
+		var FourOfAKindScore = -20;
+		if (A === B && B === C && C === D) { return scoresByColumn[2] + FourOfAKindScore; }
+		else if (A === B && B === E && E === F) { return scoresByColumn[1] + FourOfAKindScore; }
+		else if (C === D && D === E && E === F) { return scoresByColumn[0] + FourOfAKindScore; }
+		else {
+			return scoresByColumn[0] + scoresByColumn[1] + scoresByColumn[2];
+		}
+	}
+
+	function UpdateScore(pSeatNum) {
+		SEATS[pSeatNum].scores[ROUND_NUM - 1] = GetSeatScore(pSeatNum);
+		var labelEl = $("#playerInfo" + pSeatNum).find(".playerName span");
+		$.when(labelEl.fadeOut(200)).then(function() {
+			setTimeout(function() {
+				labelEl.html(GetPlayerLabelText(pSeatNum)).css("background-color", "#ffaaaa").css("border-color", "red");
+				labelEl.fadeIn(200);
+			}, 1);
+		});
+	}
+
+	function GetCardValue(pCardIndex) {
+		if (pCardIndex < 0) {
+			return -1;
+		}
+
+		var deckVal = (pCardIndex - 1) % 54;
+
+		if (deckVal > 51) {
+			// Joker
+			return 0;
+		}
+		else {
+			return (1 + (deckVal % 13));
+		}
+	}
+
+	function GetCardPoints(pCardVal) {
+		if (pCardVal === 0) {
+			return -3;
+		}
+		else if (pCardVal === 11) {
+			return 20;
+		}
+		else if (pCardVal === 12) {
+			return 10;
+		}
+		else if (pCardVal === 13) {
+			return 0;
+		}
+		else {
+			return pCardVal;
+		}
+	}
+
+	function ShowAllCards() {
+		for (var i = 0; i < 6 * PLAYERS.length; i++) {
+			DECK[i] = Math.abs(DECK[i]);
+		}
+
+		var pCardNum = -1;
+		for (var i = 0; i < SEATS.length; i++) {
+			if (SEATS[i] === null) {
+				continue;
+			}
+
+			for (var c = 0; c < 6; c++) {
+				pCardNum++;
+				RenderCard($("#playerCards" + i + " .card").eq(c), DECK[pCardNum]);
+			}
+		}
+	}
+
+	function OpponentMove() {
+		var cards = GetPlayerCards(CURRENT_SEAT);
+		var values = [0,0,0,0,0,0];
+		var pairedIndices = [];
+		var pairableIndices = [];
+		var facedownIndices = [];
+		var maxNonPairedPoints = -3;
+		var maxNonPairedIndex = null;
+		var chosenFacedownIndex = null;
+		var faceUpVal = GetCardValue(DECK[DRAW_INDEX]);
+		var faceUpPoints = GetCardPoints(faceUpVal);
+		var minAdditionalTurnsLeft = 6;
+		var showingPoints = 0;
+
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			if (SEATS[i] === null || i === CURRENT_SEAT) continue;
+
+			var numFacedown = 0;
+			var oppCards = GetPlayerCards(i);
+			for (var c = 0; c < 6; c++) {
+				if (oppCards[c] < 0) {
+					numFacedown++;
+				}
+			}
+
+			if (numFacedown < minAdditionalTurnsLeft) {
+				minAdditionalTurnsLeft = numFacedown;
+			}
+		}
+
+		for (var i = 0; i < 6; i++) {
+			var cardVal = GetCardValue(cards[i]);
+			var cardPoints = GetCardPoints(cardVal);
+			var oppoCardVal = GetCardValue(cards[(i + 3) % 6]);
+
+			values[i] = cardVal;
+
+			if (cardVal < 0) {
+				facedownIndices.push(i);
+			}
+			else if (cardVal === oppoCardVal) {
+				pairedIndices.push(i);
+			}
+			else {
+				showingPoints += cardPoints;
+
+				if (cardPoints > maxNonPairedPoints) {
+					maxNonPairedPoints = cardPoints;
+					maxNonPairedIndex = i;
+				}
+			}
+
+			if (faceUpVal === oppoCardVal && cardVal !== oppoCardVal && oppoCardVal > 0) {
+				pairableIndices.push(i);
+			}
+		}
+
+		/*console.log("CARDS: " + JSON.stringify(values));
+		console.log("AVAILABLE: " + faceUpVal);
+		console.log("PAIRED: " + JSON.stringify(pairedIndices));
+		console.log("PAIRABLE: " + JSON.stringify(pairableIndices));
+		console.log("FACEDOWN: " + JSON.stringify(facedownIndices));
+		console.log("MAX: " + maxNonPairedPoints + " at index " + maxNonPairedIndex);
+		console.log("Showing " + showingPoints + ", min turns left = " + minAdditionalTurnsLeft);*/
+
+		var facedownCount = facedownIndices.length;
+		if (facedownCount > 0) {
+			bestFacedownIndices = [];
+			for (var i = 0; i < facedownIndices.length; i++) {
+				// Ideally, choose one in a new column where neither is flipped
+				var index = facedownIndices[i];
+				var correspondingIndex = (index + 3) % 6;
+				if (facedownIndices.indexOf(correspondingIndex) >= 0) {
+					bestFacedownIndices.push(index);
+				}
+			}
+
+			if (bestFacedownIndices.length > 0) {
+				chosenFacedownIndex = bestFacedownIndices[Math.floor(Math.random() * bestFacedownIndices.length)];
+			} else {
+				chosenFacedownIndex = facedownIndices[Math.floor(Math.random() * facedownIndices.length)];
+			}
+		}
+		else {
+			if (pairedIndices.length >= 6) {
+				// 3 pairs showing - draw/discard
+				//console.log("3 pairs already");
+				OpponentDrawCard();
+				return;
+			}
+		}
+
+		if (pairableIndices.length > 0) {
+			//console.log("Easy pair");
+			// Make non-joker pair
+			OpponentTakeDiscard(pairableIndices[Math.floor(Math.random() * pairableIndices.length)]);
+			return;
+		}
+
+		if (facedownCount <= 0 && faceUpPoints > maxNonPairedPoints) {
+			//console.log("Last round and can't use take card, so draw");
+			// Last round and up card can't pair and is worse than all showing - draw
+			OpponentDrawCard();
+			return;
+		}
+
+		var _TakeUpCard = false;
+		if (faceUpPoints <= 2 && (faceUpPoints < maxNonPairedPoints || facedownCount > 0)) {
+			// Take a 2 or lower if there's either a facedown card or worse faceup card to swap it with
+			//console.log("Take a 2 or lower");
+			_TakeUpCard = true;
+		}
+		else if (faceUpPoints <= 4 && Math.random() > (0.25 * (faceUpPoints - 1)) && (faceUpPoints < maxNonPairedPoints || (facedownCount > 0 && showingPoints + faceUpPoints < 10))) {
+			// Take a 3/4 if there's a worse faceup card or can swap a facedown card to show <10 total points
+			//console.log("Take a 3 or 4");
+			_TakeUpCard = true;
+		}
+		else if (facedownCount === 1 && faceUpPoints + showingPoints <= 8 && faceUpPoints < 8) {
+			// Take card to end round with <8 points
+			_TakeUpCard = true;
+		}
+
+		if (_TakeUpCard) {
+			if (facedownCount === 1 && faceUpPoints + showingPoints <= 8) {
+				//console.log("Take to end the round with a low score");
+				OpponentTakeDiscard(chosenFacedownIndex);
+				return;
+			}
+
+			var swappable = [];
+			if (maxNonPairedIndex !== null && maxNonPairedPoints > faceUpPoints && (maxNonPairedPoints > 3 || facedownCount >= 1)) {
+				swappable.push(maxNonPairedIndex);
+			}
+			if (chosenFacedownIndex !== null && (facedownCount > 1 || maxNonPairedPoints <= 5)) {
+				swappable.push(chosenFacedownIndex);
+			}
+
+			if (swappable.length > 0) {
+				OpponentTakeDiscard(swappable[Math.floor(Math.random() * swappable.length)]);
+				return;
+			}
+		}
+
+		if (facedownCount === 1) {
+			// Only one face down card left - draw
+			//console.log("Only one facedown left, so draw");
+			OpponentDrawCard();
+			return;
+		}
+		else if (maxNonPairedPoints >= 20 && minAdditionalTurnsLeft <= 1) {
+			// Get rid of Jack if last round or any opponent has only one facedown card left
+			if (faceUpPoints <= 5) {
+				//console.log("Take 5 or less to get rid of jack late");
+				OpponentTakeDiscard(maxNonPairedIndex);
+				return;
+			}
+			//console.log("Draw to get rid of jack late");
+			OpponentDrawCard();
+			return;
+		}
+
+		if (facedownCount > 2 && maxNonPairedPoints >= 7) {
+			//console.log("Got a 7+ card showing - draw");
+			OpponentDrawCard();
+			return;
+		}
+		else if (Math.random() < 0.5 || facedownCount <= 0) {
+			// Could either draw or flip - choose randomly
+			//console.log("Random draw");
+			OpponentDrawCard();
+			return;
+		}
+		else {
+			//console.log("Random flip");
+			// Flip over a random card
+			FlipOverCard(CURRENT_SEAT, chosenFacedownIndex);
+			return;
+		}
+	}
+
+	function GetOpponentWaitDelay() {
+		return (AnyLivePlayers() ? (END_SEAT === null ? 800 : 1100) : 100);
+	}
+
+	function OpponentDrawCard() {
+		FlipDrawCard(false);
+	}
+
+	function OpponentUseDrawCard() {
+		var cards = GetPlayerCards(CURRENT_SEAT);
+		var values = [0,0,0,0,0,0];
+		var pairedIndices = [];
+		var pairableIndices = [];
+		var facedownIndices = [];
+		var maxNonPairedPoints = -3;
+		var maxNonPairedIndex = null;
+		var chosenFacedownIndex = null;
+		var drawCardVal = GetCardValue(DECK[DRAW_INDEX + 1]);
+		var drawCardPoints = GetCardPoints(drawCardVal);
+		var minAdditionalTurnsLeft = 6;
+		var showingPoints = 0;
+
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			if (SEATS[i] === null || i === CURRENT_SEAT) continue;
+
+			var numFacedown = 0;
+			var oppCards = GetPlayerCards(i);
+			for (var c = 0; c < 6; c++) {
+				if (oppCards[c] < 0) {
+					numFacedown++;
+				}
+			}
+
+			if (numFacedown < minAdditionalTurnsLeft) {
+				minAdditionalTurnsLeft = numFacedown;
+			}
+		}
+
+		for (var i = 0; i < 6; i++) {
+			var cardVal = GetCardValue(cards[i]);
+			var cardPoints = GetCardPoints(cardVal);
+			var oppoCardVal = GetCardValue(cards[(i + 3) % 6]);
+
+			values[i] = cardVal;
+
+			if (cardVal < 0) {
+				facedownIndices.push(i);
+			}
+			else if (cardVal === oppoCardVal) {
+				pairedIndices.push(i);
+			}
+			else {
+				showingPoints += cardPoints;
+
+				if (cardPoints > maxNonPairedPoints) {
+					maxNonPairedPoints = cardPoints;
+					maxNonPairedIndex = i;
+				}
+			}
+
+			if (drawCardVal === oppoCardVal && cardVal !== oppoCardVal && oppoCardVal > 0) {
+				pairableIndices.push(i);
+			}
+		}
+
+		//console.log("Draw pairable: " + JSON.stringify(pairableIndices));
+
+		var facedownCount = facedownIndices.length;
+		if (facedownCount > 0) {
+			bestFacedownIndices = [];
+			for (var i = 0; i < facedownIndices.length; i++) {
+				// Ideally, choose one in a new column where neither is flipped
+				var index = facedownIndices[i];
+				var correspondingIndex = (index + 3) % 6;
+				if (facedownIndices.indexOf(correspondingIndex) >= 0) {
+					bestFacedownIndices.push(index);
+				}
+			}
+
+			if (bestFacedownIndices.length > 0) {
+				chosenFacedownIndex = bestFacedownIndices[Math.floor(Math.random() * bestFacedownIndices.length)];
+			} else {
+				chosenFacedownIndex = facedownIndices[Math.floor(Math.random() * facedownIndices.length)];
+			}
+		}
+		else {
+			if (pairedIndices.length >= 6) {
+				// 3 pairs showing - discard
+				//console.log("All pairs");
+				PlayDrawCard(6);
+				return;
+			}
+		}
+
+		if (pairableIndices.length > 0) {
+			// Make non-joker pair
+			//console.log("Easy drawn pair");
+			PlayDrawCard(pairableIndices[Math.floor(Math.random() * pairableIndices.length)]);
+			return;
+		}
+
+		if (facedownCount <= 0) {
+			// Last round, can't pair - either discard or swap for highest upcard
+
+			if (drawCardPoints > maxNonPairedPoints) {
+				// This card would be worse than all the upcards - discard
+				PlayDrawCard(6);
+				return;
+			}
+			else {
+				// Swap out for the highest remaining
+				PlayDrawCard(maxNonPairedIndex);
+				return;
+			}
+		}
+
+		if (drawCardPoints >= 20) {
+			// Discard non-pairable jack
+			PlayDrawCard(6);
+			return;
+		}
+		else if (facedownCount >= 4 && drawCardPoints <= 9 && minAdditionalTurnsLeft >= 3) {
+			// Swap a 9 or lower for a facedown card if it's the first turn
+			PlayDrawCard(chosenFacedownIndex);
+			return;
+		}
+		else if (facedownCount >= 3 && drawCardPoints <= 7 && minAdditionalTurnsLeft > 1) {
+			// Swap a 7 or lower for a facedown card if there's at least one extra facedown turn left and still have 3 face down
+			PlayDrawCard(chosenFacedownIndex);
+			return;
+		}
+		else if (facedownCount >= 2 && (drawCardPoints <= 5) && minAdditionalTurnsLeft > 1) {
+			// Swap a 5 or lower for a facedown card if there's at least one extra facedown turn left
+			PlayDrawCard(chosenFacedownIndex);
+			return;
+		}
+		else if (drawCardPoints >= 9 && maxNonPairedPoints > drawCardPoints) {
+			// Swap a 9 or higher for a worse faceup card
+			PlayDrawCard(maxNonPairedIndex);
+			return;
+		}
+		else if (drawCardPoints >= 9) {
+			// Discard non-pairable 9+ if it's after the first turn
+			PlayDrawCard(6);
+			return;
+		}
+
+		// Have a 8 or lower draw card
+		if (facedownCount === 1 && drawCardPoints + showingPoints <= 10) {
+			// Flip over last facedown card to end round with <=10 points
+			PlayDrawCard(chosenFacedownIndex);
+			return;
+		}
+
+		if (minAdditionalTurnsLeft <= 1) {
+			if (maxNonPairedPoints >= 20) {
+				// Swap out a jack if someone else only has one facedown card left
+				PlayDrawCard(maxNonPairedIndex);
+				return;
+			}
+			else if (maxNonPairedPoints >= 7 && ((maxNonPairedPoints - drawCardPoints) > 5)) {
+				// Swap out a 7 or higher if you can subtract at least 5 points and someone else only has one facedown card left
+				PlayDrawCard(maxNonPairedIndex);
+				return;
+			}
+		}
+
+		if (maxNonPairedPoints < drawCardPoints) {
+			// No lower upcard or swap it for
+			if (facedownCount <= 1) {
+				// Only one down card left - discard
+				PlayDrawCard(6);
+				return;
+			}
+			else {
+				PlayDrawCard(chosenFacedownIndex);
+				return;
+			}
+		}
+		else if (facedownCount <= 1) {
+			// Only one down card left - swap out the highest showing up card
+			PlayDrawCard(maxNonPairedIndex);
+		}
+		else {
+			// Could go either way - randomly either swap out the highest, or a down card, or discard
+			var swappable = [];
+			if (maxNonPairedIndex !== null) {
+				swappable.push(maxNonPairedIndex);
+			}
+			if (chosenFacedownIndex !== null) {
+				swappable.push(chosenFacedownIndex);
+			}
+
+			if (swappable.length > 0) {
+				PlayDrawCard(swappable[Math.floor(Math.random() * swappable.length)]);
+				return;
+			}
+			else {
+				// Shouldn't happen but just in case - default of discarding
+				PlayDrawCard(6);
+				return;
+			}
+		}
+	}
+
+	function CheckForReshuffle() {
+		if (DRAW_INDEX === 107) {
+			console.log("Reshuffling");
+
+			var currUpCard = DECK[DRAW_INDEX];
+			var numPlayerCards = 6 * PLAYERS.length;
+			DECK[DRAW_INDEX] = DECK[numPlayerCards];
+			DECK[numPlayerCards] = currUpCard;
+			DRAW_INDEX = numPlayerCards;
+
+			for (var i = numPlayerCards + 1; i < 108; i++) {
+				var randInt = i + Math.floor(Math.random() * (108-i));
+				var temp = -Math.abs(DECK[i]);
+				DECK[i] = -Math.abs(DECK[randInt]); // Make it negative to flip it face down
+				DECK[randInt] = temp;
+			}
+		}
+	}
+
+	function PlayDrawCard(pCardIndex) {
+		DRAW_INDEX++;
+		CheckForReshuffle();
+
+		if (pCardIndex > 5) {
+			console.log(SEATS[CURRENT_SEAT].name + ": Discard the draw card");
+			var centerCards = $("#centerCell .card");
+			$.when(centerCards.fadeOut(200)).then(function() {
+				$("#centerCell .card").eq(0).css("opacity", 1);
+				$(".discard").removeClass("discard");
+				RenderCard(centerCards.eq(0), DECK[DRAW_INDEX]);
+				RenderCard(centerCards.eq(1), DECK[DRAW_INDEX + 1]);
+				$.when(centerCards.fadeIn(200)).then(function() {
+					AdvanceToNextPlayer();
+				});
+			});
+		}
+		else {
+			console.log(SEATS[CURRENT_SEAT].name + ": Swap draw card at index " + (pCardIndex + 1));
+			var oldPlayerCardIndex = GetPlayerIndex(CURRENT_SEAT) * 6 + pCardIndex;
+			var oldPlayerCardVal = DECK[oldPlayerCardIndex];
+			DECK[oldPlayerCardIndex] = DECK[DRAW_INDEX];
+			DECK[DRAW_INDEX] = Math.abs(oldPlayerCardVal);
+
+			var swapCards = $("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).add($("#centerCell .card").eq(1));
+			$.when(swapCards.fadeOut(200)).then(function() {
+				//$("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).css("background-color", "white");
+				$(".discard").removeClass("discard");
+				RenderCard($("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex), DECK[oldPlayerCardIndex]);
+				RenderCard($("#centerCell .card").eq(1), DECK[DRAW_INDEX + 1]);
+				$.when(swapCards.fadeIn(200)).then(function() {
+					AdvanceToNextPlayer();
+					setTimeout(function() {
+						$("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).css("background-color", "");
+					}, 2000);
+				});
+			});
+			var discard = $("#centerCell .card").eq(0);
+			$.when(discard.fadeOut(200)).then(function() {
+				discard.css("opacity", 1);
+				RenderCard(discard, DECK[DRAW_INDEX]);
+				discard.fadeIn(200);
+			});
+		}
+	}
+
+	function OpponentTakeDiscard(pCardIndex) {
+		TakeDiscard(pCardIndex);
+	}
+
+	function TakeDiscard(pCardIndex) {
+		console.log(SEATS[CURRENT_SEAT].name + ": Swap discard at index " + (pCardIndex + 1));
+		if (pCardIndex >= 6) {
+			console.trace();
+		}
+		var oldPlayerCardIndex = GetPlayerIndex(CURRENT_SEAT) * 6 + pCardIndex;
+		var oldPlayerCardVal = DECK[oldPlayerCardIndex];
+		DECK[oldPlayerCardIndex] = DECK[DRAW_INDEX];
+		DECK[DRAW_INDEX] = Math.abs(oldPlayerCardVal);
+
+		var swapCards = $("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).add($("#centerCell .card").eq(0));
+		$.when(swapCards.fadeOut(200)).then(function() {
+			//$("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).css("background-color", "white");
+			RenderCard($("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex), DECK[oldPlayerCardIndex]);
+			RenderCard($("#centerCell .card").eq(0), DECK[DRAW_INDEX]);
+			$.when(swapCards.fadeIn(200)).then(function() {
+				AdvanceToNextPlayer();
+				setTimeout(function() {
+					swapCards.eq(0).css("background-color", "");
+				}, 2000);
+			});
+		});
+	}
+
+	function FlipDrawCard(pIsLivePlayer) {
+		console.log(SEATS[CURRENT_SEAT].name + ": Flip draw card");
+		var drawCard = $("#centerCell .card").eq(1);
+		var deckIndex = DRAW_INDEX + 1;
+		var value = -DECK[deckIndex];
+		DECK[deckIndex] = value;
+		console.log("DRAW CARD: " + GetCardValue(value));
+		$.when(drawCard.fadeOut(200)).then(function() {
+			//drawCard.css("background-color", "white");
+			RenderCard(drawCard, value);
+			$("#centerCell .card").eq(1).removeClass("playableCard");
+			$.when(drawCard.fadeIn(200)).then(function() {
+				if (pIsLivePlayer) {
+					SELECTED_CARD = 1;
+					$("#centerCell .card").eq(0).addClass("discard").html("").attr("title", "Discard");
+					$(".live .card").addClass("playableCard");
+				} else {
+					setTimeout(OpponentUseDrawCard, GetOpponentWaitDelay());
+					$("#centerCell .card").eq(0).css("opacity", 0.15);
+				}
+
+				setTimeout(function() {
+					drawCard.css("background-color", "");
+				}, 2000);
+			});
+		});
+	}
+
+	function ClickedDiscard() {
+		if (SEATS[CURRENT_SEAT].isLive && $("#centerCell .card").eq(0).hasClass("playableCard")) {
+			if (SELECTED_CARD === 1) {
+				PlayDrawCard(6);
+			}
+			else if (SELECTED_CARD === 0) {
+				$("#centerCell .card").eq(0).removeClass("selectedCard");
+				$("#centerCell .card").eq(1).addClass("playableCard").css("opacity", 1);
+				$(".live .card.faceup").removeClass("playableCard");
+				SELECTED_CARD = null;
+			}
+			else if (SELECTED_CARD === null) {
+				$("#centerCell .card").eq(0).addClass("selectedCard");
+				$("#centerCell .card").eq(1).removeClass("playableCard").css("opacity", 0.15);
+				$(".live .card").addClass("playableCard");
+				SELECTED_CARD = 0;
+			}
+		}
+	}
+
+	function ClickedDrawCard() {
+		if (SEATS[CURRENT_SEAT].isLive && $("#centerCell .card").eq(1).hasClass("playableCard")) {
+			FlipDrawCard(true);
+		}
+	}
+
+	function ClickedCard(pCardEl, pSeatNum, pCardNum) {
+		if (!$(pCardEl).hasClass("playableCard")) {
+			return;
+		}
+
+		if (DRAWING_TWO) {
+			FlipOverCard(pSeatNum, pCardNum);
+			CheckForFlipTwoDone(false);
+		}
+		else if (SEATS[CURRENT_SEAT].isLive && pSeatNum === CURRENT_SEAT) {
+			if (SELECTED_CARD === null) {
+				FlipOverCard(pSeatNum, pCardNum);
+			}
+			else if (SELECTED_CARD === 1) {
+				PlayDrawCard(pCardNum);
+			}
+			else if (SELECTED_CARD === 0) {
+				TakeDiscard(pCardNum);
+			}
+		}
+	}
+
+	function GetPlayerCards(pSeatNum) {
+		var deckIndexStart = 6 * GetPlayerIndex(pSeatNum);
+		var cards = [];
+		for (var i = 0; i < 6; i++) {
+			cards.push(DECK[deckIndexStart + i]);
+		}
+
+		return cards;
+	}
+
+	function DealCard(card, delayTime) {
+		setTimeout(function() {
+			card.css("opacity", 1).addClass("showOutline");
+		}, delayTime);
+	}
+
+	function ToggleNames() {
+		SHOW_NAMES = !SHOW_NAMES;
+		ShowHideNames();
+	}
+
+	function ToggleScores() {
+		SHOW_SCORES = !SHOW_SCORES;
+		ShowHideNames();
+	}
+
+	function ShowHideNames() {
+		console.log("ShowHideNames");
+		$(".playerName").toggle(SHOW_SCORES || SHOW_NAMES);
+
+		for (var i = 0; i < SEATS.length; i++) {
+			var label = $("#playerInfo" + i).find(".playerName span");
+			if (SEATS[i] === null) {
+				label.hide();
+			}
+			else {
+				label.html(GetPlayerLabelText(i));
+			}
+		}
+	}
+
+	function GetPlayerLabelText(pSeatNum) {
+		var roundScores = SEATS[pSeatNum].scores;
+		var total = 0;
+		for (var i = 0; i < 9; i++) {
+			total += roundScores[i];
+		}
+		return (SHOW_NAMES ? SEATS[pSeatNum].name : "") + (SHOW_SCORES ? " <strong>" + total + "</strong>" : "");
+	}
+
+	function CheckAllCards() {
+		$(".card").each(function() {
+			CheckCard($(this));
+		});
+	}
+
+	function CheckCard(cardEl, value) {
+		if (typeof cardEl.attr("seatNum") !== "undefined") {
+			var deckIndex = 6 * GetPlayerIndex(parseInt(cardEl.attr("seatNum"))) + parseInt(cardEl.attr("cardNum"));
+			if (typeof value !== "undefined" && DECK[deckIndex] != value) {
+				console.log(SEATS[parseInt(cardEl.attr("seatNum"))].name + " (" + (1 + parseInt(cardEl.attr("cardNum"))) + "): " + value + " should be " + DECK[deckIndex]);
+			}
+
+			if (typeof cardEl.attr("cardVal") !== "undefined") {
+				var cardVal = parseInt(cardEl.attr("cardVal"));
+				if (DECK[deckIndex] !== cardVal) {
+					console.log(SEATS[parseInt(cardEl.attr("seatNum"))].name + " (" + (1 + parseInt(cardEl.attr("cardNum"))) + "): showing as " + cardVal + " should be " + DECK[deckIndex]);
+				}
+			}
+		}
+	}
+
+	function RenderCard(td, value) {
+		td.attr("cardVal", value);
+		CheckCard(td, value);
+		td.removeClass("red").removeClass("black").removeClass("deck1").removeClass("deck2").removeClass("facedown").removeClass("faceup").removeClass("joker").attr("title", "");
+		var isFaceDown = (value < 0);
+		value = Math.abs(value);
+
+		if (isFaceDown) {
+			td.addClass("facedown").addClass(value < 54 ? "deck1" : "deck2");
+			td.html("");
+		}
+		else {
+			td.addClass("faceup");
+			var cardVal = (value - 1) % 54;
+			if (cardVal > 51) {
+				td.addClass("joker");
+				td.html("<span class='jokerText'>J<span style='color:red'>O</span>K<span style='color:red'>E</span>R</span><br><span style='color:black'>♠</span><span style='color:red'>♥</span><br><span style='color:red'>♦</span><span style='color:black'>♣</span>");
+			}
+			else {
+				var suit = Math.floor(cardVal / 13);
+				td.html("<span>" + VALS[cardVal % 13] + "</span><br>" + '<span class="suit">' + SUITS[suit] + '</span>')
+				  .addClass(suit % 2 == 1 ? "black" : "red");
+			}
+		}
+
+		ResizeCards();
+	}
+
+	function SafeFitToWindow() {
+		FitToWindow(false);
+	}
+
+	function FitToWindow(pOnPageLoad) {
+		var currWindowSize = $("#bgPhoto").width();;
+
+		if (currWindowSize === LAST_WINDOW_SIZE && pOnPageLoad !== true) {
+			return;
+		}
+
+		LAST_RESIZE = new Date();
+		var currTime = LAST_RESIZE; 
+		setTimeout(function() {
+			if (currTime !== LAST_RESIZE) {
+				return;
+			}
+			LAST_WINDOW_SIZE = $("#bgPhoto").width();
+			ResizeText();
+			var idealMiddle = 0.575;
+			var tableHeight = $("#playTable").height();
+			var imageHeight = $("#bgPhoto").height();
+			var windowHeight = window.innerHeight;
+			var percentHeight = (tableHeight / imageHeight);
+			var marginTopPercent = idealMiddle - (percentHeight / 2);
+			var marginTopPixels = marginTopPercent * imageHeight;
+
+			if (tableHeight > imageHeight) {
+				marginTopPixels = -($("#playTableContainer").position().top);
+			}
+			else if (marginTopPixels + tableHeight > imageHeight) {
+				marginTopPixels = imageHeight - tableHeight - ($("#playTableContainer").position().top) - 2;
+			}
+
+			/*console.log(idealMiddle);
+			console.log(tableHeight);
+			console.log(imageHeight);
+			console.log(windowHeight);
+			console.log(percentHeight);
+			console.log(marginTopPercent);
+			console.log(marginTopPixels);*/
+			$("#playTableContainer").css("margin-top", marginTopPixels + "px");
+			
+			var ua = window.navigator.userAgent.toLowerCase();
+	        if (ua.indexOf("trident") >= 0 || ua.indexOf("edge") >= 0) {
+				$("#playTableContainer").css("max-height", "200px");
+			}
+
+			var scrollTo = marginTopPixels + tableHeight - windowHeight + 10;
+
+			if (windowHeight > tableHeight) {
+				scrollTo += ((windowHeight - tableHeight) / 2);
+			} else if (tableHeight > imageHeight) {
+				scrollTo = (tableHeight - windowHeight) / 2;
+			}
+
+            if (pOnPageLoad == true) {
+	            $('body').animate({
+	                scrollTop: scrollTo
+		        }, 1500);
+            }
+            else {
+                window.scroll(0, scrollTo);
+	            /*var ua = window.navigator.userAgent.toLowerCase();
+	            if (ua.indexOf("trident") >= 0 || ua.indexOf("edge") >= 0) {
+	                // IE and Edge don't support smooth animated scrolling - just set the scroll
+	                window.scroll(0, scrollTo);
+	            }
+	            else {
+	                window.scroll({ top: scrollTo, behavior: 'smooth' });
+	            }*/
+            }
+
+            FitOverlay();
+
+		}, 100);
+	}
+
+	function GetPlayerIndex(pSeatNum) {
+		var playerNum = -1;
+		for (var s = 0; s <= pSeatNum; s++) {
+			if (SEATS[s] !== null) {
+				playerNum++;
+			}
+		}
+
+		return playerNum;
+	}
+
+	function ToggleEnlargeCards() {
+		ENLARGE_CARDS = !ENLARGE_CARDS;
+		$("#toggleEnlargeCardsBox").prop("checked", ENLARGE_CARDS);
+
+		var playableCount = $(".playableCard").length;
+		if (ENLARGE_CARDS && playableCount > 0) {
+			ZoomInPlayableCards();
+		}
+
+		if (!ENLARGE_CARDS && playableCount > 0) {
+			for (var i = 0; i < SEATS.length; i++) {
+				if (SEATS[i] !== null && SEATS[i].isLive) {
+					ZoomOutPlayableCards(i);
+				}
+			}
+		}
+	}
+
+	function ToggleFullScreen() {
+	/*	var body = $("body")[0];
+		if (body.requestFullscreen) {
+			body.requestFullscreen();
+		} else if (body.webkitRequestFullscreen) { // Safari 
+			body.webkitRequestFullscreen();
+		} else if (elem.msRequestFullscreen) { // IE11
+			body.msRequestFullscreen();
+		}*/
+
+		if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {  // current working methods
+			if (document.documentElement.requestFullscreen) {
+				document.documentElement.requestFullscreen();
+			} else if (document.body.msRequestFullscreen) {
+				document.body.msRequestFullscreen();
+			} else if (document.documentElement.msRequestFullscreen) {
+				document.documentElement.msRequestFullscreen();
+			} else if (document.documentElement.mozRequestFullScreen) {
+				document.documentElement.mozRequestFullScreen();
+			} else if (document.documentElement.webkitRequestFullscreen) {
+				document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+			}
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document.msExitFullscreen) {
+				document.msExitFullscreen();
+			} else if (document.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			} else if (document.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			}
+		}
+
+		setTimeout(function() {
+	  		FitToWindow(true);
+		}, 100);
+	}
+
+	function FlipOverCard(pSeatNum, pCardNum) {
+		console.log(SEATS[pSeatNum].name + ": Flip over card #" + (pCardNum + 1));
+		var cards = $("#playerCards" + pSeatNum);
+		var card = cards.find(".card").eq(pCardNum);
+		card.removeClass("playableCard");
+		var deckIndex = 6 * GetPlayerIndex(pSeatNum) + pCardNum;
+		var value = -DECK[deckIndex];
+		DECK[deckIndex] = value;
+		card.fadeOut(200, function() {
+			RenderCard(card, value);
+		});
+		card.fadeIn(200, function() {
+			if (DRAWING_TWO) {
+				if (SEATS[pSeatNum].isLive && ENLARGE_CARDS) {
+					var seatCards = GetPlayerCards(pSeatNum);
+					var faceUpCount = 0;
+					for (var i = 0; i < 6; i++) {
+						if (seatCards[i] > 0) {
+							faceUpCount++;
+						}
+					}
+
+					if (faceUpCount >= 2) {
+						ZoomOutPlayableCards(pSeatNum);
+					}
+				}
+			}
+			else {
+				AdvanceToNextPlayer();
+			}
+		});
+	}
+
+	function IncrementCurrent(pHighlight) {
+		//console.log("Incrementing");
+		var started = true;
+		while (started === true || SEATS[CURRENT_SEAT] === null) {
+			started = false;
+			CURRENT_SEAT += 1;
+			CURRENT_SEAT %= TOTAL_SEATS;
+		}
+		//console.log("Done Incrementing");
+
+		$(".current").removeClass("current");
+
+		if (pHighlight) {
+			$("#playerInfo" + CURRENT_SEAT).addClass("current");
+			$("#playerCards" + CURRENT_SEAT).addClass("current");
+		}
+	}
+
+	function ResizeText() {
+		var idealWidth = 1270;
+		var actualWidth = $("#bgPhoto").width();
+		var scale = (actualWidth / idealWidth);
+
+		if (scale > 1) {
+			scale = 1;
+		}
+
+		var photoHeight = scale * 100;
+		if (photoHeight > 100) {
+			photoHeight = 100;
+		}
+		if (photoHeight < 50) {
+			photoHeight = 50;
+		}
+
+		$(".playerInfo img").css("max-height", photoHeight + "px");
+		$(".playerName, #centerCell, .centerInfo").css((scale * 16 < 14 ? 14 : scale * 16) + "pt");
+		//$("#roundByRoundTable").css("font-size", (scale * 18) + "pt");
+		//$("#scoringRules").css("font-size", (scale * 22) + "pt");
+		//$(".buttonContainer button").css("font-size", (scale * 16) + "pt");
+		$(".changeSeatsButton").css("font-size", (scale * 13) + "pt");
+
+		ResizeCards();
+	}
+
+	function ResizeCards() {
+		var idealWidth = 1270;
+		var actualWidth = $("#bgPhoto").width();
+		var scale = (actualWidth / idealWidth);
+
+		// Compensate for line thickness
+		if (scale > 1) {
+			scale *= 1.02;
+		}
+		else {
+			scale /= 1.02;
+		}
+
+		var suitScale = $("#widthTestValue").width() / $("#widthTestSuit").width() * 1.25;
+
+		// Card 24 pt
+		// Suit (24 * scale) pt since different browsers render them different sizes
+		// Joker 8 pt
+		// Name 12 pt
+
+		$(".card").css("font-size", (scale * 24) + "pt").css("padding-bottom", (scale * 5) + "px").css("border-radius", (scale * 6) + "px");
+		$(".showOutline").css("border-width", (scale * 1.8) + "px");
+		$(".jokerText").css("font-size", (scale * 8) + "pt");
+		$(".suit").css("font-size", (scale * suitScale * 24) + "pt");
+		$(".joker>span").not(".jokerText").css("font-size", (scale * suitScale * 12) + "pt");
+
+		$(".enlarged").css("font-size", (scale * 42) + "pt");
+		$(".enlarged .jokerText").css("font-size", (scale * 14) + "pt");
+		$(".enlarged .suit").css("font-size", (scale * suitScale * 42) + "pt");
+		$(".enlarged.joker>span").not(".jokerText").css("font-size", (scale * suitScale * 21) + "pt");
+	}
+
+	function ShowPlayerSelection() {
+		$(".overlayContent").hide();
+		$("#playerChoose").show();
+		ShowOverlay();
+	}
+
+	function ShowDeviceSelection() {
+		$(".overlayContent").hide();
+		$("#deviceChoose").show();
+		ShowOverlay();
+	}
+
+	function ShowRulesStandings() {
+		if ($("#howToPlayButton").hasClass("selected")) {
+			ShowHowToPlay();
+		}
+		else if ($("#scoringRulesButton").hasClass("selected")) {
+			ShowScoringRules();
+		}
+		else {
+			ShowRoundByRound();
+		}
+	}
+
+	function ShowHowToPlay() {
+		$(".overlayContent").hide();
+		$("#rulesStandings").show();
+		$("#howToPlay").show();
+		$("#scoringRules").hide();
+		$("#roundByRoundTable").hide();
+		$("#howToPlayButton").addClass("selected");
+		$("#scoringRulesButton").removeClass("selected");
+		$("#standingsButton").removeClass("selected");
+		ShowOverlay();
+	}
+
+	function ShowScoringRules() {
+		$(".overlayContent").hide();
+		$("#rulesStandings").show();
+		$("#howToPlay").hide();
+		$("#scoringRules").show();
+		$("#roundByRoundTable").hide();
+		$("#howToPlayButton").removeClass("selected");
+		$("#scoringRulesButton").addClass("selected");
+		$("#standingsButton").removeClass("selected");
+		ShowOverlay();
+	}
+
+	function ShowRoundByRound() {
+		$(".overlayContent").hide();
+		$("#rulesStandings").show();
+		$("#howToPlay").hide();
+		$("#scoringRules").hide();
+		$("#roundByRoundTable").show();
+		$("#howToPlayButton").removeClass("selected");
+		$("#scoringRulesButton").removeClass("selected");
+		$("#standingsButton").addClass("selected");
+		ShowOverlay();
+	}
+
+	function ShowOverlay() {
+		setTimeout(function() {
+			FitOverlay();
+			var scrollTo = parseInt($(".overlayContent:visible").css("top")) - 5;
+			var imageHeight = $("#bgPhoto").height();
+			var windowHeight = window.innerHeight;
+			if (scrollTo + windowHeight > imageHeight) {
+				scrollTo = imageHeight - windowHeight;
+			}
+			if (scrollTo < 0) {
+				scrollTo = 0;
+			}
+
+			$("body").animate({scrollTop: scrollTo}, 500);
+		}, 100);
+		$("#overlayContainer").fadeIn(500);		
+	}
+
+	function FitOverlay() {
+		var imageHeight = $("#bgPhoto").height();
+		var windowHeight = window.innerHeight;
+		var contentHeight = $(".overlayContent:visible").outerHeight() + 20;
+		var overlayHeight = (imageHeight > windowHeight ? imageHeight : windowHeight);
+		var targetTop = window.scrollY;
+
+		console.log(targetTop);
+		console.log(contentHeight);
+		console.log(windowHeight);
+		console.log(overlayHeight);
+
+		if (targetTop + contentHeight > overlayHeight) {
+			console.log("part 1");
+			targetTop = overlayHeight - contentHeight;
+		}
+		if (targetTop < 0) {
+			console.log("part 2");
+			targetTop = 0;
+		}
+
+		$(".overlayContent").css("top", targetTop + 5);
+		$("#overlayContainer").css("height", "" + overlayHeight + "px");
+	}
+
+	function HideOverlay() {
+		$("#overlayContainer").fadeOut(500);
+		SafeFitToWindow();
+	}
+</script>
+
+</html>
