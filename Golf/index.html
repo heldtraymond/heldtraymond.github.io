@@ -1681,10 +1681,10 @@
 		}
 		else {
 			var turnName = SEATS[CURRENT_SEAT].name;
-			if (ROUND_NUM === 3) {
+			/*if (ROUND_NUM === 3) {
 				turnName = ANGELA[NAMES.indexOf(turnName)];
 			}
-			else if (ROUND_NUM > 3 && Math.random() < (0.03 * ROUND_NUM)) {
+			else*/ if (ROUND_NUM > 3 && Math.random() < (0.03 * ROUND_NUM)) {
 				turnName = NICKNAMES[NAMES.indexOf(turnName)];
 			}
 			$("#whoseTurn").html(turnName + "'s turn");
