@@ -239,7 +239,7 @@
 		.playerName {
 			margin-top:0px;
 			margin-bottom:0px;
-    		font-size:12pt;
+    		font-size:11pt;
 			position:relative;
 			z-index:100;
 		}
@@ -2792,7 +2792,8 @@
 		}
 
 		$(".playerInfo img").css("max-height", photoHeight + "px");
-		$(".playerName, #centerCell, .centerInfo").css((scale * 16 < 14 ? 14 : scale * 16) + "pt");
+		$("#centerCell, .centerInfo").css((scale * 16 < 14 ? 14 : scale * 16) + "pt");
+		$(".playerName").css((scale * 14 < 12 ? 12 : scale * 14) + "pt");
 		//$("#roundByRoundTable").css("font-size", (scale * 18) + "pt");
 		//$("#scoringRules").css("font-size", (scale * 22) + "pt");
 		//$(".buttonContainer button").css("font-size", (scale * 16) + "pt");
