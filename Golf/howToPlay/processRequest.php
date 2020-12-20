@@ -18,6 +18,11 @@ $debug = isset($_POST['d']);
 if (isset($_POST['a'])) {
 	$gameAction = $_POST['a'];
 
+	if ($gameAction == 278177) {
+		if (!mysqli_query($conn, "UPDATE GameStatus SET Round = 1, RoundStartUtc = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 130 SECOND) WHERE Id = (SELECT MAX(Id) FROM GameStatus)")) {
+		    echo "Start round 1 error: (" . $conn->errno . ") " . $conn->error;
+		}
+	}
 	if ($gameAction >= 122400000 && $gameAction < 122416384) {
 		// New game
 		$playersInt = ($gameAction % 100000);
@@ -32,7 +37,7 @@ if (isset($_POST['a'])) {
 			$mult = $mult * 2;
 
 			$currVal = $playersInt % $mult;
-			if ($currVal === $prevMult) {
+			if ($currVal == $prevMult) {
 				array_push($livePlayers, $p);
 			}
 		}
@@ -61,7 +66,7 @@ if (isset($_POST['a'])) {
 			}
 		}
 
-		$newGameSql = "INSERT INTO GameStatus(Id, Round, RoundStartUtc, CurrentSeat, EndingSeat, UpCardIndex, RoundStartSeat) VALUES ($gameId, 1, DATE_ADD(UTC_TIMESTAMP(), INTERVAL 130 SECOND), $startingSeat, NULL, $startingUpCardIndex, $startingSeat)";
+		$newGameSql = "INSERT INTO GameStatus(Id, Round, RoundStartUtc, CurrentSeat, EndingSeat, UpCardIndex, RoundStartSeat) VALUES ($gameId, 0, NULL, $startingSeat, NULL, $startingUpCardIndex, $startingSeat)";
 
 		$insertCardsSql = "INSERT INTO Card(GameId, Round, DeckIndex, Value) VALUES ";
 		$firstOne = true;
@@ -433,16 +438,16 @@ if (isset($_POST['a'])) {
 					$pairedCardCounts = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 					for ($i = 0; $i < 6; $i++) {
 						$points = $cardValues[$i];
-						$pairIndex = ($points === -3 ? 13 : $points);
+						$pairIndex = ($points == -3 ? 13 : $points);
 
-						if ($cardValues[$i] === $cardValues[($i + 3) % 6]) {
+						if ($cardValues[$i] == $cardValues[($i + 3) % 6]) {
 							$points = 0;
 							$pairedCardCounts[$pairIndex] = ($pairedCardCounts[$pairIndex]) + 1;
 						}
-						else if ($cardValues[$i] === 11) {
+						else if ($cardValues[$i] == 11) {
 							$points = 20;
 						}
-						else if ($cardValues[$i] === 12) {
+						else if ($cardValues[$i] == 12) {
 							$points = 10;
 						}
 
@@ -470,7 +475,7 @@ if (isset($_POST['a'])) {
 						// End of round
 						if ($round < 9) {
 							$round++;
-							array_push($updateSql, "UPDATE GameStatus SET Round = $round, RoundStartUtc = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 90 SECOND), RoundStartSeat = $nextRoundStartSeat, CurrentSeat = $nextRoundStartSeat, EndingSeat = NULL, UpCardIndex = $totalPlayerCards WHERE Id = $gameId;");
+							array_push($updateSql, "UPDATE GameStatus SET Round = $round, RoundStartUtc = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 100 SECOND), RoundStartSeat = $nextRoundStartSeat, CurrentSeat = $nextRoundStartSeat, EndingSeat = NULL, UpCardIndex = $totalPlayerCards WHERE Id = $gameId;");
 						}
 						else {
 							// End of game
@@ -530,16 +535,18 @@ else {
 	$seatInfoJsonStrings = array();//"null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null", "null");
 	$upCard = "null";
 	$drawCard = "null";
-	$seatNumbersTaken = array();
+	$seatNumbersTaken = array(-70);
 	$forceFlipCardIndices = array();
-	$isLiveHand = ($timeLeft == null || $timeLeft < 0);
+	$everyoneHasTwoFlipped = true;
+	$isLiveHand = (is_null($timeLeft) || $timeLeft < 0);
+	$isDrawTwo = (!is_null($timeLeft) && $timeLeft <= 70 && $timeLeft > 0);
 
 	$rowsFetched = mysqli_num_rows($playerCardsResult);
 	//echo ("Total player cards: $rowsFetched ");
 
 	while($card = $playerCardsResult->fetch_assoc()) {
 		if ($game["UpCardIndex"] == $card["DeckIndex"]) {
-			$upCard = ($isLiveHand ? $card["Value"] : "null");
+			$upCard = $card["Value"]; //($isLiveHand ? $card["Value"] : "null");
 		}
 		else if (($game["UpCardIndex"] + 1) == $card["DeckIndex"]) {
 			$drawVal = $card["Value"];
@@ -551,12 +558,13 @@ else {
 				$drawVal = -1;
 			}
 
-			$drawCard = ($isLiveHand ? $drawVal : "null");
+			$drawCard = $drawVal; //($isLiveHand ? $drawVal : "null");
 		}
 		else {
 			$deckIndex = $card["DeckIndex"];
 			$cardVal = $card["Value"];
 			$handCardIndex = ($deckIndex % 6);
+
 			if ($isLiveHand && $cardVal < 0 && ($handCardIndex >= 4)) {
 				$upCount = 0;
 				for ($i = 1; $i <= $handCardIndex; $i++) {
@@ -564,9 +572,20 @@ else {
 					$upCount = $upCount + ($earlierCardVal > 0 ? 1 : 0);
 				}
 
-				if (($handCardIndex === 4 && $upCount <= 0) || ($handCardIndex === 5 && $upCount <= 1)) {
+				if (($handCardIndex == 4 && $upCount <= 0) || ($handCardIndex == 5 && $upCount <= 1)) {
 					$cardVal = abs($cardVal);
 					array_push($forceFlipCardIndices, $deckIndex);
+				}
+			}
+			else if ($isDrawTwo && $handCardIndex == 5) {
+				$upCount = ($cardVal > 0 ? 1 : 0);
+				for ($i = 1; $i < 6; $i++) {
+					$earlierCardVal = ($allPlayerCards[$deckIndex - $i])["Value"];
+					$upCount = $upCount + ($earlierCardVal > 0 ? 1 : 0);
+				}
+
+				if ($upCount < 2) {
+					$everyoneHasTwoFlipped = false;
 				}
 			}
 
@@ -595,6 +614,22 @@ else {
 		$forceFlipDrawTwoResult = mysqli_query($conn, $forceFlipSql);
 	}
 
+	if ($everyoneHasTwoFlipped && $isDrawTwo) {
+		$startRoundSql = "UPDATE GameStatus SET RoundStartUtc = UTC_TIMESTAMP() WHERE Id = $gameId";
+		if ($debug) {
+			echo $startRoundSql;
+		}
+		$startRoundResult = mysqli_query($conn, $startRoundSql);
+
+		if ($startRoundResult) {
+			$timeLeftString = "null";
+		}
+	}
+	else if (!$isLiveHand) {
+		$drawCard = "null";
+		$upCard = "null";
+	}
+
 	while($roundScore = $playerScoresResult->fetch_assoc()) {
 		array_push($allScores, $roundScore);
 	}
@@ -603,14 +638,21 @@ else {
 		array_push($allSeats, $seat);
 		//echo json_encode($seat);
 	}
+
+	if ($debug) {
+		print_r($seatNumbersTaken);
+	}
+
 	for ($s = 0; $s < 14; $s++) {
 		$filledSeatIndex = array_search($s, $seatNumbersTaken);
-		if ($filledSeatIndex !== 0 && $filledSeatIndex == false || is_null($filledSeatIndex)) {
-			//echo "push null seat $s: $filledSeatIndex";
-			array_push($seatInfoJsonStrings, "null");
+		if ($debug) {
+			echo "s = $s, filledSeatIndex = $filledSeatIndex";
 		}
-		else {
-			$seat = $allSeats[$filledSeatIndex];
+		if ($filledSeatIndex >= 1 && $filledSeatIndex <= 14) {
+			if ($debug) {
+				echo " apparently its not null: [$filledSeatIndex] ";
+			}
+			$seat = $allSeats[$filledSeatIndex - 1];
 			$playerId = $seat["PlayerId"];
 			$jsonString = "{\"i\":$playerId,\"s\":[";
 			$delimiter = "";
@@ -623,7 +665,7 @@ else {
 			}
 			$jsonString = $jsonString . "],\"c\":[";
 
-			$startingCardIndex = (6 * $filledSeatIndex);
+			$startingCardIndex = (6 * ($filledSeatIndex - 1));
 			for ($cardIndex = 0; $cardIndex < 6; $cardIndex++) {
 				if (count($allPlayerCards) > ($startingCardIndex + $cardIndex)) {
 					$card = $allPlayerCards[$startingCardIndex + $cardIndex];
@@ -637,8 +679,18 @@ else {
 
 			array_push($seatInfoJsonStrings, $jsonString);
 		}
+		else {
+			if ($debug) {
+				echo "push null seat $s: $filledSeatIndex";
+			}
+			array_push($seatInfoJsonStrings, "null");
+		}
+		
 	}
 
+	if (is_null($round)) {
+		$round = 0;
+	}
 	$jsonReturn = "{\"r\":$round,\"c\":$currentSeatString,\"f\":$endingSeatString,\"t\":$timeLeftString,\"u\":$upCard,\"d\":$drawCard,\"s\":[";
 	for ($s = 0; $s < 14; $s++) {
 		$jsonReturn = $jsonReturn . ($seatInfoJsonStrings[$s]);

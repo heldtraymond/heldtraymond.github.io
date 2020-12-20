@@ -1262,7 +1262,7 @@
                 }
                 else {
                 	for (var i = 0; i < TOTAL_SEATS; i++) {
-                		if (SEATS[i] === null) continue;
+                		if (SEATS[i] === null || GAME_DATA.s[i] === null) continue;
 
                 		if (SEATS[i].cards === null) {
                 			SEATS[i].cards = [];
@@ -1325,10 +1325,10 @@
 	}
 
 	function CheckForStatus() {
+		FETCH_COUNT++;
 		if (KEEP_FETCHING && (ROUND_NUM === null || ROUND_NUM > 0 || (FETCH_COUNT % 5 === 0))) {
 			GetLatestData();
 		}
-		FETCH_COUNT++;
 	}
 
 	function BeginCountdown() {
@@ -1365,6 +1365,7 @@
 			// Game hasn't started yet
 			$("#centerCellInfoTop").html("Waiting for game to begin...");
 			$("#centerCellInfoBottom").html("");
+			KEEP_FETCHING = true;
 			return;
 		}
 
@@ -1564,7 +1565,7 @@
 			for (var i = 0; i < SEATS.length; i++) {
 				var fetchedSeat = GAME_DATA.s[i];
 				var seat = SEATS[i];
-				if (seat === null) continue;
+				if (seat === null || fetchedSeat === null) continue;
 				seat.scores = fetchedSeat.s;
 
 				if (fetchedSeat.c === null || fetchedSeat.c.length <= 0) {
@@ -1580,7 +1581,7 @@
 
 	function AnimateNewScores() {
 		for (var i = 0; i < TOTAL_SEATS; i++) {
-			if (SEATS[i] === null) continue;
+			if (SEATS[i] === null || GAME_DATA.s[i] === null) continue;
 
 			var scores = SEATS[i].scores;
 			var newScores = GAME_DATA.s[i].s;
@@ -1595,7 +1596,7 @@
 		// If seatInfo has anything
 		var changedCards = [];
 		for (var i = 0; i < TOTAL_SEATS; i++) {
-			if (SEATS[i] === null) continue;
+			if (SEATS[i] === null || GAME_DATA.s[i] === null) continue;
 
 			var cards = SEATS[i].cards;
 			var newCards = GAME_DATA.s[i].c;
@@ -1779,6 +1780,7 @@
 
 	function AnimateDealing() {
 		var dealerSeat = GetAdjacentSeat(CURRENT_SEAT, -1);
+		$(".playerCards").css("opacity", 1);
 
 		setTimeout(function() {
 			FitToWindow(true);
@@ -1980,6 +1982,7 @@
 		var current = new Date();
 		if (current >= COUNTDOWNEND_TIME) {
 			StopCountdown();
+			GetLatestData();
 			return;
 		}
 		else {
