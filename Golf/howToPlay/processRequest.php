@@ -149,7 +149,7 @@ if (isset($_POST['a'])) {
 		$player = (($gameAction - $action) / 100);
 
 		if ($debug) {
-			echo "action = $action, player = $player";
+			//echo "action = $action, player = $player";
 		}
 
 		$isDrawTwo = false;
@@ -165,7 +165,7 @@ if (isset($_POST['a'])) {
 						  WHERE g.Id = (SELECT MAX(Id) FROM GameStatus)
 						  LIMIT 1";
 		if ($debug) {
-			echo $gameStatusSql;
+			//echo $gameStatusSql;
 		}
 
 		$result = mysqli_query($conn, $gameStatusSql);
@@ -183,7 +183,7 @@ if (isset($_POST['a'])) {
 		$numPrevPlayers = null;
 
 		if ($debug) {
-			echo ("numRows: " . $result->num_rows);
+			//echo ("numRows: " . $result->num_rows);
 		}
 
 		if ($result->num_rows > 0) {
@@ -203,7 +203,7 @@ if (isset($_POST['a'])) {
 			$totalPlayerCards = $totalPlayers * 6;
 
 			if ($debug) {
-				echo "at least one row returned round=$round, roundStart=$roundStart, timeDiff=$timeDiff, currSeat=$currentSeat, playerSeat=$playerSeat";
+				//echo "at least one row returned round=$round, roundStart=$roundStart, timeDiff=$timeDiff, currSeat=$currentSeat, playerSeat=$playerSeat";
 			}
 
 			if ($round > 0 && !is_null($roundStart) && $timeDiff >= 0 && $timeDiff <= 70) {
@@ -215,7 +215,7 @@ if (isset($_POST['a'])) {
 		}
 
 		if ($debug) {
-			echo "query done, isDrawTwo = $isDrawTwo, isPlayersTurn = $isPlayersTurn";
+			//echo "query done, isDrawTwo = $isDrawTwo, isPlayersTurn = $isPlayersTurn";
 		}
 
 		if ($isPlayersTurn || ($action >= 0 && $action <= 5 && $isDrawTwo)) {
@@ -305,14 +305,16 @@ if (isset($_POST['a'])) {
 						// Fetch the remaining cards and reshuffle them
 						$discardsSql = "SELECT Value FROM Card WHERE GameId = $gameId AND Round = $round
 									 AND DeckIndex >= $newUpCardIndex AND DeckIndex < 107";
+
 						$discardsResult = mysqli_query($conn, $discardsSql);
 						$discards = array();
 						while($row = $discardsResult->fetch_assoc()) {
 							array_push($discards, $row["Value"]);
 						}
 
-						for ($discardIndex = 0; $discardIndex < count($discards); $discardIndex++) {
-							$randomInt = rand($discardIndex, 107);
+						$numDiscards = count($discards);
+						for ($discardIndex = 0; $discardIndex < $numDiscards; $discardIndex++) {
+							$randomInt = rand($discardIndex, ($numDiscards - 1));
 							$temp = $discards[$discardIndex];
 							$cardVal = -abs($discards[$randomInt]);
 
@@ -363,14 +365,23 @@ if (isset($_POST['a'])) {
 						// Fetch the remaining cards and reshuffle them
 						$discardsSql = "SELECT Value FROM Card WHERE GameId = $gameId AND Round = $round
 									 AND DeckIndex >= $newUpCardIndex AND DeckIndex < 107";
+
 						$discardsResult = mysqli_query($conn, $discardsSql);
 						$discards = array();
 						while($row = $discardsResult->fetch_assoc()) {
 							array_push($discards, $row["Value"]);
+							if ($debug) {
+								echo $row["Value"] . ",";
+							}
 						}
 
-						for ($discardIndex = 0; $discardIndex < count($discards); $discardIndex++) {
-							$randomInt = rand($discardIndex, 107);
+						if ($debug) {
+							echo " " . count($discards) . " rows returned from: $discardsSql";
+						}
+
+						$numDiscards = count($discards);
+						for ($discardIndex = 0; $discardIndex < $numDiscards; $discardIndex++) {
+							$randomInt = rand($discardIndex, ($numDiscards - 1));
 							$temp = $discards[$discardIndex];
 							$cardVal = -abs($discards[$randomInt]);
 
@@ -419,11 +430,14 @@ if (isset($_POST['a'])) {
 
 					// $cardValues now holds the point value of every card, ignoring cancellations, and exceptions that J = 11 and Q = 12
 					$roundScore = 0;
+					$pairedCardCounts = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 					for ($i = 0; $i < 6; $i++) {
 						$points = $cardValues[$i];
+						$pairIndex = ($points === -3 ? 13 : $points);
 
 						if ($cardValues[$i] === $cardValues[($i + 3) % 6]) {
 							$points = 0;
+							$pairedCardCounts[$pairIndex] = ($pairedCardCounts[$pairIndex]) + 1;
 						}
 						else if ($cardValues[$i] === 11) {
 							$points = 20;
@@ -434,6 +448,16 @@ if (isset($_POST['a'])) {
 
 						$roundScore = $roundScore + $points;
 					}
+
+					for ($i = 0; $i < 13; $i++) {
+						if ($pairedCardCounts[$i] >= 6) {
+							$roundScore = $roundScore - 30;
+						}
+						else if ($pairedCardCounts[$i] >= 4) {
+							$roundScore = $roundScore - 20;
+						}
+					}
+
 					array_push($updateSql, "INSERT INTO Score(GameId, PlayerId, Round, Score) VALUES ($gameId, $player, $round, $roundScore);");
 
 					// Check for end of round
@@ -446,7 +470,7 @@ if (isset($_POST['a'])) {
 						// End of round
 						if ($round < 9) {
 							$round++;
-							array_push($updateSql, "UPDATE GameStatus SET Round = $round, RoundStartUtc = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 160 SECOND), RoundStartSeat = $nextRoundStartSeat, CurrentSeat = $nextRoundStartSeat, EndingSeat = NULL WHERE Id = $gameId;");
+							array_push($updateSql, "UPDATE GameStatus SET Round = $round, RoundStartUtc = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 90 SECOND), RoundStartSeat = $nextRoundStartSeat, CurrentSeat = $nextRoundStartSeat, EndingSeat = NULL, UpCardIndex = $totalPlayerCards WHERE Id = $gameId;");
 						}
 						else {
 							// End of game
@@ -481,7 +505,7 @@ $playerSeatsResult = $conn->query("SELECT * FROM Seat WHERE GameId = (SELECT MAX
 $playerCardsResult = $conn->query("SELECT c.* FROM Card c
 							 JOIN GameStatus g on g.Id = c.GameId
 							 WHERE g.Id = (SELECT MAX(Id) FROM GameStatus)
-							 AND c.Round = (CASE WHEN g.Round = 0 OR g.RoundStartUtc IS NULL OR g.RoundStartUtc < DATE_ADD(UTC_TIMESTAMP(), INTERVAL 70 SECOND) THEN g.Round ELSE (g.Round - 1) END)
+							 AND c.Round = (CASE WHEN g.Round = 0 OR g.RoundStartUtc IS NULL OR g.RoundStartUtc < DATE_ADD(UTC_TIMESTAMP(), INTERVAL 71 SECOND) THEN g.Round ELSE (g.Round - 1) END)
 							 AND (c.DeckIndex = g.UpCardIndex OR c.DeckIndex = g.UpCardIndex + 1 OR c.DeckIndex < (SELECT (6 * COUNT(*)) FROM Seat WHERE GameId = g.Id))
 							 ORDER BY c.DeckIndex");
 $playerScoresResult = $conn->query("SELECT * FROM Score WHERE GameId = (SELECT MAX(Id) FROM GameStatus) ORDER BY Round ASC");
@@ -601,11 +625,13 @@ else {
 
 			$startingCardIndex = (6 * $filledSeatIndex);
 			for ($cardIndex = 0; $cardIndex < 6; $cardIndex++) {
-				$card = $allPlayerCards[$startingCardIndex + $cardIndex];
-				if ($cardIndex > 0) {
-					$jsonString = $jsonString . ",";
+				if (count($allPlayerCards) > ($startingCardIndex + $cardIndex)) {
+					$card = $allPlayerCards[$startingCardIndex + $cardIndex];
+					if ($cardIndex > 0) {
+						$jsonString = $jsonString . ",";
+					}
+					$jsonString = $jsonString . $card["Value"];
 				}
-				$jsonString = $jsonString . $card["Value"];
 			}
 			$jsonString = $jsonString . "]}";
 
