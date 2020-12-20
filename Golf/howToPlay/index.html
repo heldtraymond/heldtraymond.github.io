@@ -1042,7 +1042,6 @@
 	var ENLARGE_CARDS = false;
 	var ROUND_NUM = 0;
 	var DRAW_INDEX = 0;
-	var PLAYERS = [];
 	var DRAWING_TWO = false;
 	var UPCARD_VAL = null;
 	var DRAWCARD_VAL = null;
@@ -1079,6 +1078,8 @@
 	var DEALING = false;
 
 	var FETCH_COUNT = 0;
+	var HAD_LIVE_ACTION_ALREADY = false;
+	var IS_FIRST_FETCH = true;
 
 	$("#standingsButton").hide();
 	$("#centerCellCards").hide();
@@ -1104,17 +1105,7 @@
 			$("#playButton").hide();
 
 			var GOLF_DATA = JSON.parse(localStorage.getItem("GOLF_DATA"));
-			IS_TOUCHSCREEN = GOLF_DATA.mobile;
-			ENLARGE_CARDS = GOLF_DATA.enlarge;
-			$("#toggleEnlargeCardsBox").prop("checked", ENLARGE_CARDS);
-			if (IS_TOUCHSCREEN) {
-				$("#toggleNames, #toggleScores, #fullScreen").remove();
-			}
-			else {
-				$("#toggleEnlargeCards").remove();
-			}
-
-			$("#playingAs").html("Playing on " + (IS_TOUCHSCREEN ? "phone/tablet" : "computer/laptop"));
+			$("#playingAs").html("Playing on " + (GOLF_DATA.mobile ? "phone/tablet" : "computer/laptop"));
 
 			for (var i = 0; i < GOLF_DATA.live.length; i++) {
 				var playerIndex = GOLF_DATA.live[i];
@@ -1131,14 +1122,25 @@
 	}
 
 	function GetLatestData() {
-		PingServer(null);
+		PingServer(null, true);
 	}
 
 	function FetchDataWithoutRefresh() {
-		PingServer(-1);
+		PingServer(null, false);
 	}
 
 	function ClickedContinuePlayingButton() {
+		var GOLF_DATA = JSON.parse(localStorage.getItem("GOLF_DATA"));
+		IS_TOUCHSCREEN = GOLF_DATA.mobile;
+		ENLARGE_CARDS = GOLF_DATA.enlarge;
+		$("#toggleEnlargeCardsBox").prop("checked", ENLARGE_CARDS);
+		if (IS_TOUCHSCREEN) {
+			$("#toggleNames, #toggleScores, #fullScreen").remove();
+		}
+		else {
+			$("#toggleEnlargeCards").remove();
+		}
+
 		ReadyToPlay();
 	}
 
@@ -1232,13 +1234,9 @@
 		GetLatestData();
 	}
 
-	function PingServer(pAction) {
+	function PingServer(pAction, pRefresh) {
 		var params = {};
-		var refresh = true;
-		if (pAction === -1) {
-			refresh = false;
-		}
-		else if (pAction !== null) {
+		if (pAction !== null) {
 			params = {a:pAction};
 		}
 
@@ -1257,21 +1255,11 @@
                 console.log("SUCCESS");
                 console.log(result);
                 GAME_DATA = result;
-                if (refresh) {
-	                RefreshFromNewGameData();
+                if (pRefresh) {
+	                RenderLatestGameData();
                 }
                 else {
-                	for (var i = 0; i < TOTAL_SEATS; i++) {
-                		if (SEATS[i] === null || GAME_DATA.s[i] === null) continue;
-
-                		if (SEATS[i].cards === null) {
-                			SEATS[i].cards = [];
-                		}
-
-        				for (var c = 0; c < 6; c++) {
-	                		SEATS[i].cards[c] = GAME_DATA.s[i].c[c];
-        				}
-                	}
+                	RefreshGameData();
                 }
             },
             error:function(data) {
@@ -1286,11 +1274,13 @@
 
 	function DrawRoundByRound(pShow) {
 		var PlayerScores = [];
+		var anyScoresSoFar = false;
 		for (var i = 0; i < TOTAL_SEATS; i++) {
 			if (SEATS[i] !== null) {
 				var total = 0;
 				for (var r = 0; r < SEATS[i].scores.length; r++) {
 					total += SEATS[i].scores[r];
+					anyScoresSoFar = true;
 				}
 				PlayerScores.push({
 					name: ((ROUND_NUM === 4 && COUNTDOWNEND_TIME !== null) ? NICKNAMES[NAMES.indexOf(SEATS[i].name)] : SEATS[i].name),
@@ -1305,19 +1295,30 @@
 			return (a.total > b.total ? -1 : (a.total < b.total ? 1 : (a.name < b.name ? -1 : 1)));
 		});
 
-		var lastPlaceScore = (ROUND_NUM < 1 ? 1 : PlayerScores[0].total);
+		var lastPlaceScore = (anyScoresSoFar ? PlayerScores[0].total : 7);
 
-		$("#roundByRoundTable tr").each(function(index) {
-			if (index <= 0) return;
+		$("#roundByRoundTable tr.playerScoringRow").remove();
 
-			var player = PlayerScores[index - 1];
-			$(this).find("td").eq(0).html((player.total >= lastPlaceScore ? "<img src='https://heldtraymond.github.io/Golf/trophy.png' class='scoreImg'>" : "") + player.name);
-			$(this).find("td").eq(1).html(player.total);
-			$(this).find("td").css("background-color", "");
-			for (var r = 0; r < 9; r++) {
-				$(this).find("td").eq(2 + r).html(player.scores.length > r ? player.scores[r] : "");
+		for (var i = 0; i < PlayerScores.length; i++) {
+			var player = PlayerScores[i];
+			var tr = $("<tr></tr>");
+			tr.addClass("playerScoringRow");
+			for (var c = 0; c < 11; c++) {
+				var td = $("<td></td>");
+				if (c === 0) {
+					td.html((player.total >= lastPlaceScore ? "<img src='https://heldtraymond.github.io/Golf/trophy.png' class='scoreImg'>" : "") + player.name);
+				} else if (c === 1) {
+					td.html(player.total);
+				} else {
+					var round = c - 1;
+					td.html(player.scores.length >= round ? player.scores[round - 1] : "");
+				}
+				//$(this).find("td").css("background-color", "");
+
+				tr.append(td);
 			}
-		});
+			$("#roundByRoundTable").append(tr);
+		};
 
 		if (pShow === true) {
 			ShowRoundByRound();
@@ -1345,12 +1346,77 @@
 		$("#centerCellInfoTop, #centerCellInfoBottom, .timeStatus").html("");
 	}
 
+	function RefreshGameData() {
+		if (typeof GAME_DATA.r !== "undefined") { ROUND_NUM = GAME_DATA.r; }
+		if (typeof GAME_DATA.c !== "undefined") { CURRENT_SEAT = GAME_DATA.c; }
+		if (typeof GAME_DATA.n !== "undefined") { NEXTCARD_VAL = GAME_DATA.n; }
+		if (typeof GAME_DATA.u !== "undefined") { UPCARD_VAL = GAME_DATA.u; }
+		if (typeof GAME_DATA.d !== "undefined") { DRAWCARD_VAL = GAME_DATA.d; }
+		if (typeof GAME_DATA.f !== "undefined") { END_SEAT = GAME_DATA.f; }
+		if (typeof GAME_DATA.s !== "undefined") {
+			seatInfo = GAME_DATA.s;
+			SEATS = [];
+			for (var i = 0; i < TOTAL_SEATS; i++) {
+				var seat = seatInfo[i];
+				if (seat === null) {
+					SEATS.push(null);
+				}
+				else {
+					SEATS.push({
+						playerId: seat.i,
+						name: NAMES[seat.i],
+						scores: seat.s,
+						isLive: LIVE_PLAYERS.indexOf(seat.i) >= 0,
+						cards: (seat.c === null || seat.c.length <= 0) ? [] : [seat.c[0], seat.c[1], seat.c[2], seat.c[3], seat.c[4], seat.c[5]]
+					});
+				}
+			}
+		}
+	}
+
+	function RenderLatestGameData() {
+		setTimeout(RenderCurrentStatus, KEEP_FETCHING ? 220 : 150);
+
+		if (typeof GAME_DATA.s !== "undefined" && !IS_FIRST_FETCH) {
+			if (KEEP_FETCHING) {
+				AnimateNewCards();
+			}
+			AnimateNewScores();
+		}
+
+		IS_FIRST_FETCH = false;
+	}
+
 	function RenderCurrentStatus() {
 		var timeUntilNextRound = null;
+		var seatInfo = null;
+		var prevRound = ROUND_NUM;
+		var prevSeat = CURRENT_SEAT;
+
+		RefreshGameData();
+		DrawPlayerInfos();
+
 		if (typeof GAME_DATA.t !== "undefined") { timeUntilNextRound = GAME_DATA.t; }
+
+		if (prevRound !== null && prevRound > 0 && ROUND_NUM !== null && (ROUND_NUM > prevRound || (ROUND_NUM === 9 && prevSeat !== null && CURRENT_SEAT === null))) {
+			console.log(prevRound);
+			console.log(ROUND_NUM);
+			console.log(prevSeat);
+			console.log(CURRENT_SEAT);
+			// Round just ended - show standings
+			setTimeout(ShowRoundByRound, 1300);
+		}
 
 		if (CURRENT_SEAT !== null) {
 			KEEP_FETCHING = !(SEATS[CURRENT_SEAT].isLive);
+		}
+
+		if (ROUND_NUM <= 0 || (ROUND_NUM === 1 && timeUntilNextRound !== null && timeUntilNextRound > 70)) {
+			MovePhotosToMiddle(false);
+			$(".playerName").hide();
+		}
+		else {
+			ShowHideNames();
 		}
 
 		$("#discardCard").toggle(UPCARD_VAL !== null).removeClass("discard").attr("title", "");
@@ -1481,103 +1547,10 @@
 		if ($(".enlarged").length <= 0 && $(".playableCard").length > 0 && ENLARGE_CARDS === true) {
 			ZoomInPlayableCards();
 		}
-		else if ((".enlarged").length > 0 && $(".playableCard").length <= 0) {
+		else if ($(".enlarged").length > 0 && $(".playableCard").length <= 0) {
 			ZoomOutPlayableCards();
 		}
 	}
-
-	function RefreshFromNewGameData() {
-		var isFirstFetch = (SEATS.length <= 0);
-
-		var timeUntilNextRound = null;
-		var currentPlayerSeat = null;
-		var seatInfo = null;
-		var prevRound = ROUND_NUM;
-
-		if (typeof GAME_DATA.r !== "undefined") { ROUND_NUM = GAME_DATA.r; }
-		if (typeof GAME_DATA.t !== "undefined") { timeUntilNextRound = GAME_DATA.t; }
-		if (typeof GAME_DATA.c !== "undefined") { CURRENT_SEAT = GAME_DATA.c; }
-		if (typeof GAME_DATA.n !== "undefined") { NEXTCARD_VAL = GAME_DATA.n; }
-		if (!KEEP_FETCHING) {
-			if (typeof GAME_DATA.u !== "undefined") { UPCARD_VAL = GAME_DATA.u; }
-			if (typeof GAME_DATA.d !== "undefined") { DRAWCARD_VAL = GAME_DATA.d; }
-		}
-		if (typeof GAME_DATA.f !== "undefined") { END_SEAT = GAME_DATA.f; }
-
-		setTimeout(RenderCurrentStatus, KEEP_FETCHING ? 220 : 150);
-		if (!isFirstFetch && ROUND_NUM > 0 && (timeUntilNextRound !== null || CURRENT_SEAT === null) && COUNTDOWNEND_TIME === null) {
-			// Round just ended - show standings
-			setTimeout(ShowRoundByRound, 1500);
-		}
-
-		if (isFirstFetch && typeof GAME_DATA.s !== "undefined") {
-			// Set seat data
-			if (typeof GAME_DATA.r !== "undefined") {
-				ROUND_NUM = GAME_DATA.r;
-			}
-			if (typeof GAME_DATA.u !== "undefined") { UPCARD_VAL = GAME_DATA.u; }
-			if (typeof GAME_DATA.d !== "undefined") { DRAWCARD_VAL = GAME_DATA.d; }
-
-			seatInfo = GAME_DATA.s;
-			for (var i = 0; i < TOTAL_SEATS; i++) {
-				var seat = seatInfo[i];
-				if (seat === null) {
-					SEATS.push(null);
-				}
-				else {
-					var newPlayer = {
-						playerId: seat.i,
-						name: NAMES[seat.i],
-						scores: seat.s,
-						isLive: LIVE_PLAYERS.indexOf(seat.i) >= 0,
-						cards: (seat.c === null || seat.c.length <= 0) ? null : [seat.c[0], seat.c[1], seat.c[2], seat.c[3], seat.c[4], seat.c[5]]
-					};
-
-					PLAYERS.push(newPlayer);
-					SEATS.push(newPlayer);
-
-					// Only add as many rows to standings as there are players
-					var round = $("<tr></tr>");
-					for (var col = 0; col < 11; col++) {
-						round.append("<td></td>");
-					}
-					$("#roundByRoundTable").append(round);
-				}
-			}
-
-			if (GAME_DATA.r <= 0 || (GAME_DATA.r === 1 && GAME_DATA.t > 70)) {
-				MovePhotosToMiddle(false);
-				$(".playerName").hide();
-			}
-			else {
-				ShowHideNames();
-			}
-			DrawPlayerInfos();
-			$(".playerInfo").animate({"opacity": 1}, 700);
-
-			DrawRoundByRound(false);
-		} else if (typeof GAME_DATA.s !== "undefined") {
-			if (KEEP_FETCHING) {
-				AnimateNewCards();
-			}
-			AnimateNewScores();
-
-			for (var i = 0; i < SEATS.length; i++) {
-				var fetchedSeat = GAME_DATA.s[i];
-				var seat = SEATS[i];
-				if (seat === null || fetchedSeat === null) continue;
-				seat.scores = fetchedSeat.s;
-
-				if (fetchedSeat.c === null || fetchedSeat.c.length <= 0) {
-					SEATS[i].cards = null;
-					$("#playerCards" + i).css("opacity", 0);
-				}
-				else {
-					SEATS[i].cards = [fetchedSeat.c[0], fetchedSeat.c[1], fetchedSeat.c[2], fetchedSeat.c[3], fetchedSeat.c[4], fetchedSeat.c[5]];
-				}
-			}
-		}
-	};
 
 	function AnimateNewScores() {
 		for (var i = 0; i < TOTAL_SEATS; i++) {
@@ -1593,7 +1566,6 @@
 	}
 
 	function AnimateNewCards() {
-		// If seatInfo has anything
 		var changedCards = [];
 		for (var i = 0; i < TOTAL_SEATS; i++) {
 			if (SEATS[i] === null || GAME_DATA.s[i] === null) continue;
@@ -1738,16 +1710,23 @@
 	}
 
 	function DrawPlayerInfos() {
+		$(".playerInfo.live").removeClass("live");
+		$(".playerCards.live").removeClass("live");
+
 		for (var i = 0; i < TOTAL_SEATS; i++) {
 			if (SEATS[i] === null) {
-				$("#playerInfo" + i + " img").hide();
+				//$("#playerInfo" + i + " img").hide();
 				$("#playerInfo" + i + " .playerName").hide();
-				$("#playerCards" + i + " table").hide();
+				//$("#playerCards" + i + " table").hide();
+				$("#playerInfo" + i).css("opacity", 0);
+				$("#playerCards" + i).css("opacity", 0);
 			}
 			else {
 				$("#playerInfo" + i + " img").show();
 				//$("#playerInfo" + i + " .playerName").show();
 				$("#playerCards" + i + " table").show();
+				$("#playerInfo" + i).css("opacity", 1);
+				$("#playerCards" + i).css("opacity", 1);
 
 				if (SEATS[i].isLive) {
 					$("#playerInfo" + i).addClass("live");
@@ -1823,6 +1802,7 @@
 
 				var delayTime = 0;
 				var totalCards = 0;
+				var totalPlayers = 0;
 
 				for (var i = 0; i < SEATS.length; i++) {
 					if (SEATS[i] === null) {
@@ -1839,6 +1819,8 @@
 							RenderCard(td, -Math.abs(SEATS[i].cards[c]));
 						}
 					}
+
+					totalPlayers++;
 				}
 
 				var currentSeat = CURRENT_SEAT;
@@ -1849,12 +1831,12 @@
 							continue;
 						}
 
-						var delay = (totalCards <= 3 ? 400 : (totalCards < PLAYERS.length ? 60 : 30));
+						var delay = (totalCards <= 3 ? 400 : (totalCards < totalPlayers ? 60 : 30));
 						delayTime += delay;
 						totalCards++;
 						DealCard($("#playerCards" + currentSeat + " .card").eq(q), delayTime);
 
-						if (totalCards < (6 * PLAYERS.length)) {
+						if (totalCards < (6 * totalPlayers)) {
 							currentSeat = GetAdjacentSeat(currentSeat, 1);
 						}
 					}
@@ -1890,7 +1872,7 @@
 			}
 		}
 
-		if (GAME_DATA.t === null) {
+		if (GAME_DATA.t === null || GAME_DATA.t < 0) {
 			// Live hand - need to enlarge the center cards also
 			$("#centerCell .card").addClass("enlarged");
 		}
@@ -2019,78 +2001,6 @@
 		}
 	}
 
-	function GetSeatScore(pSeatNum) {
-		var cards = GAME_DATA.s[pSeatNum].cards;
-		var A = GetCardValue(cards[0]);
-		var B = GetCardValue(cards[3]);
-		var C = GetCardValue(cards[1]);
-		var D = GetCardValue(cards[4]);
-		var E = GetCardValue(cards[2]);
-		var F = GetCardValue(cards[5]);
-
-		if (A === B && B === C && C === D && D === E && E === F) {
-			return -30;
-		}
-
-		scoresByColumn = [0,0,0];
-		if (A !== B) { scoresByColumn[0] = GetCardPoints(A) + GetCardPoints(B); }
-		if (C !== D) { scoresByColumn[1] = GetCardPoints(C) + GetCardPoints(D); }
-		if (E !== F) { scoresByColumn[2] = GetCardPoints(E) + GetCardPoints(F); }
-
-		var FourOfAKindScore = -20;
-		if (A === B && B === C && C === D) { return scoresByColumn[2] + FourOfAKindScore; }
-		else if (A === B && B === E && E === F) { return scoresByColumn[1] + FourOfAKindScore; }
-		else if (C === D && D === E && E === F) { return scoresByColumn[0] + FourOfAKindScore; }
-		else {
-			return scoresByColumn[0] + scoresByColumn[1] + scoresByColumn[2];
-		}
-	}
-
-	function UpdateScore(pSeatNum) {
-		SEATS[pSeatNum].scores[ROUND_NUM - 1] = GetSeatScore(pSeatNum);
-		var labelEl = $("#playerInfo" + pSeatNum).find(".playerName span");
-		$.when(labelEl.fadeOut(200)).then(function() {
-			setTimeout(function() {
-				labelEl.html(GetPlayerLabelText(pSeatNum)).css("background-color", "#ffaaaa").css("border-color", "red");
-				labelEl.fadeIn(200);
-			}, 1);
-		});
-	}
-
-	function GetCardValue(pCardIndex) {
-		if (pCardIndex < 0) {
-			return -1;
-		}
-
-		var deckVal = (pCardIndex - 1) % 54;
-
-		if (deckVal > 51) {
-			// Joker
-			return 0;
-		}
-		else {
-			return (1 + (deckVal % 13));
-		}
-	}
-
-	function GetCardPoints(pCardVal) {
-		if (pCardVal === 0) {
-			return -3;
-		}
-		else if (pCardVal === 11) {
-			return 20;
-		}
-		else if (pCardVal === 12) {
-			return 10;
-		}
-		else if (pCardVal === 13) {
-			return 0;
-		}
-		else {
-			return pCardVal;
-		}
-	}
-
 	function RenderAllCards() {
 		$(".card").stop();
 
@@ -2128,7 +2038,7 @@
 		$(".playableCard").removeClass("playableCard");
 		card.animate({"opacity": 0}, 200);
 
-		PingServer((100 * SEATS[pSeatNum].playerId) + pCardNum);
+		PingServer((100 * SEATS[pSeatNum].playerId) + pCardNum, true);
 	}
 
 	function PlayDrawCard(pCardIndex) {
@@ -2149,7 +2059,7 @@
 		$(".playableCard").removeClass("playableCard");
 		$("#drawPileCard, #discardCard").add(card).animate({"opacity": 0}, 200);
 
-		PingServer((100 * SEATS[CURRENT_SEAT].playerId) + (pCardIndex <= 5 ? (10 + pCardIndex) : 7));
+		PingServer((100 * SEATS[CURRENT_SEAT].playerId) + (pCardIndex <= 5 ? (10 + pCardIndex) : 7), true);
 	}
 
 	function TakeDiscard(pCardIndex) {
@@ -2166,7 +2076,7 @@
 		$(".selectedCard").removeClass("selectedCard");
 		$("#discardCard").add(card).animate({"opacity": 0}, 200);
 
-		PingServer((100 * SEATS[CURRENT_SEAT].playerId) + pCardIndex + 10);
+		PingServer((100 * SEATS[CURRENT_SEAT].playerId) + pCardIndex + 10, true);
 	}
 
 	function FlipDrawCard(pIsLivePlayer) {
@@ -2178,7 +2088,7 @@
 		$("#discardCard").css("opacity", 0.5);
 		$("#drawPileCard").animate({"opacity": 0}, 200);
 
-		PingServer((100 * SEATS[CURRENT_SEAT].playerId) + 6);
+		PingServer((100 * SEATS[CURRENT_SEAT].playerId) + 6, true);
 	}
 
 	function ClickedDiscard() {
@@ -2613,7 +2523,7 @@
 
 	function ClickedRefresh() {
 		DEBUG_MODE = false;
-		PingServer(null);
+		PingServer(null, true);
 	}
 </script>
 

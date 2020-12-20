@@ -12,7 +12,7 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$seatingChart = array(3,5,4,2,9,1,8,7,12,0,10,11,13,6);
+$seatingChart = array(8,5,4,2,9,1,3,7,12,0,10,11,13,6);
 $debug = isset($_POST['d']);
 
 if (isset($_POST['a'])) {
@@ -23,9 +23,10 @@ if (isset($_POST['a'])) {
 		    echo "Start round 1 error: (" . $conn->errno . ") " . $conn->error;
 		}
 	}
-	if ($gameAction >= 122400000 && $gameAction < 122416384) {
+	if (($gameAction >= 122300000 && $gameAction < 122316384) || ($gameAction >= 122400000 && $gameAction < 122416384)) {
 		// New game
 		$playersInt = ($gameAction % 100000);
+		$startRoundOne = ($gameAction > 122380000);
 		$mult = 1;
 		$currVal = 0;
 		$livePlayers = array();
@@ -66,7 +67,10 @@ if (isset($_POST['a'])) {
 			}
 		}
 
-		$newGameSql = "INSERT INTO GameStatus(Id, Round, RoundStartUtc, CurrentSeat, EndingSeat, UpCardIndex, RoundStartSeat) VALUES ($gameId, 0, NULL, $startingSeat, NULL, $startingUpCardIndex, $startingSeat)";
+		$startingRound = ($startRoundOne ? 1 : 0);
+		$roundStartText = ($startRoundOne ? "DATE_ADD(UTC_TIMESTAMP(), INTERVAL 130 SECOND)" : "NULL");
+
+		$newGameSql = "INSERT INTO GameStatus(Id, Round, RoundStartUtc, CurrentSeat, EndingSeat, UpCardIndex, RoundStartSeat) VALUES ($gameId, $startingRound, $roundStartText, $startingSeat, NULL, $startingUpCardIndex, $startingSeat)";
 
 		$insertCardsSql = "INSERT INTO Card(GameId, Round, DeckIndex, Value) VALUES ";
 		$firstOne = true;
