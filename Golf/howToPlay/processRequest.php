@@ -12,14 +12,14 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$seatingChart = array(8,5,4,2,9,1,3,7,12,0,10,11,13,6);
+$seatingChart = array(6,10,12,4,0,1,3,11,7,8,5,13,9,2);
 $debug = isset($_POST['d']);
 
 if (isset($_POST['a'])) {
 	$gameAction = $_POST['a'];
 
 	if ($gameAction == 278177) {
-		if (!mysqli_query($conn, "UPDATE GameStatus SET Round = 1, RoundStartUtc = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 130 SECOND) WHERE Id = (SELECT MAX(Id) FROM GameStatus)")) {
+		if (!mysqli_query($conn, "UPDATE GameStatus SET Round = 1, RoundStartUtc = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 160 SECOND) WHERE Id = (SELECT MAX(Id) FROM GameStatus)")) {
 		    echo "Start round 1 error: (" . $conn->errno . ") " . $conn->error;
 		}
 	}
@@ -68,7 +68,7 @@ if (isset($_POST['a'])) {
 		}
 
 		$startingRound = ($startRoundOne ? 1 : 0);
-		$roundStartText = ($startRoundOne ? "DATE_ADD(UTC_TIMESTAMP(), INTERVAL 130 SECOND)" : "NULL");
+		$roundStartText = ($startRoundOne ? "DATE_ADD(UTC_TIMESTAMP(), INTERVAL 160 SECOND)" : "NULL");
 
 		$newGameSql = "INSERT INTO GameStatus(Id, Round, RoundStartUtc, CurrentSeat, EndingSeat, UpCardIndex, RoundStartSeat) VALUES ($gameId, $startingRound, $roundStartText, $startingSeat, NULL, $startingUpCardIndex, $startingSeat)";
 
@@ -479,7 +479,7 @@ if (isset($_POST['a'])) {
 						// End of round
 						if ($round < 9) {
 							$round++;
-							array_push($updateSql, "UPDATE GameStatus SET Round = $round, RoundStartUtc = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 100 SECOND), RoundStartSeat = $nextRoundStartSeat, CurrentSeat = $nextRoundStartSeat, EndingSeat = NULL, UpCardIndex = $totalPlayerCards WHERE Id = $gameId;");
+							array_push($updateSql, "UPDATE GameStatus SET Round = $round, RoundStartUtc = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 160 SECOND), RoundStartSeat = $nextRoundStartSeat, CurrentSeat = $nextRoundStartSeat, EndingSeat = NULL, UpCardIndex = $totalPlayerCards WHERE Id = $gameId;");
 						}
 						else {
 							// End of game

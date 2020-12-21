@@ -1283,7 +1283,7 @@
 					anyScoresSoFar = true;
 				}
 				PlayerScores.push({
-					name: ((ROUND_NUM === 4 && COUNTDOWNEND_TIME !== null) ? NICKNAMES[NAMES.indexOf(SEATS[i].name)] : SEATS[i].name),
+					name: ((ROUND_NUM === 4 && COUNTDOWNEND_TIME !== null) ? NICKNAMES[SEATS[i].playerId] : SEATS[i].name),
 					scores: SEATS[i].scores,
 					total: total,
 					isLive: SEATS[i].isLive
@@ -1500,6 +1500,12 @@
 			StopCountdown();
 		}
 		$("#centerCellInfoTop").html("Round " + ROUND_NUM + " of 9");
+		var nameDisplay = SEATS[CURRENT_SEAT].name;
+		if (ROUND_NUM === 4) {
+			nameDisplay = ANGELA[SEATS[CURRENT_SEAT].playerId];
+		} else if (ROUND_NUM > 4 && Math.random() < (0.03 * ROUND_NUM)) {
+			nameDisplay = NICKNAMES[SEATS[CURRENT_SEAT].playerId];
+		}
 		$("#centerCellInfoBottom").html(SEATS[CURRENT_SEAT].name + "'s turn");
 		$("#playerInfo" + CURRENT_SEAT + ", #playerCards" + CURRENT_SEAT).addClass("current");
 
@@ -1759,7 +1765,7 @@
 
 	function AnimateDealing() {
 		var dealerSeat = GetAdjacentSeat(CURRENT_SEAT, -1);
-		$(".playerCards").css("opacity", 1);
+		//$(".playerCards").css("opacity", 1);
 
 		setTimeout(function() {
 			FitToWindow(true);
