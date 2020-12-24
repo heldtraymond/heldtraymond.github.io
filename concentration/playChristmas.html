@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Memory</title>
+<link rel="icon" href="images/bg.png">
 <style>
 	body {
 		font: normal 10pt verdana;
@@ -332,7 +333,7 @@
 		for(var i = 0; i < 11; i++) {
 			var isGreen = (i % 2 === 0);
 			var time = i * 100;
-			var color = (isGreen ? "#66ff66" : "#ff9999");
+			var color = (isGreen ? "#66ff66" : "#ff6666");
 			setTimeout(SetBorderBgColor, time, first, color);
 			setTimeout(SetBorderBgColor, time, second, color);
 		}
