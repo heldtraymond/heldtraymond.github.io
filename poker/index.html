@@ -13,6 +13,7 @@
 			margin-left:0px;
 			margin-right:0px;
 			font-size:30pt;
+			background-color:#bb8833;
 		}
 
 		.card {
@@ -23,19 +24,18 @@
 			font-size:45pt;
 			font-weight:bolder;
 			width:20%;
-			text-align:left;
+			text-align:center;
 			line-height:87%;
 			letter-spacing:-3;
-			padding-right:3px;
-			padding-top:0px;
-			padding-bottom:5px;
-			height:2.1em;
+			padding:6px;
+			/*height:2.1em;*/
 		}
 		#cardTable {
-			width:100%;
+			width:98%;
 			text-align:center;
 			font-family:'Tahoma', Verdana, sans-serif;
-			font-size:30pt;
+			font-size:25pt;
+			margin-left:1%;
 		}
 		.red {
 			color:red;
@@ -52,19 +52,31 @@
 			height: 236px;
 			overflow: hidden;
 			border:0px solid blue;
-			float:right;
+			text-align:center;
+			display:inline-block;
+			margin-top:10px;
+			/*float:right;*/
+		}
+		#cardIndices span {
+			border:1px solid black;
+			border-radius:22px;
+			padding-left:10px;
+			padding-right:10px;
+			display:inline-block;
+			background-color:#000066;
+			color:white;
 		}
 		</style>
 	<script src="jquery.js"></script>
 </head>
 <body>
 	<table id="cardTable">
-		<tr>
-			<td>1</td>
-			<td>2</td>
-			<td>3</td>
-			<td>4</td>
-			<td>5</td>
+		<tr id="cardIndices">
+			<td><span>1</span></td>
+			<td><span>2</span></td>
+			<td><span>3</span></td>
+			<td><span>4</span></td>
+			<td><span>5</span></td>
 		</tr>
 		<tr>
 			<td class="card" id="card0"></td>
@@ -100,7 +112,7 @@
 
 		var cardEl = $("#card" + pCardIndex);
 		cardEl.removeClass("red").removeClass("black");
-		cardEl.html("<span>" + VALS[cardVal] + "</span><br>" + '<span class="suit">' + SUITS[suit] + '</span>')
+		cardEl.html("<span style='float:left'>" + VALS[cardVal] + "</span><br>")// + SUITS[suit] + "</span><br>")// + '<span class="suit">' + SUITS[suit] + '</span>')
 		  .addClass((suit === 0 || suit === 3) ? "black" : "red");
 
 		var cardImg = $("<img></img>");
@@ -117,6 +129,8 @@
 		//cardImg.css("object-fit", "cover");
 
 		cardEl.append(container);
+		cardEl.append("<br><span style='float:right;transform:rotate(180deg)'>" + VALS[cardVal] + "</span>");// + " " + SUITS[suit] + "</span>");// + '<span class="suit">' + SUITS[suit] + '</span>');
+		//cardEl.html("<span>" + VALS[cardVal] + "</span>" + '<span class="suit">' + SUITS[suit] + '</span>');
 	}
 </script>
 </html>
