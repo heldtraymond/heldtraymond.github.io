@@ -1,0 +1,122 @@
+<html>
+<head>
+	<title>Poker</title>
+	<!--meta name="viewport" content="width=device-width,initial-scale=1.0"-->
+	<meta charset="UTF-8">
+	<!--link rel="icon" href="trophyicon.png"-->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@800&display=swap" rel="stylesheet">
+	<style>
+		body {
+			text-align:center;
+			font-family:'Tahoma', Verdana, sans-serif;
+			overflow:auto;
+			margin-left:0px;
+			margin-right:0px;
+			font-size:30pt;
+		}
+
+		.card {
+			font-family:'Roboto Slab', Tahoma, sans-serif;
+			border-radius:10px;
+			border:3px solid black;
+			background-color:white;
+			font-size:45pt;
+			font-weight:bolder;
+			width:20%;
+			text-align:left;
+			line-height:87%;
+			letter-spacing:-3;
+			padding-right:3px;
+			padding-top:0px;
+			padding-bottom:5px;
+			height:2.1em;
+		}
+		#cardTable {
+			width:100%;
+			text-align:center;
+			font-family:'Tahoma', Verdana, sans-serif;
+			font-size:30pt;
+		}
+		.red {
+			color:red;
+		}
+		.black {
+			color:black;
+		}
+		.suit {
+			width:100%;
+			font-size:53pt;
+		}
+		.cardImageContainer {
+			width: 134px;
+			height: 236px;
+			overflow: hidden;
+			border:0px solid blue;
+			float:right;
+		}
+		</style>
+	<script src="jquery.js"></script>
+</head>
+<body>
+	<table id="cardTable">
+		<tr>
+			<td>1</td>
+			<td>2</td>
+			<td>3</td>
+			<td>4</td>
+			<td>5</td>
+		</tr>
+		<tr>
+			<td class="card" id="card0"></td>
+			<td class="card" id="card1"></td>
+			<td class="card" id="card2"></td>
+			<td class="card" id="card3"></td>
+			<td class="card" id="card4"></td>
+		</tr>
+	</table>
+</body>
+<script>
+	var DECK = [];
+	var SUITS = ["♠", "♥", "♦", "♣"];
+	var VALS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+	for (var i = 0; i < 52; i++) {
+		DECK[i] = i;
+	}
+
+	for (var i = 0; i < 5; i++) {
+		var randInt = i + Math.floor(Math.random() * (52 - i));
+		var temp = DECK[i];
+		DECK[i] = DECK[randInt];
+		DECK[randInt] = temp;
+	}
+
+	for (var i = 0; i < 5; i++) {
+		RenderCard(i, DECK[i]);
+	}
+
+	function RenderCard(pCardIndex, pCardVal) {
+		var suit = Math.floor(Math.abs(pCardVal) / 13);
+		var cardVal = Math.abs(pCardVal) % 13;
+
+		var cardEl = $("#card" + pCardIndex);
+		cardEl.removeClass("red").removeClass("black");
+		cardEl.html("<span>" + VALS[cardVal] + "</span><br>" + '<span class="suit">' + SUITS[suit] + '</span>')
+		  .addClass((suit === 0 || suit === 3) ? "black" : "red");
+
+		var cardImg = $("<img></img>");
+		cardImg.attr("src", "deck.png");
+		cardImg.addClass("cardImage");
+		cardImg.css("margin-left", -(195 * cardVal + 38));
+		cardImg.css("margin-top", -(285 * suit + 32));
+
+		var container = $("<div></div>");
+		container.addClass("cardImageContainer");
+		container.append(cardImg);
+
+		//cardImg.css("object-position", _CSS);
+		//cardImg.css("object-fit", "cover");
+
+		cardEl.append(container);
+	}
+</script>
+</html>
