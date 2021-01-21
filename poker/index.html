@@ -25,9 +25,9 @@
 			font-weight:bolder;
 			width:20%;
 			text-align:center;
-			line-height:87%;
+			line-height:65%;
 			letter-spacing:-3;
-			padding:6px;
+			padding:8px 6px 8px 6px;
 			/*height:2.1em;*/
 		}
 		#cardTable {
@@ -36,6 +36,7 @@
 			font-family:'Tahoma', Verdana, sans-serif;
 			font-size:25pt;
 			margin-left:1%;
+			transform:scale(0.9);
 		}
 		.red {
 			color:red;
@@ -48,14 +49,15 @@
 			font-size:53pt;
 		}
 		.cardImageContainer {
-			width: 134px;
+			width: 148px;
 			height: 236px;
 			overflow: hidden;
 			border:0px solid blue;
 			text-align:center;
 			display:inline-block;
 			margin-top:10px;
-			/*float:right;*/
+			/*transform:scale(0.8);
+			float:right;*/
 		}
 		#cardIndices span {
 			border:1px solid black;
@@ -95,14 +97,14 @@
 		DECK[i] = i;
 	}
 
-	for (var i = 0; i < 5; i++) {
+	for (var i = 0; i < 7; i++) {
 		var randInt = i + Math.floor(Math.random() * (52 - i));
 		var temp = DECK[i];
 		DECK[i] = DECK[randInt];
 		DECK[randInt] = temp;
 	}
 
-	for (var i = 0; i < 5; i++) {
+	for (var i = 0; i < 7; i++) {
 		RenderCard(i, DECK[i]);
 	}
 
@@ -116,14 +118,24 @@
 		  .addClass((suit === 0 || suit === 3) ? "black" : "red");
 
 		var cardImg = $("<img></img>");
-		cardImg.attr("src", "deck.png");
+		cardImg.attr("src", "deck3.png");
 		cardImg.addClass("cardImage");
-		cardImg.css("margin-left", -(195 * cardVal + 38));
+		cardImg.css("margin-left", -(195 * cardVal + (cardVal > 9 ? 31 : 39)));
 		cardImg.css("margin-top", -(285 * suit + 32));
 
 		var container = $("<div></div>");
 		container.addClass("cardImageContainer");
 		container.append(cardImg);
+
+		if (cardVal > 9) {
+			container.css("transform", "scale(0.95)");
+		} else {
+			container.css("width", "132px").css("transform", "scaleX(1.15)");
+		}
+
+		if (cardVal === 0) {
+			//cardImg.css("transform", "scale(2)").css("margin-left", -(195 * cardVal + 81)).css("margin-top", -(285 * suit + 92));
+		}
 
 		//cardImg.css("object-position", _CSS);
 		//cardImg.css("object-fit", "cover");
