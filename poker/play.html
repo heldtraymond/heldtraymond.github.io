@@ -790,7 +790,7 @@
 		for (var i = 0; i < NAMES.length; i++) {
 			PLAYERS.push({
 				name: NAMES[i],
-				money: (7.50 + (Math.random() * 6).toFixed())
+				money: (7.50 + (Math.random() * 6)).toFixed(2)
 			});
 		}
 
@@ -987,6 +987,7 @@
 				var firstPlayerSeat = CURRENT_SEAT;
 				DRAWING_TWO = true;
 				var cardsPerPlayer = 7;
+				var isFourUp = (Math.random() > 0.5);
 
 				for (var i = 0; i < 52; i++) {
 					DECK[i] = (i + 1);
@@ -998,9 +999,14 @@
 					DECK[i] = DECK[randInt];
 					DECK[randInt] = temp;
 
-					if ((i % cardsPerPlayer < 2) || (i % cardsPerPlayer > 5)) {
+					if ((i % cardsPerPlayer < 2) || (i % cardsPerPlayer > (isFourUp ? 5 : 4))) {
 						DECK[i] = -DECK[i];
 					}
+				}
+
+				var dealtCardIndices = [0,1,6,7,8,9,4];
+				if (!isFourUp) {
+					dealtCardIndices = [0,1,6,7,8,3,4];
 				}
 
 				var prevPlayers = 0;
@@ -1014,7 +1020,8 @@
 					var cards = $("#playerCards" + i);
 
 					for (var c = cardsPerPlayer * prevPlayers; c < cardsPerPlayer * prevPlayers + cardsPerPlayer; c++) {
-						var td = cards.find("td").eq(c % cardsPerPlayer);
+						var dealtCardIndex = c % cardsPerPlayer;
+						var td = cards.find("td").eq(dealtCardIndices[dealtCardIndex]);
 						RenderCard(td, DECK[c]);
 					}
 
@@ -1025,10 +1032,6 @@
 				DECK[DRAW_INDEX] = -DECK[DRAW_INDEX];
 
 				var totalDealt = PLAYERS.length * cardsPerPlayer;
-				for (var i = 0; i < 2; i++) {
-					RenderCard($("#centerCell .card").eq(i), DECK[DRAW_INDEX + i]);
-				}
-
 				for (var q = 0; q < cardsPerPlayer; q++) {
 					for (var p = 0; p < SEATS.length; p++) {
 						if (SEATS[p] === null) {
@@ -1040,7 +1043,8 @@
 						totalCards++;
 						//console.log(CURRENT_SEAT);
 						//console.log(CURRENT_SEAT + "x" + q + " - " + totalCards);
-						DealCard($("#playerCards" + CURRENT_SEAT + " .card").eq(q), delayTime);
+
+						DealCard($("#playerCards" + CURRENT_SEAT + " .card").eq(dealtCardIndices[q]), delayTime);
 
 						if (totalCards < (cardsPerPlayer * PLAYERS.length)) {
 							IncrementCurrent(false);
