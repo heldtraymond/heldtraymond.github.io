@@ -14,47 +14,55 @@
 			margin-right:0px;
 			background-color:#bb8833;
 		}
-
+		#pot {
+			font-size:15pt;
+			font-weight:bold;
+			background-color:#008800;
+			color:white;
+			padding:5px;
+			border-radius:5px;
+			border:2px solid white;
+			margin-top:2px;
+			display:inline-block;
+		}
 		.playerCards {
 			width:100%;
 			height:100px;
 			display:inline-block;
-			transform: scale(1.5);
+			transform: scale(1.4);
 		}
-		#player0, #player1 {
+		#player2, #player3 {
 			text-align:center;
 			margin:5px 90px 15px 90px;
 		}
-		#player0 .playerCards, #player1 .playerCards {
-			transform: scale(1.5) translateY(18px);
+		#player2 .playerCards, #player3 .playerCards {
+			transform: scale(1.4) translateY(18px);
 		}
-		#player3, #player4 {
+		#player0, #player5 {
 			text-align:center;
 			margin:140px 90px 5px 90px;
 		}
-		#player3 .playerCards, #player4 .playerCards {
-			transform: scale(1.5) translateY(-17px);
+		#player0 .playerCards, #player5 .playerCards {
+			transform: scale(1.4) translateY(-17px);
 		}
-		#player5 {
+		#player1 {
 			text-align:left;
-			float:left;
 			margin:20px 20px 15px 5px;
 		}
-		#player5 .playerCards {
-			transform: scale(1.5) translateX(60px) translateY(18px);
+		#player1 .playerCards {
+			transform: scale(1.4) translateX(47px) translateY(18px);
 		}
-		#player2 {
+		#player4 {
 			text-align:right;
-			float:right;
 			margin:20px 5px 15px 20px;
 		}
-		#player2 .playerCards {
-			transform: scale(1.5) translateX(-63px) translateY(18px);
+		#player4 .playerCards {
+			transform: scale(1.4) translateX(-47px) translateY(18px);
 		}
 		.playerArea {
 			width:26%;
 			display:inline-block;
-			vertical-align:top;
+			vertical-align:middle;
 		}
 
 		.playerInfo {
@@ -65,26 +73,6 @@
 			color:blue;
 			cursor:pointer;
 		}*/
-		.changeSeatsButton:hover {
-			background-color:#88ff88;
-		}
-		.changeSeatsButton {
-			padding:3px !important;
-			margin-top:0px !important;
-			font-size:12pt !important;
-			background-color:#ffffff;
-			color:#006600;
-			font-family:Tahoma,sans-serif !important;
-		}
-		.widthTest {
-			font-family:'Roboto Slab', Tahoma, sans-serif;
-			font-size:50pt;
-			opacity:0;
-			position:absolute;
-			left:0px;
-			top:0px;
-			z-index:-2;
-		}
 		#playTableContainer {
 			width:100%;
 			display:inline-block;
@@ -107,37 +95,17 @@
 			display:none;
 			font-weight:bold;
 			position:relative;
-			margin-bottom:-1.5em;
-			margin-top:0px;
 			height:1.5em;
 			z-index:104;
+			margin-bottom:-1.5em;
+			margin-top:0px;
+			transform:translateY(-105px);
 		}
 		.dealerLabel span {
 			color:white;
-			border:5px solid #ff0000;
+			border:5px solid #0000bb;
 			border-radius:5px;
-			background-color:#ff0000;
-		}
-		/*#playTable tr, #playTable td {
-			border:none;
-		}*/
-		.infoOnly {
-			width:11%;
-		}
-		/*.playerCards {
-			width:13%;
-			padding-left:10px;
-			padding-right:10px;
-		}*/
-		#centerCell .card {
-			width:1.4em;
-		}
-		#centerCell {
-			font-size:12pt;
-		}
-		.endplayer .card {
-			border-color:red;
-			background-color:#ffdddd;
+			background-color:#0000bb;
 		}
 		.card, .invisibleCard {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
@@ -152,9 +120,29 @@
 			height:1.6em;
 			display:inline-block;
 		}
-		.card {
+		.playerCards .card {
 			width:96%;
 			padding:2px 2px 2px 0px;
+		}
+		#centerCardsContainer {
+			width:42%;
+			display:inline-block;
+			transform:scale(1.35) translateY(52px);
+			vertical-align:middle;
+		}
+		#centerCardsContainer .card {
+			width:46px;
+			vertical-align:middle;
+			border-width:2px;
+			padding:2px;
+		}
+		#centerCardsContainer .card.empty {
+    		border:2px dashed white;
+    		background-color:transparent;
+		}
+		#centerCardsContainer .card.empty:hover {
+    		background-color:#bbbbff;
+    		cursor:pointer;
 		}
 		.invisibleCard {
 			width:1px;
@@ -183,6 +171,26 @@
 			background-color:#000066;
 			color:white;
 		}
+		.controlPanel {
+			display:inline-block;
+			width:11%;
+			vertical-align:middle;
+		}
+		.controlPanel button {
+			width:100%;
+			border-radius:8px;
+			border:2px solid white;
+			background-color:red;
+			font-size:14pt;
+			font-weight:bold;
+			margin-top:2px;
+			padding:6px 2px 6px 2px;
+		}
+		.controlPanel button:hover {
+			cursor:pointer;
+			background-color:#9999ff !important;
+			color:black !important;
+		}
 		#playTable tr td {
 			/*padding-bottom:8px;*/
 		}
@@ -203,49 +211,8 @@
 			background-image:url('cardBackBicycle.gif');
 			background-color:#dddddd;/*#252760;*/
 		}
-		.playerCell {
-			font-style:bold;
-		}
-		/*.playerInfo {
-			text-align:center;
-		}*/
 		.playerInfoWrapper {
 			max-width:80px;
-		}
-		/*.cellComponent.endplayer {
-			background-color:#ff0000;
-		}*/
-		.playerCards.live.current {
-			background-color:blue;
-			border-radius:6px;
-		}
-		/*.playerInfo.live.current img {
-			border-color:#8833bb;
-		}
-		.playerInfo.live.firstPlayer img {
-			border-color:#8833bb;
-		}*/
-		.playerCards.current {
-			background-color:#8833bb;
-			border-radius:6px;
-		}
-		.playerInfo.live.firstPlayer img {
-			border-color:#8833bb;
-		}
-		.playerInfo.firstPlayer img {
-			border:5px solid #8833bb;
-			margin:-2px -2px -2px -2px;
-		}
-		.playerInfo.current img {
-			border:7px solid #8833bb;
-			margin:-5px -5px -5px -5px;
-		}
-		/*.playerInfo.live {
-			background-color:#77ff77;
-		}*/
-		.playerInfo.live img {
-			border:8px solid blue;
-			margin:-5px -5px -5px -5px;
 		}
 		.playerInfo img {
 			background-color:white;
@@ -260,10 +227,6 @@
     		font-size:11pt;
 			position:relative;
 			z-index:100;
-		}
-		.endplayer .playerName span {
-			background-color:#ffdddd;
-			border-color:red;
 		}
 		.playerName span {
 			color:black;
@@ -282,51 +245,16 @@
     		width:100%;
     		/*table-layout:fixed;*/
     	}
-    	.card.discard {
-    		background-color:#ff8888;
-    		background-image:url('discard.png');
-			background-repeat:no-repeat;
-			background-size:contain;
-			background-position:center;
-    	}
-    	.card.discard:hover {
-    		background-color:#ff0000 !important;
-    	}
-    	.card.selectedCard:hover {
-    		background-color:#aaaaff !important;
-    	}
-    	.card.selectedCard {
-    		background-color:#aaaaff !important;
-    	}
-    	@media (hover: none) {
-			.playableCard.faceup:not(.discard):not(.selectedCard) {
-				background-color:white !important;
-			}
-			.card.discard {
-	    		background-color:#ff0000 !important;
-			}
-			#playerChoose img:not(.livePlayer):hover {
-				margin:6px !important;
-				border:3px solid white !important;
-			}
-			#playerChoose img.livePlayer:hover {
-				border:8px solid #000099 !important;
-				margin:1px !important;
-			}
-		}
-    	.card.playableCard:hover {
+    	.playerCards .card:hover {
+    		background-color:#ffbb99 !important;
     		cursor:pointer;
-    		background-color:#66dd66;
-    		/*border-color:green;*/
     	}
-    	/*.playerCards.live .facedown:hover {
-    		cursor:pointer;
-    		background-color:#66dd66;
-    		border-color:#ffff88;
-    		background-image:none;
-    	}*/
-    	.card:hover {
-    		cursor:not-allowed;
+    	.selectedCard .card, .selectedCard .cardHandIndex {
+    		background-color:#ffbb99 !important;
+			background-image:none !important;
+    	}
+    	.selectedCard .cardHandIndex {
+    		color: black;
     	}
     	.playerInfo.right {
     		text-align:right;
@@ -337,345 +265,64 @@
     	.playerInfoWrapper br {
 			display:none;
     	}
-    	#middleRow, #middleRow > td {
-    		padding-top:5px;
-    		padding-bottom:3px;
-    	}
-    	#leftCenterCell {
-    		text-align:right;
-    	}
-    	#centerCell {
-    		text-align:center;
-    	}
-    	#rightCenterCell {
-    		text-align:left;
-    	}
-    	#leftCenterCell input {
-    		margin-right:6px;
-    		height:20px;
-    		width:20px;
-    	}
-    	.toggleLabel, #leftCenterCell input {
-    		vertical-align:middle;
-    		cursor:pointer;
-    	}
-    	#toggleEnlargeCards {
-    		background-color:#bbbbff;
-    		display:inline-block;
-    		width:90%;
-    		padding:4px;
-    		border: 2px solid #000066;
-    		border-radius:7px;
-    		display:center;
-    		font-size:14pt;
-    		font-family:Tahoma,sans-serif;
-    		line-height:85%;
-    	}
-    	#leftCenterCell .centerInfo:hover {
-    		cursor:pointer;
-    		background-color:#bbbbff;
-    		border:2px solid #000088;
-    		border-radius:4px;
-    		padding:0px 1px 2px 0px;
-    	}
-    	#leftCenterCell .centerInfo {
-    		padding:2px 3px 4px 2px;
-    	}
-    	#leftCenterCell span {
-    		width:100%;
-    		display:inline-block;
-    	}
-    	#overlayContainer {
-    		text-align:center;
-    		width:100%;
-    		position:absolute;
-    		left:0;
-    		z-index:120;
-    		display:none;
-    		top:0;
-    	}
-    	#overlayBackground {
-    		width:100%;
-    		position:absolute;
-    		height:100%;
-    		left:0;
-    		background-color:black;
-    		opacity:0.5;
-    		z-index:-1;
-    	}
-    	.scoringSettings {
-			padding:0px;
-			margin:0px;
-    	}
-		.scoringSettings li {
-			display: flex;
-			padding-left:0px;
-			margin-left:0px;
-		}
-
-		.scoringSettings li .cardType {
-			order: 1;
-		}
-
-		.scoringSettings li .cardPoints {
-			order: 3;
-		}
-
-		.scoringSettings li::after {
-			content: "";
-			border-bottom: 3px dotted;
-			flex-grow: 1;
-			order: 2;
-			margin-bottom:0.4em;
-			margin-left:0.1em;
-			margin-right:0.1em;
-		}
-
-		#rulesStandings {
-    		text-align:center;
-    		display:inline-block;
-    		border: 4px solid black;
-    		border-radius:10px;
-    		background-color:white;
-    		padding:1em;
-    		margin-top:1em;
-    		position:relative;
-    		max-width:830px;
-		}
-
-		.startSelectionScreen {
-			font-family:'Roboto Slab', Tahoma, sans-serif;
-    		text-align:center;
-    		display:inline-block;
-    		border-radius:10px;
-    		border: 4px solid #006600;
-    		padding:1em;
-    		margin-top:1em;
-    		position:relative;
-		}
-
-		#playerChoose {
-    		background-color:#77cc77;
-    		max-width:850px;
-		}
-		#playerChoose h1 {
-			font-size:20pt;
-			margin-top:0px;
-			margin-bottom:0px;
-		}
-		#playerChoose h2 {
-			margin-top:0px;
-			font-size:14pt;
-			font-family:'Roboto Slab', Tahoma, sans-serif;
-		}
-
-		#playerChoose img.livePlayer {
-			border:8px solid #000099;
-			margin:1px;
-		}
-
-		#playerChoose img.livePlayer:hover {
-			border:8px solid #000099;
-			margin:1px;
-		}
-
-		#playerChoose img:hover {
-			border:6px solid #6666bb;
-			margin:3px;
-		}
-
-		#playerChoose img {
-			height:130px;
-			margin:6px;
-			border:3px solid white;
-			border-radius:15px;
-			cursor:pointer;
-		}
-
-    	#scoringRules {
-    		text-align:left;
-    		width:13em;
-    		display:inline-block;
-    		padding:1em 2em 1em 2em;
-    		font-family:'Times New Roman';
-    		font-size:22pt;
-    		line-height:150%;
-    	}
-
-		#roundByRoundTable {
-			font-family:'Roboto Slab', Tahoma, sans-serif;
-    		font-size:18pt;
-    		border-collapse:collapse;
-    		display:inline-block;
-		}
-
-		#roundByRoundTable td {
-			border-top:1px solid #006600;
-			border-bottom:1px solid #006600;
-		}
-
-		#roundByRoundTable tr td:nth-child(1) {
-			text-align:right;
-			/*background-color:#88bb88 !important;*/
-		}
-		#roundByRoundTable tr th:nth-child(1) {
-			text-align:right;
-		}
-
-		#roundByRoundTable tr td:nth-child(even) {
-			background-color:#aaeeaa;
-			color:#000000;
-		}
-
-		/*#roundByRoundTable tr td:nth-child(odd) {
-			background-color:#eeaaaa;
-			color:#000000;
-		}*/
-
-		#roundByRoundTable tr td:nth-child(2) {
-			background-color:#006600;
-			color:white !important;
-			/*border-right:3px solid black !important;*/
-		}
-
-		#roundByRoundTable th, #roundByRoundTable td {
-			padding:3px 7px 3px 7px;
-			text-align:center;
-			min-width:1em;
-		}
-
-		#roundByRoundTable th {
-			background-color:#006600;
-			color:white;
-		}
-
-		.buttonContainer {
-			text-align:center;
-		}
-
-		.buttonContainer button {
-			font-family:'Roboto Slab', Tahoma, sans-serif;
-    		font-size:15pt;
-    		padding:15px;
-    		margin-top:10px;
-    		border-radius:7px;
-    		cursor:pointer;
-		}
-
-		.rulesStandingsButton:hover {
-    		background-color:#6666ff;
-		}
-		.rulesStandingsButton.selected {
-    		color:#9999ff;
-    		background-color:#000066;
-		}
-		.rulesStandingsButton {
-    		background-color:#bbbbff;
-    		color:#000066;
-    		margin-bottom:10px;
-		}
-
-		#scoringRulesButton {
-			border-top-right-radius:0px;
-			border-bottom-right-radius:0px;
-			margin-right:-3px;
-		}
-		#howToPlayButton {
-			border-top-left-radius:0px;
-			border-bottom-left-radius:0px;
-			margin-left:-3px;
-			margin-right:-3px;
-		}
-		#standingsButton {
-			border-top-left-radius:0px;
-			border-bottom-left-radius:0px;
-			margin-left:-3px;
-		}
-
-		.startRoundButton:hover {
-    		background-color:#44bb44;
-		}
-		.startRoundButton {
-    		background-color:#006600;
-    		color:white;
-		}
-
-		.overlayCloseButton:hover {
-			cursor:pointer;
-			background-color:#bb44ff;
-		}
-		.overlayCloseButton {
-    		background-color:#8833bb;
-    		color:white;
-    		font-size:15pt;
-		}
-
-		#rulesStandingsTopCloseButton {
-			font-size:20pt;
-			font-family:sans-serif;
-			font-weight:bold;
-			position:absolute;
-			top:-20px;
-			left:100%;
-			margin-left:-30px;
-			min-width:50px;
-			min-height:50px;
-			padding: 4px 13px 7px 13px;
-			border:3px solid #440066;
-			border-radius:25px;
-		}
-
-		.scoreImg {
-			height: 1.2em;
-			margin-right: 4px;
-			margin-bottom:-0.2em;
-		}
-
-		#clipboard:hover {
-			cursor:pointer;
-			-webkit-filter: drop-shadow(0px 0px 30px #aa7744);
-			filter: drop-shadow(0px 0px 30px #aa7744);
-		}
-
-		#clipboard {
-			max-width:85%;
-		}
 		</style>
 	<script src="jquery.js"></script>
 </head>
 <body style="overflow-y:scroll;text-align:center;">
-	<span class="widthTest" id="widthTestValue">A</span>
-	<span class="widthTest" id="widthTestSuit">♣</span>
 	<!--img id="bgPhoto" src="LivingRoomBackground.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1"-->
 	<div id="playTableContainer">
 		<div>
-			<div id="player0" class="playerArea">
-				<div class="playerInfo"></div>
-				<div class="playerCards"></div>
-			</div>
-			<div id="player1" class="playerArea">
-				<div class="playerInfo"></div>
-				<div class="playerCards"></div>
-			</div>
-		</div>
-		<div>
-			<div id="player5" class="playerArea">
-				<div class="playerInfo"></div>
-				<div class="playerCards"></div>
-			</div>
 			<div id="player2" class="playerArea">
 				<div class="playerInfo"></div>
 				<div class="playerCards"></div>
 			</div>
+			<div id="player3" class="playerArea">
+				<div class="playerInfo"></div>
+				<div class="playerCards"></div>
+			</div>
 		</div>
 		<div>
+			<div id="player1" class="playerArea">
+				<div class="playerInfo"></div>
+				<div class="playerCards"></div>
+			</div>
+			<div id="centerCardsContainer">
+				<span class="card" id="centerCard3" onclick="DealCenterCard(3)"></span><br>
+				<span class="card" id="centerCard0" onclick="DealCenterCard(0)"></span>
+				<span class="card" id="centerCard1" onclick="DealCenterCard(1)"></span>
+				<span class="card" id="centerCard2" onclick="DealCenterCard(2)"></span><br>
+				<span class="card" id="centerCard4" onclick="DealCenterCard(4)"></span><br>
+				<span id="pot">$0.00</span>
+			</div>
 			<div id="player4" class="playerArea">
+				<div class="playerInfo"></div>
+				<div class="playerCards"></div>
+			</div>
+		</div>
+		<div>
+			<div class="controlPanel">
+				<br><br><br><br><br>
+				<button style="background-color:white;color:red" onclick="DealNextUpCard()">Deal Face Up</button><br><br>
+				<input type="text" id="faceDownCount" style="width:25%;font-size:15pt;text-align:center;font-weight:bold;">
+				<button style="background-color:#000066;color:white;width:70%;" onclick="DealFaceDown()">Face Down</button><br><br><br>
+				<button style="background-color:#008800;color:white">Collect $$$</button><br><br><br>
+				<button style="background-color:red" onclick="NewHand()">New Hand</button>
+			</div>
+			<div id="player0" class="playerArea">
 				<div class="playerCards"></div>
 				<div class="playerInfo"></div>
 			</div>
-			<div id="player3" class="playerArea">
+			<div id="player5" class="playerArea">
 				<div class="playerCards"></div>
 				<div class="playerInfo"></div>
+			</div>
+			<div class="controlPanel">
+				<button style="background-color:#cc88ff" onclick="ToggleCenterCards()">Cards in Middle</button><br>
+				<button style="background-color:#ffcc88" onclick="ToggleFullScreen()">Full Screen</button><br>
+				<button style="background-color:#88ffcc" onclick="FlipSelectedCards()">Flip Over Card(s)</button><br>
+				<button style="background-color:#cccccc" onclick="SelectAllFacedown()">Select All Facedown</button><br>
+				<button style="background-color:#888888" onclick="SelectAll()">Select All</button><br>
+				<button style="background-color:#000000;color:white;" onclick="Deselect()">De-Select All</button><br>
 			</div>
 		</div>
 	</div>
@@ -684,11 +331,11 @@
 	var DECK = [];
 	var NAMES = [
 		"Ray",
-		"Diane",
+		"Jeff",
 		"Nicholas",
 		"Angela",
-		"Jeff",
 		"David",
+		"Michael"
 	];
 
 	var PLAYERS = [];
@@ -698,6 +345,7 @@
 	var CURRENT_SEAT = null;
 	var START_SEAT = null;
 	var END_SEAT = null;
+	var DEALER_SEAT = 0;
 
 	var IS_FULLSCREEN = false;
 
@@ -705,7 +353,7 @@
 	var VALS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
 
 	var SHOW_SCORES = true; // (Math.random() > 0.5);	
-	var SHOW_NAMES = true; //(Math.random() > 0.5);
+	var SHOW_NAMES = false; //(Math.random() > 0.5);
 	var PREV_SHOW_SCORES = SHOW_SCORES;
 
 	var GAMES = [
@@ -717,16 +365,19 @@
 		[0,1,1,1,0],
 		[0,1,1,1,1],
 		[1,1,1,1,1]
-	]
+	];
+
+	DECK = [];
+	DECK_INDEX = 0;
 
 	var totalMoney = 0;
 	CURRENT_SEAT = 0;
 	var GAME_CHOICE = Math.floor(Math.random() * GAMES.length);
 
-	for (var i = 0; i < TOTAL_SEATS; i++) {
+	for (var i = 0; i < PLAYERS.length; i++) {
 		var money = (7 + (0.05 * Math.floor(Math.random() * 120)));
-		if (i >= (TOTAL_SEATS - 1)) {
-			money = (10 * TOTAL_SEATS) - totalMoney;
+		if (i >= (PLAYERS.length - 1)) {
+			money = (10 * PLAYERS.length) - totalMoney;
 		}
 		totalMoney += money;
 		var playerDiv = $("#player" + i);
@@ -752,1102 +403,117 @@
 		$("#playerPhotos").append(img);
 	}
 
-	DealCards();
+	Setup();
+	NewHand();
 
-	function DealCards() {
-		for (var i = 0; i < TOTAL_SEATS; i++) {
-			for (var c = 0; c < GAMES[GAME_CHOICE].length; c++) {
-				setTimeout(AddCard, 250 * (c * TOTAL_SEATS + i + 1), c);
+	function NewHand() {
+		DEALER_SEAT = ((DEALER_SEAT + 1) % PLAYERS.length);
+		$(".playerInfoWrapper img").css("border", "").css("margin", "");
+		$(".dealerLabel").hide();
+		$("#player" + DEALER_SEAT + " img").css("border", "10px solid #0000bb").css("margin", "-7px -7px -7px -7px");
+		$("#player" + DEALER_SEAT + " .dealerLabel").show();
+
+		CURRENT_SEAT = DEALER_SEAT;
+		AdvanceCurrentPlayer();
+
+		for (var i = 0; i < PLAYERS.length; i++) {
+			PLAYERS[i].folded = false;
+			PLAYERS[i].cards = [];
+		}
+
+		$("#centerCardsContainer span.card").addClass("empty").removeClass("facedown").html("");
+		$(".facedown").removeClass("facedown");
+		$(".playerCards .card").remove();
+		$(".playerCards .cardContainer").remove();
+		DECK = [];
+		DECK_INDEX = 0;
+		for (var i = 1; i <= 52; i++) {
+			DECK.push(-i);
+		}
+		for (var i = 0; i < 52; i++) {
+			var randNum = i + Math.floor(Math.random() * (52 - i));
+			var temp = DECK[i];
+			DECK[i] = DECK[randNum];
+			DECK[randNum] = temp;
+		}
+	}
+
+	function DealFaceDown() {
+		var numberOfCards = parseInt($("#faceDownCount").val());
+		$("#faceDownCount").val(null);
+		if (isNaN(numberOfCards)) {
+			return;
+		}
+
+		var cardsDealt = 0;
+		for (var r = 0; r < numberOfCards; r++) {
+			for (var i = 1; i <= PLAYERS.length; i++) {
+				var seat = (DEALER_SEAT + i) % PLAYERS.length;
+				if (PLAYERS[seat].folded || DECK_INDEX >= 52) {
+					continue;
+				}
+
+				var cardVal = DECK[DECK_INDEX++];
+				PLAYERS[seat].cards.push(cardVal);
+				setTimeout(RenderDealCard, 170 * cardsDealt++, seat, cardVal);
 			}
 		}
 	}
 
-	function AddCard(pCardNum) {
-		var card = $("<span class='card'></span>");
-		var value = 1 + Math.floor(Math.random() * 52);
-		if (!((GAMES[GAME_CHOICE])[pCardNum])) {
-			value = -value;
-		}
-		var index = $("<span class='cardHandIndex'>" + (pCardNum + 1) + "</span>");
-		var cardContainer = $("<span class='cardContainer'></span>")
-		var cards = $("#player" + CURRENT_SEAT).find(".playerCards");
+	function FlipSelectedCards() {
+		$(".selectedCard").each(function() {
+			//$(this).removeClass("selectedCard");
+			var cardEl = $(this).find(".card");
+			var currVal = parseInt(cardEl.attr("cardVal"));
+			cardEl.attr("cardVal", -currVal);
+			RenderCard(cardEl, -currVal);
+		});
+	}
 
-		if (CURRENT_SEAT === 3 || CURRENT_SEAT === 4) {
+	function SelectAll() {
+		$(".cardContainer").addClass("selectedCard");
+	}
+
+	function SelectAllFacedown() {
+		$(".facedown").parent().addClass("selectedCard");
+	}
+
+	function Deselect() {
+		$(".selectedCard").removeClass("selectedCard");
+	}
+
+	function DealNextUpCard() {
+		var cardVal = Math.abs(DECK[DECK_INDEX++]);
+		PLAYERS[CURRENT_SEAT].cards.push(cardVal);
+		RenderDealCard(CURRENT_SEAT, cardVal);
+		AdvanceCurrentPlayer();
+	}
+
+	function DealCenterCard(pIndex) {
+		var cardVal = Math.abs(DECK[DECK_INDEX++]);
+		RenderCard($("#centerCard" + pIndex), cardVal);
+		$("#centerCard" + pIndex).removeClass("empty");
+	}
+
+	function RenderDealCard(pSeatNum, pCardVal) {
+		var playerCards = $("#player" + pSeatNum).find(".playerCards");
+		var cardIndex = playerCards.find(".card").length;
+
+		var cardContainer = $("<span class='cardContainer'></span>")
+		var index = $("<span class='cardHandIndex'>" + (cardIndex + 1) + "</span>");
+		var card = $("<span class='card'></span>");
+		card.attr("onclick", "SelectCard(this," + pSeatNum + "," + cardIndex + ")");
+		card.attr("cardVal", pCardVal);
+
+		if (pSeatNum === 0 || pSeatNum === 5) {
 			cardContainer.append(index).append("<br>").append(card);
 		} else {
+			//cardContainer.append(index).append("<br>").append(card);
 			cardContainer.append(card).append("<br>").append(index);
 		}
-		cards.append(cardContainer);
-		RenderCard(card, value);
-		CURRENT_SEAT = ((CURRENT_SEAT + 1) % TOTAL_SEATS);
-	}
 
-//	$("body").animate({scrollTop:0},700);
-//	Setup();
-
-	function Setup() {
-		if (PLAYERS.length > 0) {
-			return;
-		}
-
-		for (var i = 0; i < NAMES.length; i++) {
-			PLAYERS.push({
-				name: NAMES[i],
-				money: (7.50 + (Math.random() * 6)).toFixed(2)
-			});
-		}
-
-		for (var i = 0; i < TOTAL_SEATS; i++) {
-			SEATS.push(null);
-		}
-
-		for (var i = 0; i < PLAYERS.length; i++) {
-			var seat = -1;
-			while (seat < 0 || SEATS[seat] !== null) {
-				seat = Math.floor(Math.random() * TOTAL_SEATS);
-			}
-
-			SEATS[seat] = PLAYERS[i];
-		}
-
-		$(".playerInfo").each(function() {
-			var span = $("<span></span>");
-			span.addClass("playerInfoWrapper");
-			var name = $("<p><span></span></p>");
-			name.addClass("playerName");
-			var img = $("<img>");
-			img.attr("src", "User.png");
-			var dealer = $("<p><span>DEALER</span></p>");
-			dealer.addClass("dealerLabel");
-			span.append(img);
-			span.append(dealer);
-			span.append(name);
-			$(this).append(span);
-		});
-
-		$(".playerCards").each(function() {
-			var id = parseInt($(this).attr("id").substring(11));
-			var table = $("<table></table>");
-			for (var r = 0; r < 2; r++) {
-				var tr = $("<tr></tr>");
-				for (var c = 0; c < 5; c++) {
-					var td = $("<td></td>");
-					td.addClass("card");
-					td.attr("seatNum", id);
-					td.attr("cardNum", (r * 3 + c));
-					//if (id === livePlayer) {
-						td.attr("onclick", "ClickedCard(this," + id + "," + (r * 3 + c) + ")");
-					//}
-					tr.append(td);
-				}
-				table.append(tr);
-			}
-			$(this).append(table);
-		});
-
-		var status = $("<span id='statusText'></span>");
-		var span = $("<span style='display:inline-block;text-align:center;'><span id='roundNum'></span></span>");
-		var turnSpan = $("<span id='whoseTurn'></span>");
-		var innerSpan = $("<span></span>");
-		var table = $("<table align='center'></table>");
-		var tr = $("<tr></tr>");
-		table.append(tr);
-		for (var c = 0; c < 3; c++) {
-			var td = $("<td></td>");
-			if (c !== 1) {
-				td.addClass("card");
-			}
-			if (c === 0) {
-				td.attr("onclick", "ClickedDiscard()");
-			}
-			if (c === 2) {
-				td.attr("onclick", "ClickedDrawCard()");
-			}
-			tr.append(td);
-		}
-		innerSpan.append(table);
-		span.append(innerSpan);
-		span.append(turnSpan);
-		$("#centerCell").append(span);
-		$("#centerCell").append(status);
-
-		$("#statusText").hide();
-
-		DrawPlayerInfos();
-
-		$("#centerCell>span").hide();
-
-		setTimeout(function() {
-			$(".playerInfo").animate({opacity:1}, 400);
-			$("#centerCell button").fadeIn(300);
-
-			$("#fullScreen").fadeIn(300);
-			ShuffleUpAndDeal();
-		}, 1000);
-	}
-
-	function ChangeSeats() {
-		SEATS = [];
-
-		for (var i = 0; i < TOTAL_SEATS; i++) {
-			SEATS.push(null);
-		}
-
-		for (var i = 0; i < PLAYERS.length; i++) {
-			var seat = -1;
-			while (seat < 0 || SEATS[seat] !== null) {
-				seat = Math.floor(Math.random() * TOTAL_SEATS);
-			}
-
-			SEATS[seat] = PLAYERS[i];
-		}
-
-		$.when($(".playerInfo").fadeOut(300)).then(function() {
-			$(".live").removeClass("live");
-			DrawPlayerInfos();
-			$(".playerInfo").fadeIn(300);
-		});
-	}
-
-	function DrawPlayerInfos() {
-		for (var i = 0; i < TOTAL_SEATS; i++) {
-			if (SEATS[i] === null) {
-				$("#playerInfo" + i + " img").hide();
-				$("#playerInfo" + i + " .playerName").hide();
-				$("#playerCards" + i + " table").hide();
-			}
-			else {
-				$("#playerInfo" + i + " img").show();
-				$("#playerInfo" + i + " .playerName").show();
-				$("#playerCards" + i + " table").show();
-
-				if (SEATS[i].isLive) {
-					$("#playerInfo" + i).addClass("live");
-					$("#playerCards" + i).addClass("live");
-				}
-				$("#playerInfo" + i + " img").attr("src", "players/" + SEATS[i].name + ".jpg");
-			}
-		}
-	}
-
-	function AnyLivePlayers() {
-		for (var i = 0; i < TOTAL_SEATS; i++) {
-			if (SEATS[i] === null) continue;
-			if (SEATS[i].isLive) return true;
-		}
-		return false;
-	}
-
-	function ShuffleUpAndDeal() {
-		END_SEAT = null;
-		if (START_SEAT === null) {
-			CURRENT_SEAT = Math.floor(Math.random() * TOTAL_SEATS);
-			IncrementCurrent(false);
-			DEALER = CURRENT_SEAT;
-		}
-		else {
-			// Round 2 or later - dealer was last hand's first player
-			DEALER = START_SEAT;
-		}
-
-		CURRENT_SEAT = DEALER;
-		IncrementCurrent(false);
-		START_SEAT = CURRENT_SEAT;
-
-		$(".playerName").hide();
-		$("#leftCenterCell .centerInfo").not("#fullScreen").hide();
-
-		$.when($(".card").animate({opacity: 0}, 400)).then(function() {
-			$(".card").removeClass("showOutline");
-		});
-
-		setTimeout(function() {
-			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
-			$("#playerInfo" + DEALER + " .dealerLabel").show();
-		setTimeout(function() {
-			$(".playerInfoWrapper img").css("border", "").css("margin", "");
-		setTimeout(function() {
-			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
-		setTimeout(function() {
-			$(".playerInfoWrapper img").css("border", "").css("margin", "");
-		setTimeout(function() {
-			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
-		setTimeout(function() {
-			$(".playerInfoWrapper img").css("border", "").css("margin", "");
-		setTimeout(function() {
-			$("#playerInfo" + DEALER + " img").css("border", "10px solid #ff0000").css("margin", "-7px -7px -7px -7px");
-		setTimeout(function() {
-			$(".playerInfoWrapper img, .dealerLabel").animate({
-		    	left:'0px',
-		    	top:'0px',
-			}, 1500);
-			setTimeout(function() {
-				$("#statusText").html("Dealing").hide();
-				//ShowHideNames();
-
-				var delayTime = 0;
-				var totalCards = 0;
-				var firstPlayerSeat = CURRENT_SEAT;
-				DRAWING_TWO = true;
-				var cardsPerPlayer = 7;
-				var isFourUp = (Math.random() > 0.5);
-
-				for (var i = 0; i < 52; i++) {
-					DECK[i] = (i + 1);
-				}
-
-				for (var i = 0; i < 52; i++) {
-					var randInt = i + Math.floor(Math.random() * (52-i));
-					var temp = DECK[i];
-					DECK[i] = DECK[randInt];
-					DECK[randInt] = temp;
-
-					if ((i % cardsPerPlayer < 2) || (i % cardsPerPlayer > (isFourUp ? 5 : 4))) {
-						DECK[i] = -DECK[i];
-					}
-				}
-
-				var dealtCardIndices = [0,1,6,7,8,9,4];
-				if (!isFourUp) {
-					dealtCardIndices = [0,1,6,7,8,3,4];
-				}
-
-				var prevPlayers = 0;
-				for (var i = 0; i < SEATS.length; i++) {
-					if (SEATS[i] === null) {
-						continue;
-					}
-
-					var info = $("#playerInfo" + i);
-					info.removeClass("current");
-					var cards = $("#playerCards" + i);
-
-					for (var c = cardsPerPlayer * prevPlayers; c < cardsPerPlayer * prevPlayers + cardsPerPlayer; c++) {
-						var dealtCardIndex = c % cardsPerPlayer;
-						var td = cards.find("td").eq(dealtCardIndices[dealtCardIndex]);
-						RenderCard(td, DECK[c]);
-					}
-
-					prevPlayers++;
-				}
-
-				DRAW_INDEX = (cardsPerPlayer * PLAYERS.length) + 1;
-				DECK[DRAW_INDEX] = -DECK[DRAW_INDEX];
-
-				var totalDealt = PLAYERS.length * cardsPerPlayer;
-				for (var q = 0; q < cardsPerPlayer; q++) {
-					for (var p = 0; p < SEATS.length; p++) {
-						if (SEATS[p] === null) {
-							continue;
-						}
-
-						var delay = (totalCards <= 3 ? 400 : (totalCards < PLAYERS.length ? 400 : 400));
-						delayTime += delay;
-						totalCards++;
-						//console.log(CURRENT_SEAT);
-						//console.log(CURRENT_SEAT + "x" + q + " - " + totalCards);
-
-						DealCard($("#playerCards" + CURRENT_SEAT + " .card").eq(dealtCardIndices[q]), delayTime);
-
-						if (totalCards < (cardsPerPlayer * PLAYERS.length)) {
-							IncrementCurrent(false);
-						}
-					}
-				}
-
-				setTimeout(function() {
-					$("#leftCenterCell .centerInfo").show();
-					$(".playerName").css("opacity", "1");
-					$(".playerInfoWrapper img").css("border", "").css("margin", "");
-					$("#playerInfo" + DEALER + " .dealerLabel").hide();
-					$("#playerInfo" + firstPlayerSeat).addClass("firstPlayer");
-					$("#playerCards" + firstPlayerSeat).addClass("firstPlayer");
-					$("#centerCell .card").addClass("showOutline");
-					ShowHideNames();
-					EveryoneDrawTwo();
-					COUNTDOWN_TIME = (new Date()).getTime() + (61 * 1000);
-					CLOCK_INTERVAL = setInterval(Countdown, 100);
-				}, delayTime + 1000);
-	  		}, 1500);
-		}, 700);
-		}, 100);
-		}, 100);
-		}, 100);
-		}, 100);
-		}, 100);
-		}, 100);
-		}, 450);
-	}
-
-	function AdvanceToNextPlayer() {
-		if (ENLARGE_CARDS && SEATS[CURRENT_SEAT].isLive) {
-			ZoomOutPlayableCards(CURRENT_SEAT);
-		}
-
-		DRAWING_TWO = false;
-
-		var cards = GetPlayerCards(CURRENT_SEAT);
-		var anyFacedown = false;
-		for (var i = 0; i < 6; i++) {
-			if (cards[i] < 0) {
-				anyFacedown = true;
-				break;
-			}
-		}
-
-		if (anyFacedown === false) {
-			if (END_SEAT === null) {
-				END_SEAT = CURRENT_SEAT;
-				ShowAllCards();
-			}
-			$("#playerInfo" + CURRENT_SEAT).addClass("endplayer");
-			$("#playerCards" + CURRENT_SEAT).addClass("endplayer");
-			UpdateScore(CURRENT_SEAT);
-		}
-
-		// END OF PREVIOUS TURN - BEGIN NEXT TURN
-		$("#roundNum").click();
-		$(".playableCard").removeClass("playableCard");
-		$(".selectedCard").removeClass("selectedCard");
-		$(".discard").removeClass("discard");
-		$(".card").css("opacity", 1);
-
-		SELECTED_CARD = null;
-		CheckAllCards();
-
-		IncrementCurrent(true);
-
-		if (END_SEAT !== null && END_SEAT === CURRENT_SEAT) {
-			$(".current").removeClass("current");
-			CURRENT_SEAT === null;
-			ShowHideNames();
-			if (ROUND_NUM <= 9) {
-				$("#centerCell>span").hide();
-				PREV_SHOW_SCORES = SHOW_SCORES;
-				SHOW_SCORES = true;
-				ShowHideNames();
-				setTimeout(function() {
-					DrawRoundByRound(true);
-				}, 2000);
-				/*$("#statusText").html("End of Round " + ROUND_NUM).show();
-				COUNTDOWN_TIME = (new Date()).getTime() + (121 * 1000); 
-				CLOCK_INTERVAL = setInterval(Countdown, 100);*/
-				//setTimeout(ShuffleUpAndDeal, 10000);
-			}
-			if (ROUND_NUM <= 8) {
-				setTimeout(ShowNextRoundButton, 2500);
-			}
-			// End of hand
-			setTimeout(function() {
-				$(".endplayer").removeClass("endplayer");
-				$(".playerInfo .playerName span").css("background-color", "").css("border-color", "");
-				$(".playerCards .card").css("opacity", 0.5);
-			}, 1000);
-		}
-		else {
-			var turnName = SEATS[CURRENT_SEAT].name;
-			/*if (ROUND_NUM === 3) {
-				turnName = ANGELA[NAMES.indexOf(turnName)];
-			}
-			else*/ if (ROUND_NUM > 3 && Math.random() < (0.03 * ROUND_NUM)) {
-				turnName = NICKNAMES[NAMES.indexOf(turnName)];
-			}
-			$("#whoseTurn").html(turnName + "'s turn");
-			if (SEATS[CURRENT_SEAT].isLive) {
-				// Set playable cards for live player
-				var cards = GetPlayerCards(CURRENT_SEAT);
-				for (var i = 0; i < 6; i++) {
-					if (cards[i] < 0) {
-						$("#playerCards" + CURRENT_SEAT + " .card").eq(i).addClass("playableCard");
-					}
-				}
-
-				$("#centerCell .card").addClass("playableCard");
-
-				if (ENLARGE_CARDS) {
-					ZoomInPlayableCards();
-				}
-			}
-			else {
-				setTimeout(OpponentMove, GetOpponentWaitDelay());
-			}
-		}
-	}
-
-	function Countdown() {
-		var current = new Date();
-		if (current >= COUNTDOWN_TIME) {
-			clearInterval(CLOCK_INTERVAL);
-			$("#statusText").html("").hide();
-			if (DRAWING_TWO) {
-				CheckForFlipTwoDone(true);
-			}
-			else {
-				ShuffleUpAndDeal();
-			}
-		}
-		else {
-			timeDiff = (COUNTDOWN_TIME - current);
-			var totalSeconds = Math.floor(timeDiff / 1000);
-			var minutes = Math.floor(totalSeconds / 60);
-			var seconds = totalSeconds % 60;
-			var timeString = ("" + minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
-
-			var displayString = timeString;			
-			displayString += " remaining to<br>flip over 2 cards";
-			$("#statusText").html(displayString).show();
-		}
-	}
-
-	function UpdateScore(pSeatNum) {
-		SEATS[pSeatNum].scores[ROUND_NUM - 1] = GetSeatScore(pSeatNum);
-		var labelEl = $("#playerInfo" + pSeatNum).find(".playerName span");
-		$.when(labelEl.fadeOut(200)).then(function() {
-			setTimeout(function() {
-				labelEl.html(GetPlayerLabelText(pSeatNum)).css("background-color", "#ffaaaa").css("border-color", "red");
-				labelEl.fadeIn(200);
-			}, 1);
-		});
-	}
-
-	function ShowAllCards() {
-		for (var i = 0; i < 6 * PLAYERS.length; i++) {
-			DECK[i] = Math.abs(DECK[i]);
-		}
-
-		var pCardNum = -1;
-		for (var i = 0; i < SEATS.length; i++) {
-			if (SEATS[i] === null) {
-				continue;
-			}
-
-			for (var c = 0; c < 6; c++) {
-				pCardNum++;
-				RenderCard($("#playerCards" + i + " .card").eq(c), DECK[pCardNum]);
-			}
-		}
-	}
-
-	function OpponentMove() {
-		var cards = GetPlayerCards(CURRENT_SEAT);
-		var values = [0,0,0,0,0,0];
-		var pairedIndices = [];
-		var pairableIndices = [];
-		var facedownIndices = [];
-		var maxNonPairedPoints = -3;
-		var maxNonPairedIndex = null;
-		var chosenFacedownIndex = null;
-		var faceUpVal = GetCardValue(DECK[DRAW_INDEX]);
-		var faceUpPoints = GetCardPoints(faceUpVal);
-		var minAdditionalTurnsLeft = 6;
-		var showingPoints = 0;
-
-		for (var i = 0; i < TOTAL_SEATS; i++) {
-			if (SEATS[i] === null || i === CURRENT_SEAT) continue;
-
-			var numFacedown = 0;
-			var oppCards = GetPlayerCards(i);
-			for (var c = 0; c < 6; c++) {
-				if (oppCards[c] < 0) {
-					numFacedown++;
-				}
-			}
-
-			if (numFacedown < minAdditionalTurnsLeft) {
-				minAdditionalTurnsLeft = numFacedown;
-			}
-		}
-
-		for (var i = 0; i < 6; i++) {
-			var cardVal = GetCardValue(cards[i]);
-			var cardPoints = GetCardPoints(cardVal);
-			var oppoCardVal = GetCardValue(cards[(i + 3) % 6]);
-
-			values[i] = cardVal;
-
-			if (cardVal < 0) {
-				facedownIndices.push(i);
-			}
-			else if (cardVal === oppoCardVal) {
-				pairedIndices.push(i);
-			}
-			else {
-				showingPoints += cardPoints;
-
-				if (cardPoints > maxNonPairedPoints) {
-					maxNonPairedPoints = cardPoints;
-					maxNonPairedIndex = i;
-				}
-			}
-
-			if (faceUpVal === oppoCardVal && cardVal !== oppoCardVal && oppoCardVal > 0) {
-				pairableIndices.push(i);
-			}
-		}
-
-		/*console.log("CARDS: " + JSON.stringify(values));
-		console.log("AVAILABLE: " + faceUpVal);
-		console.log("PAIRED: " + JSON.stringify(pairedIndices));
-		console.log("PAIRABLE: " + JSON.stringify(pairableIndices));
-		console.log("FACEDOWN: " + JSON.stringify(facedownIndices));
-		console.log("MAX: " + maxNonPairedPoints + " at index " + maxNonPairedIndex);
-		console.log("Showing " + showingPoints + ", min turns left = " + minAdditionalTurnsLeft);*/
-
-		var facedownCount = facedownIndices.length;
-
-		if (facedownCount > 0) {
-			bestFacedownIndices = [];
-			for (var i = 0; i < facedownIndices.length; i++) {
-				// Ideally, choose one in a new column where neither is flipped
-				var index = facedownIndices[i];
-				var correspondingIndex = (index + 3) % 6;
-				if (facedownIndices.indexOf(correspondingIndex) >= 0) {
-					bestFacedownIndices.push(index);
-				}
-			}
-
-			if (bestFacedownIndices.length > 0) {
-				chosenFacedownIndex = bestFacedownIndices[Math.floor(Math.random() * bestFacedownIndices.length)];
-			} else {
-				chosenFacedownIndex = facedownIndices[Math.floor(Math.random() * facedownIndices.length)];
-			}
-		}
-		else {
-			if (pairedIndices.length >= 6) {
-				// 3 pairs showing - draw/discard
-				//console.log("3 pairs already");
-				OpponentDrawCard();
-				return;
-			}
-		}
-
-		if (pairableIndices.length > 0) {
-			//console.log("Easy pair");
-			// Make non-joker pair
-			OpponentTakeDiscard(pairableIndices[Math.floor(Math.random() * pairableIndices.length)]);
-			return;
-		}
-
-		if (facedownCount <= 0 && faceUpPoints > maxNonPairedPoints) {
-			//console.log("Last round and can't use take card, so draw");
-			// Last round and up card can't pair and is worse than all showing - draw
-			OpponentDrawCard();
-			return;
-		}
-
-		var _TakeUpCard = false;
-		if (faceUpPoints <= 2 && (faceUpPoints < maxNonPairedPoints || facedownCount > 0)) {
-			// Take a 2 or lower if there's either a facedown card or worse faceup card to swap it with
-			//console.log("Take a 2 or lower");
-			_TakeUpCard = true;
-		}
-		else if (faceUpPoints <= 4 && Math.random() > (0.25 * (faceUpPoints - 1)) && (faceUpPoints < maxNonPairedPoints || (facedownCount > 0 && showingPoints + faceUpPoints < 10))) {
-			// Take a 3/4 if there's a worse faceup card or can swap a facedown card to show <10 total points
-			//console.log("Take a 3 or 4");
-			_TakeUpCard = true;
-		}
-		else if (facedownCount === 1 && faceUpPoints + showingPoints <= 8 && faceUpPoints < 8) {
-			// Take card to end round with <8 points
-			_TakeUpCard = true;
-		}
-
-		if (_TakeUpCard) {
-			if (facedownCount === 1 && faceUpPoints + showingPoints <= 8) {
-				//console.log("Take to end the round with a low score");
-				OpponentTakeDiscard(chosenFacedownIndex);
-				return;
-			}
-
-			var swappable = [];
-			if (maxNonPairedIndex !== null && maxNonPairedPoints > faceUpPoints && (maxNonPairedPoints > 3 || facedownCount >= 1)) {
-				swappable.push(maxNonPairedIndex);
-			}
-			if (chosenFacedownIndex !== null && (facedownCount > 1 || maxNonPairedPoints <= 5)) {
-				swappable.push(chosenFacedownIndex);
-			}
-
-			if (swappable.length > 0) {
-				OpponentTakeDiscard(swappable[Math.floor(Math.random() * swappable.length)]);
-				return;
-			}
-		}
-
-		if (facedownCount === 1) {
-			// Only one face down card left - draw
-			//console.log("Only one facedown left, so draw");
-			OpponentDrawCard();
-			return;
-		}
-		else if (maxNonPairedPoints >= 20 && minAdditionalTurnsLeft <= 1) {
-			// Get rid of Jack if last round or any opponent has only one facedown card left
-			if (faceUpPoints <= 5) {
-				//console.log("Take 5 or less to get rid of jack late");
-				OpponentTakeDiscard(maxNonPairedIndex);
-				return;
-			}
-			//console.log("Draw to get rid of jack late");
-			OpponentDrawCard();
-			return;
-		}
-
-		if (facedownCount > 2 && maxNonPairedPoints >= 7) {
-			//console.log("Got a 7+ card showing - draw");
-			OpponentDrawCard();
-			return;
-		}
-		else if (Math.random() < 0.5 || facedownCount <= 0) {
-			// Could either draw or flip - choose randomly
-			//console.log("Random draw");
-			OpponentDrawCard();
-			return;
-		}
-		else {
-			//console.log("Random flip");
-			// Flip over a random card
-			FlipOverCard(CURRENT_SEAT, chosenFacedownIndex);
-			return;
-		}
-	}
-
-	function GetOpponentWaitDelay() {
-		return (AnyLivePlayers() ? (END_SEAT === null ? 800 : 1100) : 100);
-	}
-
-	function OpponentDrawCard() {
-		FlipDrawCard(false);
-	}
-
-	function OpponentUseDrawCard() {
-		var cards = GetPlayerCards(CURRENT_SEAT);
-		var values = [0,0,0,0,0,0];
-		var pairedIndices = [];
-		var pairableIndices = [];
-		var facedownIndices = [];
-		var maxNonPairedPoints = -3;
-		var maxNonPairedIndex = null;
-		var chosenFacedownIndex = null;
-		var drawCardVal = GetCardValue(DECK[DRAW_INDEX + 1]);
-		var drawCardPoints = GetCardPoints(drawCardVal);
-		var minAdditionalTurnsLeft = 6;
-		var showingPoints = 0;
-
-		for (var i = 0; i < TOTAL_SEATS; i++) {
-			if (SEATS[i] === null || i === CURRENT_SEAT) continue;
-
-			var numFacedown = 0;
-			var oppCards = GetPlayerCards(i);
-			for (var c = 0; c < 6; c++) {
-				if (oppCards[c] < 0) {
-					numFacedown++;
-				}
-			}
-
-			if (numFacedown < minAdditionalTurnsLeft) {
-				minAdditionalTurnsLeft = numFacedown;
-			}
-		}
-
-		for (var i = 0; i < 6; i++) {
-			var cardVal = GetCardValue(cards[i]);
-			var cardPoints = GetCardPoints(cardVal);
-			var oppoCardVal = GetCardValue(cards[(i + 3) % 6]);
-
-			values[i] = cardVal;
-
-			if (cardVal < 0) {
-				facedownIndices.push(i);
-			}
-			else if (cardVal === oppoCardVal) {
-				pairedIndices.push(i);
-			}
-			else {
-				showingPoints += cardPoints;
-
-				if (cardPoints > maxNonPairedPoints) {
-					maxNonPairedPoints = cardPoints;
-					maxNonPairedIndex = i;
-				}
-			}
-
-			if (drawCardVal === oppoCardVal && cardVal !== oppoCardVal && oppoCardVal > 0) {
-				pairableIndices.push(i);
-			}
-		}
-
-		//console.log("Draw pairable: " + JSON.stringify(pairableIndices));
-
-		var facedownCount = facedownIndices.length;
-		if (facedownCount > 0) {
-			bestFacedownIndices = [];
-			for (var i = 0; i < facedownIndices.length; i++) {
-				// Ideally, choose one in a new column where neither is flipped
-				var index = facedownIndices[i];
-				var correspondingIndex = (index + 3) % 6;
-				if (facedownIndices.indexOf(correspondingIndex) >= 0) {
-					bestFacedownIndices.push(index);
-				}
-			}
-
-			if (bestFacedownIndices.length > 0) {
-				chosenFacedownIndex = bestFacedownIndices[Math.floor(Math.random() * bestFacedownIndices.length)];
-			} else {
-				chosenFacedownIndex = facedownIndices[Math.floor(Math.random() * facedownIndices.length)];
-			}
-		}
-		else {
-			if (pairedIndices.length >= 6) {
-				// 3 pairs showing - discard
-				//console.log("All pairs");
-				PlayDrawCard(6);
-				return;
-			}
-		}
-
-		if (pairableIndices.length > 0) {
-			// Make non-joker pair
-			//console.log("Easy drawn pair");
-			PlayDrawCard(pairableIndices[Math.floor(Math.random() * pairableIndices.length)]);
-			return;
-		}
-
-		if (facedownCount <= 0) {
-			// Last round, can't pair - either discard or swap for highest upcard
-
-			if (drawCardPoints > maxNonPairedPoints) {
-				// This card would be worse than all the upcards - discard
-				PlayDrawCard(6);
-				return;
-			}
-			else {
-				// Swap out for the highest remaining
-				PlayDrawCard(maxNonPairedIndex);
-				return;
-			}
-		}
-
-		if (drawCardPoints >= 20) {
-			// Discard non-pairable jack
-			PlayDrawCard(6);
-			return;
-		}
-		else if (facedownCount >= 4 && drawCardPoints <= 9 && minAdditionalTurnsLeft >= 3) {
-			// Swap a 9 or lower for a facedown card if it's the first turn
-			PlayDrawCard(chosenFacedownIndex);
-			return;
-		}
-		else if (facedownCount >= 3 && drawCardPoints <= 7 && minAdditionalTurnsLeft > 1) {
-			// Swap a 7 or lower for a facedown card if there's at least one extra facedown turn left and still have 3 face down
-			PlayDrawCard(chosenFacedownIndex);
-			return;
-		}
-		else if (facedownCount >= 2 && (drawCardPoints <= 5) && minAdditionalTurnsLeft > 1) {
-			// Swap a 5 or lower for a facedown card if there's at least one extra facedown turn left
-			PlayDrawCard(chosenFacedownIndex);
-			return;
-		}
-		else if (drawCardPoints >= 9 && maxNonPairedPoints > drawCardPoints) {
-			// Swap a 9 or higher for a worse faceup card
-			PlayDrawCard(maxNonPairedIndex);
-			return;
-		}
-		else if (drawCardPoints >= 9) {
-			// Discard non-pairable 9+ if it's after the first turn
-			PlayDrawCard(6);
-			return;
-		}
-
-		// Have a 8 or lower draw card
-		if (facedownCount === 1 && drawCardPoints + showingPoints <= 10) {
-			// Flip over last facedown card to end round with <=10 points
-			PlayDrawCard(chosenFacedownIndex);
-			return;
-		}
-
-		if (minAdditionalTurnsLeft <= 1) {
-			if (maxNonPairedPoints >= 20) {
-				// Swap out a jack if someone else only has one facedown card left
-				PlayDrawCard(maxNonPairedIndex);
-				return;
-			}
-			else if (maxNonPairedPoints >= 7 && ((maxNonPairedPoints - drawCardPoints) > 5)) {
-				// Swap out a 7 or higher if you can subtract at least 5 points and someone else only has one facedown card left
-				PlayDrawCard(maxNonPairedIndex);
-				return;
-			}
-		}
-
-		if (maxNonPairedPoints < drawCardPoints) {
-			// No lower upcard or swap it for
-			if (facedownCount <= 1) {
-				// Only one down card left - discard
-				PlayDrawCard(6);
-				return;
-			}
-			else {
-				PlayDrawCard(chosenFacedownIndex);
-				return;
-			}
-		}
-		else if (facedownCount <= 1) {
-			// Only one down card left - swap out the highest showing up card
-			PlayDrawCard(maxNonPairedIndex);
-		}
-		else {
-			// Could go either way - randomly either swap out the highest, or a down card, or discard
-			var swappable = [];
-			if (maxNonPairedIndex !== null) {
-				swappable.push(maxNonPairedIndex);
-			}
-			if (chosenFacedownIndex !== null) {
-				swappable.push(chosenFacedownIndex);
-			}
-
-			if (swappable.length > 0) {
-				PlayDrawCard(swappable[Math.floor(Math.random() * swappable.length)]);
-				return;
-			}
-			else {
-				// Shouldn't happen but just in case - default of discarding
-				PlayDrawCard(6);
-				return;
-			}
-		}
-	}
-
-	function CheckForReshuffle() {
-		if (DRAW_INDEX === 107) {
-			console.log("Reshuffling");
-
-			var currUpCard = DECK[DRAW_INDEX];
-			var numPlayerCards = 6 * PLAYERS.length;
-			DECK[DRAW_INDEX] = DECK[numPlayerCards];
-			DECK[numPlayerCards] = currUpCard;
-			DRAW_INDEX = numPlayerCards;
-
-			for (var i = numPlayerCards + 1; i < 108; i++) {
-				var randInt = i + Math.floor(Math.random() * (108-i));
-				var temp = -Math.abs(DECK[i]);
-				DECK[i] = -Math.abs(DECK[randInt]); // Make it negative to flip it face down
-				DECK[randInt] = temp;
-			}
-		}
-	}
-
-	function PlayDrawCard(pCardIndex) {
-		DRAW_INDEX++;
-		CheckForReshuffle();
-
-		if (pCardIndex > 5) {
-			console.log(SEATS[CURRENT_SEAT].name + ": Discard the draw card");
-			var centerCards = $("#centerCell .card");
-			$.when(centerCards.fadeOut(200)).then(function() {
-				$("#centerCell .card").eq(0).css("opacity", 1);
-				$(".discard").removeClass("discard");
-				RenderCard(centerCards.eq(0), DECK[DRAW_INDEX]);
-				RenderCard(centerCards.eq(1), DECK[DRAW_INDEX + 1]);
-				$.when(centerCards.fadeIn(200)).then(function() {
-					AdvanceToNextPlayer();
-				});
-			});
-		}
-		else {
-			console.log(SEATS[CURRENT_SEAT].name + ": Swap draw card at index " + (pCardIndex + 1));
-			var oldPlayerCardIndex = GetPlayerIndex(CURRENT_SEAT) * 6 + pCardIndex;
-			var oldPlayerCardVal = DECK[oldPlayerCardIndex];
-			DECK[oldPlayerCardIndex] = DECK[DRAW_INDEX];
-			DECK[DRAW_INDEX] = Math.abs(oldPlayerCardVal);
-
-			var swapCards = $("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).add($("#centerCell .card").eq(1));
-			$.when(swapCards.fadeOut(200)).then(function() {
-				//$("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).css("background-color", "white");
-				$(".discard").removeClass("discard");
-				RenderCard($("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex), DECK[oldPlayerCardIndex]);
-				RenderCard($("#centerCell .card").eq(1), DECK[DRAW_INDEX + 1]);
-				$.when(swapCards.fadeIn(200)).then(function() {
-					AdvanceToNextPlayer();
-					setTimeout(function() {
-						$("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).css("background-color", "");
-					}, 2000);
-				});
-			});
-			var discard = $("#centerCell .card").eq(0);
-			$.when(discard.fadeOut(200)).then(function() {
-				discard.css("opacity", 1);
-				RenderCard(discard, DECK[DRAW_INDEX]);
-				discard.fadeIn(200);
-			});
-		}
-	}
-
-	function OpponentTakeDiscard(pCardIndex) {
-		TakeDiscard(pCardIndex);
-	}
-
-	function TakeDiscard(pCardIndex) {
-		console.log(SEATS[CURRENT_SEAT].name + ": Swap discard at index " + (pCardIndex + 1));
-		if (pCardIndex >= 6) {
-			console.trace();
-		}
-		var oldPlayerCardIndex = GetPlayerIndex(CURRENT_SEAT) * 6 + pCardIndex;
-		var oldPlayerCardVal = DECK[oldPlayerCardIndex];
-		DECK[oldPlayerCardIndex] = DECK[DRAW_INDEX];
-		DECK[DRAW_INDEX] = Math.abs(oldPlayerCardVal);
-
-		var swapCards = $("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).add($("#centerCell .card").eq(0));
-		$.when(swapCards.fadeOut(200)).then(function() {
-			//$("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex).css("background-color", "white");
-			RenderCard($("#playerCards" + CURRENT_SEAT + " .card").eq(pCardIndex), DECK[oldPlayerCardIndex]);
-			RenderCard($("#centerCell .card").eq(0), DECK[DRAW_INDEX]);
-			$.when(swapCards.fadeIn(200)).then(function() {
-				AdvanceToNextPlayer();
-				setTimeout(function() {
-					swapCards.eq(0).css("background-color", "");
-				}, 2000);
-			});
-		});
-	}
-
-	function FlipDrawCard(pIsLivePlayer) {
-		console.log(SEATS[CURRENT_SEAT].name + ": Flip draw card");
-		var drawCard = $("#centerCell .card").eq(1);
-		var deckIndex = DRAW_INDEX + 1;
-		var value = -DECK[deckIndex];
-		DECK[deckIndex] = value;
-		console.log("DRAW CARD: " + GetCardValue(value));
-		$.when(drawCard.fadeOut(200)).then(function() {
-			//drawCard.css("background-color", "white");
-			RenderCard(drawCard, value);
-			$("#centerCell .card").eq(1).removeClass("playableCard");
-			$.when(drawCard.fadeIn(200)).then(function() {
-				if (pIsLivePlayer) {
-					SELECTED_CARD = 1;
-					$("#centerCell .card").eq(0).addClass("discard").html("").attr("title", "Discard");
-					$(".live .card").addClass("playableCard");
-				} else {
-					setTimeout(OpponentUseDrawCard, GetOpponentWaitDelay());
-					$("#centerCell .card").eq(0).css("opacity", 0.15);
-				}
-
-				setTimeout(function() {
-					drawCard.css("background-color", "");
-				}, 2000);
-			});
-		});
-	}
-
-	function ClickedDiscard() {
-		if (SEATS[CURRENT_SEAT].isLive && $("#centerCell .card").eq(0).hasClass("playableCard")) {
-			if (SELECTED_CARD === 1) {
-				PlayDrawCard(6);
-			}
-			else if (SELECTED_CARD === 0) {
-				$("#centerCell .card").eq(0).removeClass("selectedCard");
-				$("#centerCell .card").eq(1).addClass("playableCard").css("opacity", 1);
-				$(".live .card.faceup").removeClass("playableCard");
-				SELECTED_CARD = null;
-			}
-			else if (SELECTED_CARD === null) {
-				$("#centerCell .card").eq(0).addClass("selectedCard");
-				$("#centerCell .card").eq(1).removeClass("playableCard").css("opacity", 0.15);
-				$(".live .card").addClass("playableCard");
-				SELECTED_CARD = 0;
-			}
-		}
-	}
-
-	function ClickedDrawCard() {
-		if (SEATS[CURRENT_SEAT].isLive && $("#centerCell .card").eq(1).hasClass("playableCard")) {
-			FlipDrawCard(true);
-		}
-	}
-
-	function ClickedCard(pCardEl, pSeatNum, pCardNum) {
-		if (!$(pCardEl).hasClass("playableCard")) {
-			return;
-		}
-
-		if (DRAWING_TWO) {
-			FlipOverCard(pSeatNum, pCardNum);
-			CheckForFlipTwoDone(false);
-		}
-		else if (SEATS[CURRENT_SEAT].isLive && pSeatNum === CURRENT_SEAT) {
-			if (SELECTED_CARD === null) {
-				FlipOverCard(pSeatNum, pCardNum);
-			}
-			else if (SELECTED_CARD === 1) {
-				PlayDrawCard(pCardNum);
-			}
-			else if (SELECTED_CARD === 0) {
-				TakeDiscard(pCardNum);
-			}
-		}
-	}
-
-	function GetPlayerCards(pSeatNum) {
-		var deckIndexStart = 6 * GetPlayerIndex(pSeatNum);
-		var cards = [];
-		for (var i = 0; i < 6; i++) {
-			cards.push(DECK[deckIndexStart + i]);
-		}
-
-		return cards;
-	}
-
-	function DealCard(card, delayTime) {
-		setTimeout(function() {
-			card.css("opacity", 1).addClass("showOutline");
-		}, delayTime);
-	}
-
-	function ToggleNames() {
-		SHOW_NAMES = !SHOW_NAMES;
-		ShowHideNames();
-	}
-
-	function ToggleScores() {
-		SHOW_SCORES = !SHOW_SCORES;
-		ShowHideNames();
-	}
-
-	function ShowHideNames() {
-		console.log("ShowHideNames");
-		$(".playerName").toggle(SHOW_SCORES || SHOW_NAMES);
-
-		for (var i = 0; i < SEATS.length; i++) {
-			var label = $("#playerInfo" + i).find(".playerName span");
-			if (SEATS[i] === null) {
-				label.hide();
-			}
-			else {
-				label.html(GetPlayerLabelText(i));
-			}
-		}
-	}
-
-	function GetPlayerLabelText(pSeatNum) {
-		return (SHOW_NAMES ? SEATS[pSeatNum].name : "") + (SHOW_SCORES ? " <strong>$" + SEATS[pSeatNum].money + "</strong>" : "");
-	}
-
-	function CheckAllCards() {
-		$(".card").each(function() {
-			CheckCard($(this));
-		});
-	}
-
-	function CheckCard(cardEl, value) {
-		if (typeof cardEl.attr("seatNum") !== "undefined") {
-			var deckIndex = 6 * GetPlayerIndex(parseInt(cardEl.attr("seatNum"))) + parseInt(cardEl.attr("cardNum"));
-			if (typeof value !== "undefined" && DECK[deckIndex] != value) {
-				console.log(SEATS[parseInt(cardEl.attr("seatNum"))].name + " (" + (1 + parseInt(cardEl.attr("cardNum"))) + "): " + value + " should be " + DECK[deckIndex]);
-			}
-
-			if (typeof cardEl.attr("cardVal") !== "undefined") {
-				var cardVal = parseInt(cardEl.attr("cardVal"));
-				if (DECK[deckIndex] !== cardVal) {
-					console.log(SEATS[parseInt(cardEl.attr("seatNum"))].name + " (" + (1 + parseInt(cardEl.attr("cardNum"))) + "): showing as " + cardVal + " should be " + DECK[deckIndex]);
-				}
-			}
-		}
+		playerCards.append(cardContainer);
+		RenderCard(card, pCardVal);
 	}
 
 	function RenderCard(td, value) {
@@ -1869,17 +535,114 @@
 		}
 	}
 
-	function GetPlayerIndex(pSeatNum) {
-		var playerNum = -1;
-		for (var s = 0; s <= pSeatNum; s++) {
-			if (SEATS[s] !== null) {
-				playerNum++;
+	function SelectCard(pCardEl, pSeatNum, pCardIndex) {
+		console.log("Seat " + pSeatNum + ", Card " + pCardIndex);
+		var container = $(pCardEl).parent();
+		if (container.hasClass("selectedCard")) {
+			container.removeClass("selectedCard");
+		}
+		else {
+			container.addClass("selectedCard");
+		}
+	}
+
+	function AdvanceCurrentPlayer() {
+		var started = true;
+		while (started === true || PLAYERS[CURRENT_SEAT].folded) {
+			started = false;
+			CURRENT_SEAT += 1;
+			CURRENT_SEAT %= PLAYERS.length;
+		}
+	}
+
+	function Setup() {
+		if (PLAYERS.length > 0) {
+			return;
+		}
+
+		for (var i = 0; i < NAMES.length; i++) {
+			PLAYERS.push({
+				name: NAMES[i],
+				money: (10).toFixed(2),
+				folded: false,
+				cards: []
+			});
+		}
+
+		$(".playerInfo").each(function() {
+			var span = $("<span></span>");
+			span.addClass("playerInfoWrapper");
+			var name = $("<p><span></span></p>");
+			name.addClass("playerName");
+			var img = $("<img>");
+			var dealer = $("<p><span>DEALER</span></p>");
+			dealer.addClass("dealerLabel");
+			span.append(img);
+			span.append(dealer);
+			span.append(name);
+			$(this).append(span);
+		});
+
+		for (var i = 0; i < PLAYERS.length; i++) {
+			var label = $("#player" + i).find(".playerName span");
+			label.html(GetPlayerLabelText(i));
+		}
+
+		for (var i = 0; i < TOTAL_SEATS; i++) {
+			if (i >= PLAYERS.length) {
+				$("#player" + i).hide();
+			}
+			else {
+				$("#player" + i + " img").show().attr("src", "players/" + PLAYERS[i].name + ".jpg");
+				$("#player" + i + " .playerName").show();
 			}
 		}
 
-		return playerNum;
+		ToggleCenterCards();
 	}
 
+	function UpdateScore(pSeatNum) {
+		SEATS[pSeatNum].scores[ROUND_NUM - 1] = GetSeatScore(pSeatNum);
+		var labelEl = $("#playerInfo" + pSeatNum).find(".playerName span");
+		$.when(labelEl.fadeOut(200)).then(function() {
+			setTimeout(function() {
+				labelEl.html(GetPlayerLabelText(pSeatNum)).css("background-color", "#ffaaaa").css("border-color", "red");
+				labelEl.fadeIn(200);
+			}, 1);
+		});
+	}
+
+	function ToggleNames() {
+		SHOW_NAMES = !SHOW_NAMES;
+		ShowHideNames();
+	}
+
+	function ToggleScores() {
+		SHOW_SCORES = !SHOW_SCORES;
+		ShowHideNames();
+	}
+
+	function ToggleCenterCards() {
+		$("#centerCardsContainer .card, #centerCardsContainer br").toggle();
+	}
+
+	function ShowHideNames() {
+		$(".playerName").toggle(SHOW_SCORES || SHOW_NAMES);
+
+		for (var i = 0; i < SEATS.length; i++) {
+			var label = $("#playerInfo" + i).find(".playerName span");
+			if (SEATS[i] === null) {
+				label.hide();
+			}
+			else {
+				label.html(GetPlayerLabelText(i));
+			}
+		}
+	}
+
+	function GetPlayerLabelText(pSeatNum) {
+		return (SHOW_NAMES ? PLAYERS[pSeatNum].name : "") + (SHOW_SCORES ? " <strong>$" + PLAYERS[pSeatNum].money + "</strong>" : "");
+	}
 
 	function ToggleFullScreen() {
 	/*	var body = $("body")[0];
@@ -1914,121 +677,6 @@
 				document.webkitExitFullscreen();
 			}
 		}
-
-		setTimeout(function() {
-	  		//FitToWindow(true);
-		}, 100);
-	}
-
-	function FlipOverCard(pSeatNum, pCardNum) {
-		console.log(SEATS[pSeatNum].name + ": Flip over card #" + (pCardNum + 1));
-		var cards = $("#playerCards" + pSeatNum);
-		var card = cards.find(".card").eq(pCardNum);
-		card.removeClass("playableCard");
-		var deckIndex = 6 * GetPlayerIndex(pSeatNum) + pCardNum;
-		var value = -DECK[deckIndex];
-		DECK[deckIndex] = value;
-		card.fadeOut(200, function() {
-			RenderCard(card, value);
-		});
-		card.fadeIn(200, function() {
-			if (DRAWING_TWO) {
-				if (SEATS[pSeatNum].isLive && ENLARGE_CARDS) {
-					var seatCards = GetPlayerCards(pSeatNum);
-					var faceUpCount = 0;
-					for (var i = 0; i < 6; i++) {
-						if (seatCards[i] > 0) {
-							faceUpCount++;
-						}
-					}
-
-					if (faceUpCount >= 2) {
-						ZoomOutPlayableCards(pSeatNum);
-					}
-				}
-			}
-			else {
-				AdvanceToNextPlayer();
-			}
-		});
-	}
-
-	function IncrementCurrent(pHighlight) {
-		//console.log("Incrementing");
-		var started = true;
-		while (started === true || SEATS[CURRENT_SEAT] === null) {
-			started = false;
-			CURRENT_SEAT += 1;
-			CURRENT_SEAT %= TOTAL_SEATS;
-		}
-		//console.log("Done Incrementing");
-
-		$(".current").removeClass("current");
-
-		if (pHighlight) {
-			$("#playerInfo" + CURRENT_SEAT).addClass("current");
-			$("#playerCards" + CURRENT_SEAT).addClass("current");
-		}
-	}
-
-	function ResizeText() {
-		var idealWidth = 1270;
-		var actualWidth = $("#bgPhoto").width();
-		var scale = (actualWidth / idealWidth);
-
-		if (scale > 1) {
-			scale = 1;
-		}
-
-		var photoHeight = scale * 100;
-		if (photoHeight > 100) {
-			photoHeight = 100;
-		}
-		if (photoHeight < 50) {
-			photoHeight = 50;
-		}
-
-		$(".playerInfo img").css("max-height", photoHeight + "px");
-		$("#centerCell, .centerInfo").css((scale * 16 < 14 ? 14 : scale * 16) + "pt");
-		$(".playerName").css((scale * 14 < 12 ? 12 : scale * 14) + "pt");
-		//$("#roundByRoundTable").css("font-size", (scale * 18) + "pt");
-		//$("#scoringRules").css("font-size", (scale * 22) + "pt");
-		//$(".buttonContainer button").css("font-size", (scale * 16) + "pt");
-		$(".changeSeatsButton").css("font-size", (scale * 13) + "pt");
-
-		ResizeCards();
-	}
-
-	function ResizeCards() {
-		var idealWidth = 1270;
-		var actualWidth = $("#bgPhoto").width();
-		var scale = (actualWidth / idealWidth);
-
-		// Compensate for line thickness
-		if (scale > 1) {
-			scale *= 1.02;
-		}
-		else {
-			scale /= 1.02;
-		}
-
-		var suitScale = $("#widthTestValue").width() / $("#widthTestSuit").width() * 1.25;
-
-		// Card 24 pt
-		// Suit (24 * scale) pt since different browsers render them different sizes
-		// Joker 8 pt
-		// Name 12 pt
-
-		$(".card").css("font-size", (scale * 24) + "pt").css("padding-bottom", (scale * 5) + "px").css("border-radius", (scale * 6) + "px");
-		$(".showOutline").css("border-width", (scale * 1.8) + "px");
-		$(".jokerText").css("font-size", (scale * 8) + "pt");
-		$(".suit").css("font-size", (scale * suitScale * 24) + "pt");
-		$(".joker>span").not(".jokerText").css("font-size", (scale * suitScale * 12) + "pt");
-
-		$(".enlarged").css("font-size", (scale * 42) + "pt");
-		$(".enlarged .jokerText").css("font-size", (scale * 14) + "pt");
-		$(".enlarged .suit").css("font-size", (scale * suitScale * 42) + "pt");
-		$(".enlarged.joker>span").not(".jokerText").css("font-size", (scale * suitScale * 21) + "pt");
 	}
 </script>
 
