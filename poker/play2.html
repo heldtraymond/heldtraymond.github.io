@@ -31,36 +31,36 @@
 			display:inline-block;
 			transform: scale(1.4);
 		}
-		#player2, #player3 {
+		#player1, #player2 {
 			text-align:center;
 			margin:5px 90px 15px 90px;
 		}
-		#player2 .playerCards, #player3 .playerCards {
+		#player1 .playerCards, #player2 .playerCards {
 			transform: scale(1.4) translateY(18px);
 		}
-		#player0, #player5 {
+		#player5, #player4 {
 			text-align:center;
 			margin:140px 90px 5px 90px;
 		}
-		#player0 .playerCards, #player5 .playerCards {
+		#player5 .playerCards, #player4 .playerCards {
 			transform: scale(1.4) translateY(-17px);
 		}
-		#player1 {
+		#player0 {
 			text-align:left;
 			margin:20px 20px 15px 5px;
 		}
-		#player1 .playerCards {
+		#player0 .playerCards {
 			transform: scale(1.4) translateX(47px) translateY(18px);
 		}
-		#player4 {
+		#player3 {
 			text-align:right;
 			margin:20px 5px 15px 20px;
 		}
-		#player4 .playerCards {
+		#player3 .playerCards {
 			transform: scale(1.4) translateX(-47px) translateY(18px);
 		}
 		.playerArea {
-			width:26%;
+			width:28.5%;
 			display:inline-block;
 			vertical-align:middle;
 		}
@@ -69,10 +69,25 @@
 			width:100%;
 			display:inline-block;
 		}
-		/*#fullScreen {
-			color:blue;
-			cursor:pointer;
-		}*/
+		.playerInfo>span {
+			display:inline-block;
+			vertical-align:middle;
+			font-size:13pt;
+			font-weight:bold;
+			margin-left:20px;
+			margin-right:20px;
+		}
+		.foldSpan input[type=checkbox] {
+			width:25px;
+			height:25px;
+		}
+		.foldSpan input[type=text] {
+			font-size:16pt;
+			font-weight:bold;
+			text-align:center;
+			width:3em;
+			height:35px;
+		}
 		#playTableContainer {
 			width:100%;
 			display:inline-block;
@@ -125,10 +140,12 @@
 			padding:2px 2px 2px 0px;
 		}
 		#centerCardsContainer {
-			width:42%;
+			width:16%;
 			display:inline-block;
 			transform:scale(1.35) translateY(52px);
 			vertical-align:middle;
+			margin-left:10%;
+			margin-right:10%;
 		}
 		#centerCardsContainer .card {
 			width:46px;
@@ -151,7 +168,7 @@
 			padding-left:0px;
 		}
 		.cardContainer {
-			width:12%;
+			width:11%;
 			padding-right:3px;
 			display:inline-block;
 			text-align:center;
@@ -173,7 +190,7 @@
 		}
 		.controlPanel {
 			display:inline-block;
-			width:11%;
+			width:9%;
 			vertical-align:middle;
 		}
 		.controlPanel button {
@@ -181,7 +198,7 @@
 			border-radius:8px;
 			border:2px solid white;
 			background-color:red;
-			font-size:14pt;
+			font-size:11pt;
 			font-weight:bold;
 			margin-top:2px;
 			padding:6px 2px 6px 2px;
@@ -246,11 +263,11 @@
     		/*table-layout:fixed;*/
     	}
     	.playerCards .card:hover {
-    		background-color:#ffbb99 !important;
+    		background-color:#bbbbff !important;
     		cursor:pointer;
     	}
     	.selectedCard .card, .selectedCard .cardHandIndex {
-    		background-color:#ffbb99 !important;
+    		background-color:#bbbbff !important;
 			background-image:none !important;
     	}
     	.selectedCard .cardHandIndex {
@@ -272,17 +289,17 @@
 	<!--img id="bgPhoto" src="LivingRoomBackground.jpg" style="width:100%;position:absolute;left:0px;top:0px;z-index:-1"-->
 	<div id="playTableContainer">
 		<div>
-			<div id="player2" class="playerArea">
+			<div id="player1" class="playerArea">
 				<div class="playerInfo"></div>
 				<div class="playerCards"></div>
 			</div>
-			<div id="player3" class="playerArea">
+			<div id="player2" class="playerArea">
 				<div class="playerInfo"></div>
 				<div class="playerCards"></div>
 			</div>
 		</div>
 		<div>
-			<div id="player1" class="playerArea">
+			<div id="player0" class="playerArea">
 				<div class="playerInfo"></div>
 				<div class="playerCards"></div>
 			</div>
@@ -294,35 +311,40 @@
 				<span class="card" id="centerCard4" onclick="DealCenterCard(4)"></span><br>
 				<span id="pot">$0.00</span>
 			</div>
-			<div id="player4" class="playerArea">
+			<div id="player3" class="playerArea">
 				<div class="playerInfo"></div>
 				<div class="playerCards"></div>
 			</div>
 		</div>
 		<div>
 			<div class="controlPanel">
-				<br><br><br><br><br>
-				<button style="background-color:white;color:red" onclick="DealNextUpCard()">Deal Face Up</button><br><br>
+				<br>
+				<button style="background-color:white;color:red" onclick="DealNextUpCard()">Deal Face Up</button><br>
 				<input type="text" id="faceDownCount" style="width:25%;font-size:15pt;text-align:center;font-weight:bold;">
-				<button style="background-color:#000066;color:white;width:70%;" onclick="DealFaceDown()">Face Down</button><br><br><br>
-				<button style="background-color:#008800;color:white">Collect $$$</button><br><br><br>
-				<button style="background-color:red" onclick="NewHand()">New Hand</button>
-			</div>
-			<div id="player0" class="playerArea">
-				<div class="playerCards"></div>
-				<div class="playerInfo"></div>
+				<button style="background-color:#000066;color:#eeeeee;width:70%;" onclick="DealFaceDown()">Face Down</button><br>
+				<button style="background-color:#88ffcc;" onclick="DrawNewCards()">Draw New Cards</button><br><br>
+				<button style="background-color:#cc88ff" onclick="ToggleCenterCards()">Middle Cards</button><br>
+				<button style="background-color:#ffcc88" onclick="TakeCenterCard(1)">Take Middle Card</button><br>
+				<button style="background-color:#886600;color:white" onclick="BuryCenterCard(1)">Bury Middle Card</button><br><br>
+				<input type="text" id="faceDownCount" style="width:25%;font-size:15pt;text-align:center;font-weight:bold;">
+				<button style="background-color:#ffff00;width:70%;" onclick="PassClockwise()">Pass CW</button>
 			</div>
 			<div id="player5" class="playerArea">
 				<div class="playerCards"></div>
 				<div class="playerInfo"></div>
 			</div>
+			<div id="player4" class="playerArea">
+				<div class="playerCards"></div>
+				<div class="playerInfo"></div>
+			</div>
 			<div class="controlPanel">
-				<button style="background-color:#cc88ff" onclick="ToggleCenterCards()">Cards in Middle</button><br>
-				<button style="background-color:#ffcc88" onclick="ToggleFullScreen()">Full Screen</button><br>
-				<button style="background-color:#88ffcc" onclick="FlipSelectedCards()">Flip Over Card(s)</button><br>
-				<button style="background-color:#cccccc" onclick="SelectAllFacedown()">Select All Facedown</button><br>
-				<button style="background-color:#888888" onclick="SelectAll()">Select All</button><br>
-				<button style="background-color:#000000;color:white;" onclick="Deselect()">De-Select All</button><br>
+				<br><br><br>
+				<button style="background-color:#cccccc" id="selectButton" onclick="SelectButtonClicked()">Select All</button><br>
+				<button style="background-color:#888888;color:white" onclick="FlipSelectedCards()">Flip Selected</button><br>
+				<button style="background-color:#8888ff" onclick="Showdown()">Showdown</button><br><br>
+				<button style="background-color:#ffcc88" onclick="ToggleFullScreen()">Full Screen</button><br><br>
+				<button style="background-color:#008800;color:white">Collect $$$</button><br>
+				<button style="background-color:red" onclick="NewHand()">New Hand</button>
 			</div>
 		</div>
 	</div>
@@ -346,6 +368,8 @@
 	var START_SEAT = null;
 	var END_SEAT = null;
 	var DEALER_SEAT = 0;
+
+	var CENTER_CARDS = [null, null, null, null, null];
 
 	var IS_FULLSCREEN = false;
 
@@ -421,7 +445,11 @@
 			PLAYERS[i].cards = [];
 		}
 
-		$("#centerCardsContainer span.card").addClass("empty").removeClass("facedown").html("");
+		$(".selectedCard").removeClass("selectedCard");
+		$("#selectButton").html("Select All");
+
+		$("#centerCardsContainer span.card").addClass("empty").removeClass("facedown").removeAttr("").html("");
+		CENTER_CARDS = [null, null, null, null, null];
 		$(".facedown").removeClass("facedown");
 		$(".playerCards .card").remove();
 		$(".playerCards .cardContainer").remove();
@@ -460,26 +488,81 @@
 		}
 	}
 
+	function DrawNewCards() {
+		for (var i = 0; i <= PLAYERS.length; i++) {
+			var seat = (DEALER_SEAT + i) % PLAYERS.length;
+			if (PLAYERS[seat].folded || DECK_INDEX >= 52) {
+				continue;
+			}
+
+			var selectedIndices = [];
+			var cardEls = $("#player" + i + " .cardContainer");
+			for (var c = 0; c < cardEls.length; c++) {
+				if (cardEls.eq(c).hasClass("selectedCard")) {
+					selectedIndices.push(c);
+				}
+			}
+
+			console.log(selectedIndices);
+
+			for (var c = 0; c < selectedIndices.length; c++) {
+				var cardIndex = selectedIndices[c];
+				var cardVal = DECK[DECK_INDEX++];
+				PLAYERS[seat].cards[cardIndex] = cardVal;
+				RenderCard(cardEls.eq(cardIndex).find(".card"), cardVal);
+			}
+		}
+
+		$(".selectedCard .card").fadeOut(250, function() {
+			$(".selectedCard").removeClass("selectedCard").find(".card").fadeIn(250);
+		});
+	}
+
+	function TakeCenterCard(pIndex) {
+		if (CENTER_CARDS[pIndex] !== null) {
+			var cardVal = CENTER_CARDS[pIndex];
+			$("#centerCard" + pIndex).addClass("empty").removeClass("facedown").removeAttr("").html("");
+			PLAYERS[CURRENT_SEAT].cards.push(cardVal);
+			RenderDealCard(CURRENT_SEAT, cardVal);
+			AdvanceCurrentPlayer();
+		}
+	}
+
+	function BuryCenterCard(pIndex) {
+		$("#centerCard" + pIndex).addClass("empty").removeClass("facedown").removeAttr("").html("");
+		CENTER_CARDS[pIndex] = null;
+	}
+
 	function FlipSelectedCards() {
 		$(".selectedCard").each(function() {
 			//$(this).removeClass("selectedCard");
 			var cardEl = $(this).find(".card");
 			var currVal = parseInt(cardEl.attr("cardVal"));
-			cardEl.attr("cardVal", -currVal);
 			RenderCard(cardEl, -currVal);
 		});
 	}
 
-	function SelectAll() {
-		$(".cardContainer").addClass("selectedCard");
+	function SelectButtonClicked() {
+		if ($(".selectedCard").length > 0) {
+			$(".selectedCard").removeClass("selectedCard");
+		} else {
+			$(".cardContainer").addClass("selectedCard");
+		}
+
+		$("#selectButton").html(($(".selectedCard").length > 0) ? "De-Select" : "Select All");
 	}
 
-	function SelectAllFacedown() {
-		$(".facedown").parent().addClass("selectedCard");
-	}
+	function Showdown() {
+		for (var i = 0; i < PLAYERS.length; i++) {
+			if (PLAYERS[i].folded) {
+				continue;
+			}
 
-	function Deselect() {
-		$(".selectedCard").removeClass("selectedCard");
+			$("#player" + i).find(".facedown").each(function() {
+				var currVal = parseInt($(this).attr("cardVal"));
+				RenderCard($(this), -currVal);
+			});
+		}
 	}
 
 	function DealNextUpCard() {
@@ -490,9 +573,13 @@
 	}
 
 	function DealCenterCard(pIndex) {
+		if (CENTER_CARDS[pIndex] !== null) {
+			return;
+		}
 		var cardVal = Math.abs(DECK[DECK_INDEX++]);
 		RenderCard($("#centerCard" + pIndex), cardVal);
 		$("#centerCard" + pIndex).removeClass("empty");
+		CENTER_CARDS[pIndex] = cardVal;
 	}
 
 	function RenderDealCard(pSeatNum, pCardVal) {
@@ -503,7 +590,6 @@
 		var index = $("<span class='cardHandIndex'>" + (cardIndex + 1) + "</span>");
 		var card = $("<span class='card'></span>");
 		card.attr("onclick", "SelectCard(this," + pSeatNum + "," + cardIndex + ")");
-		card.attr("cardVal", pCardVal);
 
 		if (pSeatNum === 0 || pSeatNum === 5) {
 			cardContainer.append(index).append("<br>").append(card);
@@ -544,6 +630,8 @@
 		else {
 			container.addClass("selectedCard");
 		}
+
+		$("#selectButton").html(($(".selectedCard").length > 0) ? "De-Select" : "Select All");
 	}
 
 	function AdvanceCurrentPlayer() {
@@ -580,7 +668,37 @@
 			span.append(img);
 			span.append(dealer);
 			span.append(name);
-			$(this).append(span);
+
+			var foldSpan = $("<span></span>");
+			foldSpan.addClass("foldSpan");
+			foldSpan.append("<input type='checkbox'/><br>Fold");
+			foldSpan.append("<br><input type='text' placeholder='Bet'/>");
+
+			var betSpan = $("<span></span>");
+			betSpan.addClass("betSpan");
+
+			var playerId = parseInt($(this).parent().attr("id").substring(6));
+
+			if (playerId === 0) {
+				$(this).append(span);
+				$(this).append(foldSpan);
+				//$(this).append(betSpan);
+			}
+			else if (playerId === 3) {
+				$(this).append(foldSpan);
+				$(this).append(span);
+				//$(this).append(betSpan);
+			}
+			else if (playerId === 1 || playerId === 5) {
+				$(this).append(span);
+				$(this).append(foldSpan);
+				//$(this).append(betSpan);
+			}
+			else if (playerId === 2 || playerId === 4) {
+				//$(this).append(betSpan);
+				$(this).append(foldSpan);
+				$(this).append(span);
+			}
 		});
 
 		for (var i = 0; i < PLAYERS.length; i++) {
