@@ -15,7 +15,10 @@
 			font-size:30pt;
 			background-color:#bb8833;
 		}
-
+		#playerName {
+			width:100%;
+			display:inline-block;
+		}
 		.card {
 			font-family:'Roboto Slab', Tahoma, sans-serif;
 			border-radius:10px;
@@ -23,12 +26,16 @@
 			background-color:white;
 			font-size:45pt;
 			font-weight:bolder;
-			width:20%;
 			text-align:center;
 			line-height:65%;
 			letter-spacing:-3;
 			padding:8px 6px 8px 6px;
 			/*height:2.1em;*/
+		}
+		#cardTableContainer {
+			text-align:center;
+			display:inline-block;
+			margin-top:-8px;
 		}
 		#cardTable {
 			width:98%;
@@ -61,51 +68,83 @@
 		}
 		#cardIndices span {
 			border:1px solid black;
-			border-radius:22px;
-			padding-left:10px;
-			padding-right:10px;
+			border-radius:30px;
+			padding-left:15px;
+			padding-right:15px;
 			display:inline-block;
 			background-color:#000066;
 			color:white;
+			font-size:36pt;
 		}
 		</style>
 	<script src="jquery.js"></script>
 </head>
 <body>
-	<table id="cardTable">
-		<tr id="cardIndices">
-			<td><span>1</span></td>
-			<td><span>2</span></td>
-			<td><span>3</span></td>
-			<td><span>4</span></td>
-			<td><span>5</span></td>
-		</tr>
-		<tr>
-			<td class="card" id="card0"></td>
-			<td class="card" id="card1"></td>
-			<td class="card" id="card2"></td>
-			<td class="card" id="card3"></td>
-			<td class="card" id="card4"></td>
-		</tr>
-	</table>
+	<strong id="playerName"></strong>
+	<div id="cardTableContainer">
+		<table id="cardTable">
+			<tr id="cardIndices">
+			</tr>
+			<tr id="cardDisplays">
+			</tr>
+		</table>
+	</div>
 </body>
 <script>
-	var DECK = [];
 	var SUITS = ["♠", "♥", "♦", "♣"];
 	var VALS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
-	for (var i = 0; i < 52; i++) {
-		DECK[i] = i;
-	}
+	var NUM_CARDS = 0;
+	var NAMES = [
+		"Lou",
+		"Fran",
+		"Ed",
+		"Ray",
+		"Joe",
+		"Nancy",
+		"Roger",
+		"Steve",
+		"Lyle",
+		""
+	];
 
-	for (var i = 0; i < 7; i++) {
-		var randInt = i + Math.floor(Math.random() * (52 - i));
-		var temp = DECK[i];
-		DECK[i] = DECK[randInt];
-		DECK[randInt] = temp;
-	}
+	var playerId = parseInt(location.href.substr(-4));
+	$("#playerName").html(NAMES[playerId % 10]);
 
-	for (var i = 0; i < 7; i++) {
-		RenderCard(i, DECK[i]);
+	fetchCards();
+	setInterval(fetchCards, 5000);
+
+	function fetchCards() {
+		var DECK = [];
+		for (var i = 0; i < 52; i++) {
+			DECK[i] = i;
+		}
+
+		NUM_CARDS = 1 + Math.floor(Math.random() * 8);
+
+		if (NUM_CARDS <= 3) {
+			$("#cardTableContainer").css("width", (30 * NUM_CARDS) + "%");
+		}
+		else {
+			$("#cardTableContainer").css("width", "100%");
+		}
+
+		$("#cardIndices").html("");
+		$("#cardDisplays").html("");
+		for (var i = 0; i < NUM_CARDS; i++) {
+			$("#cardIndices").append("<td><span>" + (i + 1) + "</span></td>");
+			$("#cardDisplays").append("<td class='card' id='card" + i + "'></td>");
+		}
+
+		for (var i = 0; i < NUM_CARDS; i++) {
+			var randInt = i + Math.floor(Math.random() * (52 - i));
+			var temp = DECK[i];
+			DECK[i] = DECK[randInt];
+			DECK[randInt] = temp;
+		}
+
+		for (var i = 0; i < NUM_CARDS; i++) {
+			RenderCard(i, DECK[i]);
+		}
 	}
 
 	function RenderCard(pCardIndex, pCardVal) {
@@ -114,7 +153,7 @@
 
 		var cardEl = $("#card" + pCardIndex);
 		cardEl.removeClass("red").removeClass("black");
-		cardEl.html("<span style='float:left'>" + VALS[cardVal] + "</span><br>")// + SUITS[suit] + "</span><br>")// + '<span class="suit">' + SUITS[suit] + '</span>')
+		cardEl.html("<span style='float:left'>" + VALS[cardVal] + "<br>" + SUITS[suit] + "</span><br><br>")// + SUITS[suit] + "</span><br>")// + '<span class="suit">' + SUITS[suit] + '</span>')
 		  .addClass((suit === 0 || suit === 3) ? "black" : "red");
 
 		var cardImg = $("<img></img>");
@@ -127,10 +166,24 @@
 		container.addClass("cardImageContainer");
 		container.append(cardImg);
 
+		var scale = 1;
+		if (NUM_CARDS > 5) {
+			scale = (5 / (NUM_CARDS));
+		}
+
+		if (NUM_CARDS >= 7) {
+			$("#cardTable").css("margin-left", "-5%");
+		}
+		else {
+			$("#cardTable").css("margin-left", "1%");
+		}
+
+		marginFaceCards = (NUM_CARDS <= 4 ? 11 : 11);
+
 		if (cardVal > 9) {
-			container.css("transform", "scale(0.95)");
+			container.css("border-width", "3px").css("transform", "scale(" + scale + ")").css("margin-left", -marginFaceCards + "px").css("margin-right", -marginFaceCards + "px");
 		} else {
-			container.css("width", "132px").css("transform", "scaleX(1.15)");
+			container.css("width", (132 * 1) + "px").css("transform", "scaleX(" + (1.15 * scale) + ") scaleY(" + (0.9 * scale) + ")");
 		}
 
 		if (cardVal === 0) {
@@ -141,7 +194,7 @@
 		//cardImg.css("object-fit", "cover");
 
 		cardEl.append(container);
-		cardEl.append("<br><span style='float:right;transform:rotate(180deg)'>" + VALS[cardVal] + "</span>");// + " " + SUITS[suit] + "</span>");// + '<span class="suit">' + SUITS[suit] + '</span>');
+		cardEl.append("<br><span style='float:right;margin-top:10px;transform:rotate(180deg)'>" + VALS[cardVal] + "<br>" + SUITS[suit] + "</span>");// + " " + SUITS[suit] + "</span>");// + '<span class="suit">' + SUITS[suit] + '</span>');
 		//cardEl.html("<span>" + VALS[cardVal] + "</span>" + '<span class="suit">' + SUITS[suit] + '</span>');
 	}
 </script>

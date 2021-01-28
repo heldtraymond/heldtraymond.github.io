@@ -24,6 +24,7 @@
 			border:2px solid white;
 			margin-top:2px;
 			display:inline-block;
+			width:4em;
 		}
 		.playerCards {
 			width:100%;
@@ -69,24 +70,39 @@
 			width:100%;
 			display:inline-block;
 		}
-		.playerInfo>span {
+		.foldSpan, .betSpan {
 			display:inline-block;
 			vertical-align:middle;
-			font-size:13pt;
+			margin-left:10px;
+			margin-right:10px;
+		}
+		.nameSpan {
+			font-size:14pt;
 			font-weight:bold;
-			margin-left:20px;
-			margin-right:20px;
+			display:inline-block;
 		}
-		.foldSpan input[type=checkbox] {
-			width:25px;
-			height:25px;
+		.moneySpan {
+			font-size:14pt;
+			font-weight:bold;
+			border:2px solid white;
+			background-color:#008800;
+			color:white;
+			border-radius:6px;
+			padding:3px;
+			margin-top:2px;
+			margin-bottom:15px;
+			display:inline-block;
+			width:4em;
+			text-align:center;
 		}
-		.foldSpan input[type=text] {
+		.betSpan input[type=text] {
 			font-size:16pt;
 			font-weight:bold;
 			text-align:center;
 			width:3em;
-			height:35px;
+			height:50px;
+			border-radius:6px;
+			border:2px solid #008800;
 		}
 		#playTableContainer {
 			width:100%;
@@ -114,7 +130,8 @@
 			z-index:104;
 			margin-bottom:-1.5em;
 			margin-top:0px;
-			transform:translateY(-105px);
+			transform:translateY(-19px) translateX(-1px);
+			width:100%;
 		}
 		.dealerLabel span {
 			color:white;
@@ -230,6 +247,8 @@
 		}
 		.playerInfoWrapper {
 			max-width:80px;
+			vertical-align:middle;
+			display:inline-block;
 		}
 		.playerInfo img {
 			background-color:white;
@@ -282,6 +301,10 @@
     	.playerInfoWrapper br {
 			display:none;
     	}
+    	.pending {
+    		background-color:#99ff99 !important;
+    		color:black !important;
+    	}
 		</style>
 	<script src="jquery.js"></script>
 </head>
@@ -318,16 +341,15 @@
 		</div>
 		<div>
 			<div class="controlPanel">
-				<br>
-				<button style="background-color:white;color:red" onclick="DealNextUpCard()">Deal Face Up</button><br>
+				<br><br>
+				<button style="background-color:red" onclick="NewHand()">New Hand</button><br>
+				<button style="background-color:#88ff99" onclick="Ante(5)">Ante Up 5¢</button><br>
+				<button style="background-color:#008800;color:white" onclick="CollectMoney()">Collect $$$</button><br><br>
 				<input type="text" id="faceDownCount" style="width:25%;font-size:15pt;text-align:center;font-weight:bold;">
 				<button style="background-color:#000066;color:#eeeeee;width:70%;" onclick="DealFaceDown()">Face Down</button><br>
-				<button style="background-color:#88ffcc;" onclick="DrawNewCards()">Draw New Cards</button><br><br>
-				<button style="background-color:#cc88ff" onclick="ToggleCenterCards()">Middle Cards</button><br>
-				<button style="background-color:#ffcc88" onclick="TakeCenterCard(1)">Take Middle Card</button><br>
-				<button style="background-color:#886600;color:white" onclick="BuryCenterCard(1)">Bury Middle Card</button><br><br>
-				<input type="text" id="faceDownCount" style="width:25%;font-size:15pt;text-align:center;font-weight:bold;">
-				<button style="background-color:#ffff00;width:70%;" onclick="PassClockwise()">Pass CW</button>
+				<button style="background-color:white;color:red" onclick="DealNextUpCard()">Deal Face Up</button><br><br>
+				<button style="background-color:#000000;color:white;" onclick="DrawNewCards()">Draw New Cards</button><br><br>
+				<button style="background-color:#ffff00" onclick="Showdown()">Show Cards</button>
 			</div>
 			<div id="player5" class="playerArea">
 				<div class="playerCards"></div>
@@ -338,36 +360,50 @@
 				<div class="playerInfo"></div>
 			</div>
 			<div class="controlPanel">
-				<br><br><br>
-				<button style="background-color:#cccccc" id="selectButton" onclick="SelectButtonClicked()">Select All</button><br>
-				<button style="background-color:#888888;color:white" onclick="FlipSelectedCards()">Flip Selected</button><br>
-				<button style="background-color:#8888ff" onclick="Showdown()">Showdown</button><br><br>
+				<br><br>
 				<button style="background-color:#ffcc88" onclick="ToggleFullScreen()">Full Screen</button><br><br>
-				<button style="background-color:#008800;color:white">Collect $$$</button><br>
-				<button style="background-color:red" onclick="NewHand()">New Hand</button>
+				<button style="background-color:#cccccc" id="selectButton" onclick="SelectButtonClicked()">Select All</button><br>
+				<button style="background-color:#cccccc" id="selectButton" onclick="SelectFacedown()">Select Facedown</button><br>
+				<button style="background-color:#888888;color:white" onclick="FlipSelectedCards()">Flip Selected</button><br><br>
+				<button style="background-color:#cc88ff" onclick="ToggleCenterCards()">Middle Cards</button><br>
+				<button style="background-color:#88ffcc" onclick="TakeCenterCard(1)">Take Middle Card</button><br>
+				<button style="background-color:#886600;color:white" onclick="BuryCenterCard(1)">Bury Middle Card</button><br><br>
+				<button style="background-color:#ffff00;width:70%;" onclick="PassToRight()">Pass Right</button>
+				<input type="text" id="passRightNumSeats" style="width:25%;font-size:15pt;text-align:center;font-weight:bold;">
 			</div>
 		</div>
 	</div>
 </body>
 <script>
+	$("button, input").attr("tabIndex", -1);
+
 	var DECK = [];
 	var NAMES = [
+		"Roger",
+		"Fran",
 		"Ray",
-		"Jeff",
-		"Nicholas",
-		"Angela",
-		"David",
-		"Michael"
+		"Nancy",
+		"Ed",
+		"Joe"
 	];
+	var IDS = [
+		{n: "Louis", i: 5220},
+		{n: "Fran", i: 6781},
+		{n: "Ed", i: 5892},
+		{n: "Ray", i: 4403},
+		{n: "Joe", i: 2254},
+		{n: "Nancy", i: 9895},
+		{n: "Roger", i: 8016},
+		{n: "Steve", i: 7737},
+		{n: "Lyle", i: 4948},
+	]
 
 	var PLAYERS = [];
 	var TOTAL_SEATS = 6;
-	var SEATS = [];
-	var DEALER = null;
 	var CURRENT_SEAT = null;
 	var START_SEAT = null;
 	var END_SEAT = null;
-	var DEALER_SEAT = 0;
+	var DEALER_SEAT = null;
 
 	var CENTER_CARDS = [null, null, null, null, null];
 
@@ -396,6 +432,7 @@
 
 	var totalMoney = 0;
 	CURRENT_SEAT = 0;
+	POT = 0;
 	var GAME_CHOICE = Math.floor(Math.random() * GAMES.length);
 
 	for (var i = 0; i < PLAYERS.length; i++) {
@@ -428,27 +465,37 @@
 	}
 
 	Setup();
-	NewHand();
+	//NewHand();
 
 	function NewHand() {
+		if (POT >= 0.01 || $(".pending").length > 0) {
+			return;
+		}
+
+		if (DEALER_SEAT === null) {
+			DEALER_SEAT = -1;
+		}
 		DEALER_SEAT = ((DEALER_SEAT + 1) % PLAYERS.length);
 		$(".playerInfoWrapper img").css("border", "").css("margin", "");
 		$(".dealerLabel").hide();
 		$("#player" + DEALER_SEAT + " img").css("border", "10px solid #0000bb").css("margin", "-7px -7px -7px -7px");
-		$("#player" + DEALER_SEAT + " .dealerLabel").show();
+		$("#player" + DEALER_SEAT + " .dealerLabel").css("display", "inline-block");
 
-		CURRENT_SEAT = DEALER_SEAT;
-		AdvanceCurrentPlayer();
+		$(".foldCheckbox").prop("checked", false);
+		$(".playerArea").css("opacity", 1);
 
 		for (var i = 0; i < PLAYERS.length; i++) {
 			PLAYERS[i].folded = false;
 			PLAYERS[i].cards = [];
 		}
 
+		CURRENT_SEAT = DEALER_SEAT;
+		AdvanceCurrentPlayer();
+
 		$(".selectedCard").removeClass("selectedCard");
 		$("#selectButton").html("Select All");
 
-		$("#centerCardsContainer span.card").addClass("empty").removeClass("facedown").removeAttr("").html("");
+		$("#centerCardsContainer span.card").addClass("empty").removeClass("facedown").removeClass("faceup").removeClass("red").removeClass("black").removeAttr("cardVal").html("");
 		CENTER_CARDS = [null, null, null, null, null];
 		$(".facedown").removeClass("facedown");
 		$(".playerCards .card").remove();
@@ -466,7 +513,181 @@
 		}
 	}
 
+	function RefreshMoney() {
+		var totalBets = 0;
+
+		for (var i = 0; i < PLAYERS.length; i++) {
+			var betInput = $("#player" + i).find(".betInput");
+			var betAmount = (parseInt(betInput.val()) / 100);
+			if (isNaN(betAmount)) {
+				betAmount = 0;
+				//betInput.val(null);
+			}
+
+			totalBets += betAmount;
+			var prevMoney = PLAYERS[i].money;
+			var newMoney = PLAYERS[i].money - betAmount;
+
+			$("#player" + i).find(".moneySpan").html("$" + newMoney.toFixed(2));
+			if (betAmount === 0) {
+				$("#player" + i).find(".moneySpan").removeClass("pending");
+				$("#player" + i).find(".betInput").removeClass("pending");
+			}
+			else {
+				$("#player" + i).find(".moneySpan").addClass("pending");
+				$("#player" + i).find(".betInput").addClass("pending");
+			}
+		}
+
+		$("#pot").html("$" + (POT + totalBets).toFixed(2));
+		if (totalBets === 0) {
+			$("#pot").removeClass("pending");
+		}
+		else {
+			$("#pot").addClass("pending");
+		}
+	}
+
+	function CollectMoney() {
+		if (DEALER_SEAT === null) {
+			return;
+		}
+
+		var totalBets = 0;
+
+		for (var i = 0; i < PLAYERS.length; i++) {
+			var betInput = $("#player" + i).find(".betInput");
+			var betAmount = (parseInt(betInput.val()) / 100);
+			if (isNaN(betAmount)) {
+				betAmount = 0;
+			}
+
+			PLAYERS[i].money -= betAmount;
+			totalBets += betAmount;
+			betInput.val(null);
+
+			$("#player" + i).find(".moneySpan").html("$" + PLAYERS[i].money.toFixed(2));
+
+			if (betAmount > 0) {
+				console.log(PLAYERS[i].name + " pays $" + betAmount.toFixed(2) + ", left with $" + PLAYERS[i].money.toFixed(2));
+			}
+			if (betAmount < 0) {
+				console.log(PLAYERS[i].name + " collects $" + Math.abs(betAmount).toFixed(2) + ", now has $" + PLAYERS[i].money.toFixed(2));
+			}
+		}
+
+		POT += totalBets;
+
+		if (POT < 0) {
+			POT = 0;
+		}
+
+		$("#pot").html("$" + (POT).toFixed(2));
+		$(".pending").removeClass("pending");
+
+		SaveMoney();
+	}
+
+	function SaveMoney() {
+		var playerMoney = [];
+
+		for (var i = 0; i < PLAYERS.length; i++) {
+			playerMoney.push({
+				player: PLAYERS[i].name,
+				money: PLAYERS[i].money.toFixed(2)
+			});
+		}
+
+		playerMoney.push({
+			player: "[POT]",
+			money: POT.toFixed(2)
+		});
+
+		localStorage.setItem("POKER_MONEY", JSON.stringify(playerMoney));
+	}
+
+	function SendCardsToServer(playerIndices) {
+		var params = {};
+		var playerCards = [];
+		for (var i = 0; i < PLAYERS.length; i++) {
+			if (playerIndices.indexOf(i) >= 0) {
+				var facedown = [];
+				for (var c = 0; c < PLAYERS[i].cards.length; c++) {
+					if (PLAYERS[i].cards[c] < 0) {
+						facedown.push(
+							(100 * (c + 1)) + Math.abs(PLAYERS[i].cards[c])
+						);
+					}
+				}
+
+				for (var p = 0; p < IDS.length; p++) {
+					if (IDS[p].n === NAMES[i]) {
+						playerCards.push({
+							p: IDS[p].i,
+							c: facedown.join(",")
+						});
+						break;
+					}
+				}
+			}
+		}
+
+		params.c = playerCards;
+		console.log(params);
+        /*$.ajax({
+            url:"processPokerRequest.php",
+            type: "post",
+            dataType: 'json',
+            data: params,
+            success:function(result){
+                console.log("SUCCESS");
+                console.log(result);
+                GAME_DATA = result;
+                if (pRefresh) {
+	                RenderLatestGameData();
+                }
+                else {
+                	RefreshGameData();
+                }
+            },
+            error:function(data) {
+            	console.log("ERROR");
+            	console.log(data);
+            },
+            complete:function() {
+            	console.log("COMPLETE");
+            }
+        });*/
+   	}
+
+	function Ante(pCents) {
+		if (DEALER_SEAT === null) {
+			return;
+		}
+		
+		if ($(".pending").length > 0) {
+			return;
+		}
+
+		for (var i = 0; i < PLAYERS.length; i++) {
+			if (!PLAYERS[i].folded) {
+				$("#player" + i + " .betInput").val(pCents);
+			}
+		}
+		RefreshMoney();
+	}
+
+	function Fold(pPlayer) {
+		var isFold = !(PLAYERS[pPlayer].folded);
+		PLAYERS[pPlayer].folded = isFold;
+		$("#player" + pPlayer).css("opacity", isFold ? 0.2 : 1);
+	}
+
 	function DealFaceDown() {
+		if ($(".pending").length > 0 || DEALER_SEAT === null) {
+			return;
+		}
+
 		var numberOfCards = parseInt($("#faceDownCount").val());
 		$("#faceDownCount").val(null);
 		if (isNaN(numberOfCards)) {
@@ -474,22 +695,34 @@
 		}
 
 		var cardsDealt = 0;
+		var playersWithNewCards = [];
 		for (var r = 0; r < numberOfCards; r++) {
 			for (var i = 1; i <= PLAYERS.length; i++) {
 				var seat = (DEALER_SEAT + i) % PLAYERS.length;
 				if (PLAYERS[seat].folded || DECK_INDEX >= 52) {
 					continue;
 				}
+				else if (playersWithNewCards.indexOf(seat) < 0) {
+					playersWithNewCards.push(seat);
+				}
 
 				var cardVal = DECK[DECK_INDEX++];
 				PLAYERS[seat].cards.push(cardVal);
-				setTimeout(RenderDealCard, 170 * cardsDealt++, seat, cardVal);
+				setTimeout(RenderDealCard, 125 * cardsDealt++, seat, cardVal);
 			}
 		}
+
+		SendCardsToServer(playersWithNewCards);
 	}
 
 	function DrawNewCards() {
-		for (var i = 0; i <= PLAYERS.length; i++) {
+		if ($(".pending").length > 0 || DEALER_SEAT === null) {
+			return;
+		}
+
+		var playersWithNewCards = [];
+
+		for (var i = 0; i < PLAYERS.length; i++) {
 			var seat = (DEALER_SEAT + i) % PLAYERS.length;
 			if (PLAYERS[seat].folded || DECK_INDEX >= 52) {
 				continue;
@@ -503,7 +736,9 @@
 				}
 			}
 
-			console.log(selectedIndices);
+			if (selectedIndices.length > 0) {
+				playersWithNewCards.push(i);
+			}
 
 			for (var c = 0; c < selectedIndices.length; c++) {
 				var cardIndex = selectedIndices[c];
@@ -515,25 +750,117 @@
 
 		$(".selectedCard .card").fadeOut(250, function() {
 			$(".selectedCard").removeClass("selectedCard").find(".card").fadeIn(250);
+			$("#selectButton").html(($(".selectedCard").length > 0) ? "De-Select" : "Select All");
 		});
+
+		SendCardsToServer(playersWithNewCards);
+	}
+
+	function PassToRight() {
+		if ($(".pending").length > 0 || DEALER_SEAT === null) {
+			return;
+		}
+
+		var numberOfSeats = parseInt($("#passRightNumSeats").val());
+		if (isNaN(numberOfSeats)) {
+				console.log("nan")
+			return;
+		}
+
+		var cardsPerPlayer = null;
+		var livePlayerCount = 0;
+		var swappedCardVals = [];
+		for (var i = 0; i < PLAYERS.length; i++) {
+			if (PLAYERS[i].folded) {
+				continue;
+			}
+
+			livePlayerCount++;
+			var selectedCards = $("#player" + i + " .selectedCard");
+			var playerCardCount = selectedCards.length;
+
+			for (var c = 0; c < selectedCards.length; c++) {
+				var cardVal = parseInt(selectedCards.eq(c).find(".card").attr("cardVal"));
+				swappedCardVals.push(cardVal);
+			}
+
+			if (cardsPerPlayer === null) {
+				cardsPerPlayer = playerCardCount;
+			}
+			else if (cardsPerPlayer !== playerCardCount) {
+				console.log("Mismatch")
+				return;
+			}
+		}
+
+		if (livePlayerCount <= 1 || cardsPerPlayer === null || cardsPerPlayer <= 0 || numberOfSeats >= livePlayerCount) {
+				console.log("various");
+			return;
+		}
+
+		console.log(swappedCardVals);
+		console.log(numberOfSeats * cardsPerPlayer);
+
+		var livePlayerCount2 = -1;
+		var playersWithNewCards = [];
+		for (var i = 0; i < PLAYERS.length; i++) {
+			if (PLAYERS[i].folded) {
+				continue;
+			}
+
+			playersWithNewCards.push(i);
+			livePlayerCount2++;
+			var playerCardCount = -1;
+
+			for (var c = 0; c < PLAYERS[i].cards.length; c++) {
+				if ($("#player" + i + " .cardContainer").eq(c).hasClass("selectedCard")) {
+					playerCardCount++;
+					var originalSwapIndex = (livePlayerCount2 * cardsPerPlayer + playerCardCount);
+					var takeFromSwapIndex = ((originalSwapIndex + (numberOfSeats * cardsPerPlayer)) % swappedCardVals.length);
+					var newCardVal = swappedCardVals[takeFromSwapIndex];
+					PLAYERS[i].cards[c] = newCardVal;
+					RenderCard($("#player" + i + " .cardContainer").eq(c).find(".card"), newCardVal);
+				}
+			}
+		}
+
+		$(".selectedCard .card").fadeOut(250, function() {
+			$(".selectedCard").removeClass("selectedCard").find(".card").fadeIn(250);
+			$("#selectButton").html(($(".selectedCard").length > 0) ? "De-Select" : "Select All");
+		});
+
+		SendCardsToServer(playersWithNewCards);
 	}
 
 	function TakeCenterCard(pIndex) {
+		if ($(".pending").length > 0 || DEALER_SEAT === null) {
+			return;
+		}
+
 		if (CENTER_CARDS[pIndex] !== null) {
 			var cardVal = CENTER_CARDS[pIndex];
 			$("#centerCard" + pIndex).addClass("empty").removeClass("facedown").removeAttr("").html("");
 			PLAYERS[CURRENT_SEAT].cards.push(cardVal);
 			RenderDealCard(CURRENT_SEAT, cardVal);
 			AdvanceCurrentPlayer();
+			CENTER_CARDS[pIndex] = null;
 		}
 	}
 
 	function BuryCenterCard(pIndex) {
+		if ($(".pending").length > 0 || DEALER_SEAT === null) {
+			return;
+		}
+
 		$("#centerCard" + pIndex).addClass("empty").removeClass("facedown").removeAttr("").html("");
 		CENTER_CARDS[pIndex] = null;
 	}
 
 	function FlipSelectedCards() {
+		if ($(".pending").length > 0 || DEALER_SEAT === null) {
+			return;
+		}
+
 		$(".selectedCard").each(function() {
 			//$(this).removeClass("selectedCard");
 			var cardEl = $(this).find(".card");
@@ -552,7 +879,16 @@
 		$("#selectButton").html(($(".selectedCard").length > 0) ? "De-Select" : "Select All");
 	}
 
+	function SelectFacedown() {
+		$(".playerCards .facedown").parent().addClass("selectedCard");
+		$("#selectButton").html(($(".selectedCard").length > 0) ? "De-Select" : "Select All");
+	}
+
 	function Showdown() {
+		if ($(".pending").length > 0 || DEALER_SEAT === null) {
+			return;
+		}
+
 		for (var i = 0; i < PLAYERS.length; i++) {
 			if (PLAYERS[i].folded) {
 				continue;
@@ -566,6 +902,22 @@
 	}
 
 	function DealNextUpCard() {
+		if ($(".pending").length > 0 || DEALER_SEAT === null) {
+			return;
+		}
+
+		var loops = 0;
+		while (PLAYERS[CURRENT_SEAT].folded === true) {
+			AdvanceCurrentPlayer();
+			if (loops++ > 100) {
+				break;
+			}
+		}
+
+		if (loops > 100) {
+			return;
+		}
+
 		var cardVal = Math.abs(DECK[DECK_INDEX++]);
 		PLAYERS[CURRENT_SEAT].cards.push(cardVal);
 		RenderDealCard(CURRENT_SEAT, cardVal);
@@ -573,6 +925,10 @@
 	}
 
 	function DealCenterCard(pIndex) {
+		if ($(".pending").length > 0 || DEALER_SEAT === null) {
+			return;
+		}
+
 		if (CENTER_CARDS[pIndex] !== null) {
 			return;
 		}
@@ -591,7 +947,7 @@
 		var card = $("<span class='card'></span>");
 		card.attr("onclick", "SelectCard(this," + pSeatNum + "," + cardIndex + ")");
 
-		if (pSeatNum === 0 || pSeatNum === 5) {
+		if (pSeatNum === 4 || pSeatNum === 5) {
 			cardContainer.append(index).append("<br>").append(card);
 		} else {
 			//cardContainer.append(index).append("<br>").append(card);
@@ -622,7 +978,6 @@
 	}
 
 	function SelectCard(pCardEl, pSeatNum, pCardIndex) {
-		console.log("Seat " + pSeatNum + ", Card " + pCardIndex);
 		var container = $(pCardEl).parent();
 		if (container.hasClass("selectedCard")) {
 			container.removeClass("selectedCard");
@@ -651,7 +1006,7 @@
 		for (var i = 0; i < NAMES.length; i++) {
 			PLAYERS.push({
 				name: NAMES[i],
-				money: (10).toFixed(2),
+				money: 10,
 				folded: false,
 				cards: []
 			});
@@ -660,51 +1015,72 @@
 		$(".playerInfo").each(function() {
 			var span = $("<span></span>");
 			span.addClass("playerInfoWrapper");
-			var name = $("<p><span></span></p>");
-			name.addClass("playerName");
 			var img = $("<img>");
 			var dealer = $("<p><span>DEALER</span></p>");
 			dealer.addClass("dealerLabel");
 			span.append(img);
+			span.append("<br>");
 			span.append(dealer);
-			span.append(name);
+
+			var playerId = parseInt($(this).parent().attr("id").substring(6));
 
 			var foldSpan = $("<span></span>");
 			foldSpan.addClass("foldSpan");
-			foldSpan.append("<input type='checkbox'/><br>Fold");
-			foldSpan.append("<br><input type='text' placeholder='Bet'/>");
+
+			var nameSpan = $("<span></span>");
+			nameSpan.addClass("nameSpan");
+			nameSpan.html(PLAYERS[playerId].name);
+
+			var moneySpan = $("<span></span>");
+			moneySpan.addClass("moneySpan");
+			moneySpan.html("$" + PLAYERS[playerId].money.toFixed(2));
+
+			foldSpan.append(nameSpan);
+			foldSpan.append("<br>");
+			foldSpan.append(moneySpan);
+			foldSpan.append("<br>");
+
+			var foldControl = $("<input>");
+			foldControl.attr("type", "checkbox");
+			foldControl.attr("tabIndex", -1);
+			foldControl.attr("id", "fold" + playerId);
+			foldControl.attr("onclick", "Fold(" + playerId + ")");
+			foldControl.addClass("foldCheckbox");
+
+			foldSpan.append(foldControl);
+			foldSpan.append("<label for='fold" + playerId + "'>Fold</label>");
 
 			var betSpan = $("<span></span>");
+			var betInput = $("<input>");
+			betInput.addClass("betInput");
+			betInput.attr("type", "text");
+			betInput.attr("tabIndex", playerId + 1);
+			betInput.attr("placeholder", "Bet");
+			betInput.attr("onkeydown", "setTimeout(RefreshMoney, 10)");
+			betSpan.append(betInput);
 			betSpan.addClass("betSpan");
-
-			var playerId = parseInt($(this).parent().attr("id").substring(6));
 
 			if (playerId === 0) {
 				$(this).append(span);
 				$(this).append(foldSpan);
-				//$(this).append(betSpan);
+				$(this).append(betSpan);
 			}
 			else if (playerId === 3) {
+				$(this).append(betSpan);
 				$(this).append(foldSpan);
 				$(this).append(span);
-				//$(this).append(betSpan);
 			}
 			else if (playerId === 1 || playerId === 5) {
-				$(this).append(span);
 				$(this).append(foldSpan);
-				//$(this).append(betSpan);
+				$(this).append(span);
+				$(this).append(betSpan);
 			}
 			else if (playerId === 2 || playerId === 4) {
-				//$(this).append(betSpan);
-				$(this).append(foldSpan);
+				$(this).append(betSpan);
 				$(this).append(span);
+				$(this).append(foldSpan);
 			}
 		});
-
-		for (var i = 0; i < PLAYERS.length; i++) {
-			var label = $("#player" + i).find(".playerName span");
-			label.html(GetPlayerLabelText(i));
-		}
 
 		for (var i = 0; i < TOTAL_SEATS; i++) {
 			if (i >= PLAYERS.length) {
@@ -712,54 +1088,14 @@
 			}
 			else {
 				$("#player" + i + " img").show().attr("src", "players/" + PLAYERS[i].name + ".jpg");
-				$("#player" + i + " .playerName").show();
 			}
 		}
 
 		ToggleCenterCards();
 	}
 
-	function UpdateScore(pSeatNum) {
-		SEATS[pSeatNum].scores[ROUND_NUM - 1] = GetSeatScore(pSeatNum);
-		var labelEl = $("#playerInfo" + pSeatNum).find(".playerName span");
-		$.when(labelEl.fadeOut(200)).then(function() {
-			setTimeout(function() {
-				labelEl.html(GetPlayerLabelText(pSeatNum)).css("background-color", "#ffaaaa").css("border-color", "red");
-				labelEl.fadeIn(200);
-			}, 1);
-		});
-	}
-
-	function ToggleNames() {
-		SHOW_NAMES = !SHOW_NAMES;
-		ShowHideNames();
-	}
-
-	function ToggleScores() {
-		SHOW_SCORES = !SHOW_SCORES;
-		ShowHideNames();
-	}
-
 	function ToggleCenterCards() {
 		$("#centerCardsContainer .card, #centerCardsContainer br").toggle();
-	}
-
-	function ShowHideNames() {
-		$(".playerName").toggle(SHOW_SCORES || SHOW_NAMES);
-
-		for (var i = 0; i < SEATS.length; i++) {
-			var label = $("#playerInfo" + i).find(".playerName span");
-			if (SEATS[i] === null) {
-				label.hide();
-			}
-			else {
-				label.html(GetPlayerLabelText(i));
-			}
-		}
-	}
-
-	function GetPlayerLabelText(pSeatNum) {
-		return (SHOW_NAMES ? PLAYERS[pSeatNum].name : "") + (SHOW_SCORES ? " <strong>$" + PLAYERS[pSeatNum].money + "</strong>" : "");
 	}
 
 	function ToggleFullScreen() {
