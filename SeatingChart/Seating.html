@@ -1,0 +1,112 @@
+<html>
+<title>Seating Chart Generator</title>
+<head>
+	<script src="jQ.js"></script>
+	<script src="Seating.js"></script>
+	<style>
+		.resultRow:hover {
+			background-color:lightgreen;
+		}
+	</style>
+</head>
+<body style="font-family:verdana;font-size:12pt;vertical-align:top">
+	<span id="Classroom" style="width:55%;background-color:pink;display:inline-block;height:100%;vertical-align:top">
+		<button style="background-color:#99ff99;color:black;font-size:11pt;width:100px;height:3em;cursor:pointer" onclick="AddNewChair()">
+			<strong>Add New Desk</strong>
+		</button>
+	</span>
+	<span id="EditChair" style="width:44%;background-color:gold;display:inline-block;height:100%;vertical-align:top;text-align:center;">
+		<br>
+		<strong id="chairnum"></strong>
+		<br>Use arrow keys to move desk.<br>Ctrl-Left, Ctrl-Right to change angle. Hold down shift to go faster.<br>
+		<button style="background-color:white;color:green;font-size:10pt;width:7em;height:2em;" onclick="ResetChair()">
+			<strong>Reset Desk</strong>
+		</button>
+		<button style="background-color:red;color:white;font-size:10pt;width:7em;height:2em;" onclick="DeleteChair()">
+			<strong>Delete Desk</strong>
+		</button>
+		<br><br>
+		<table id="chairedittable" style="padding:3px;width:86%;margin-left:7%;border-collapse:collapse;font-size:12pt;text-align:center;">
+		</table>
+		<br>
+		<button style="background-color:green;color:white;font-size:14pt;width:10em;height:2.5em;" onclick="DoneEditingChair()">
+			<strong>Done</strong>
+		</button><br>
+		Changes apply to future generated seating charts, not the currently displaying ones.
+	</span>
+	<span id="Controls" style="width:44%;background-color:#bbddff;display:inline-block;height:100%;vertical-align:top">
+		<span style="width:100%;height:15%;padding:3px;display:inline-block;text-align:center;">
+			<br>
+			Minimum threshold for best average
+			<input type="number" id="Threshold" value="40" /><br><br>
+			<span id="generateLabel">Generate this many seating charts</span>
+			<input type="number" id="Tries" value="20000" /><br>
+			<button style="background-color:green;color:white;font-size:14pt;width:10em;height:2.5em;" onclick="Go()"><strong>Find Best</strong></button>
+		</span>
+		<span id="Inputs" style="width:100%;height:73%;display:inline-block;">
+			<span style="width:100%;display:inline-block;text-align:center;">
+				<span id="generateLabel">Class Name</span>
+				<input type="text" id="ClassName" style="width:35em" />
+			</span>
+			<br>
+			<span style="width:49%;height:100%;display:inline-block;text-align:center;">
+				<strong>Class list</strong><br>
+				<span style="font-size:8pt"><i>(write each name on own line)</i></span>
+				<textarea id="Names" style="padding:3px;resize:none;width:97%;display:inline-block;" rows="40"></textarea>
+				<!--button style="background-color:green;color:white;width:6em;height:2em;" onclick="OnNamesOkay()">Okay</button-->
+			</span>
+			<span style="width:50%;height:100%;display:inline-block;text-align:center;">
+				<strong>Separations</strong><br>
+				<span style="font-size:8pt"><i>(Write each separation on its own line, separate names with commas)</i></span>
+				<textarea id="Separations" style="padding:3px;resize:none;width:97%;display:inline-block;" rows="40"></textarea>
+				<!--button style="background-color:green;color:white;width:6em;height:2em;" onclick="OnSeparationsOkay()">Okay</button-->
+			</span>
+		</span>
+		<span id="Results" style="width:100%;height:73%;display:inline-block;vertical-align:top;text-align:center;">
+			<br><br>
+			<table style="padding:3px;width:100%;border-collapse:collapse;font-size:12pt;text-align:center;background-color:white">
+				<tr>
+					<th style="border:1px solid black">SEPARATION RESULTS</th>
+					<th style="border:1px solid black">Minimum</th>
+					<th style="border:1px solid black">Average</th>
+					<th style="border:1px solid black"></th>
+				</tr>
+				<tr id="min_row">
+					<td style="border:1px solid black">Best Minimum Distance</td>
+					<td style="border:1px solid black" id="min_min"></td>
+					<td style="border:1px solid black" id="min_avg"></td>
+					<td style="border:1px solid black">
+						<button id="min_show" style="background-color:blue;color:white;height:2em;width:6em;cursor:pointer" onclick="ShowResults(false)">Show</button>
+					</td>
+				</tr>
+				<tr id="avg_row">
+					<td style="border:1px solid black">Best Average Distance</td>
+					<td style="border:1px solid black" id="avg_min"></td>
+					<td style="border:1px solid black" id="avg_avg"></td>
+					<td style="border:1px solid black">
+						<button id="avg_show" style="background-color:orange;color:black;height:2em;width:6em;cursor:pointer" onclick="ShowResults(true)"><strong>Show</strong></button>
+					</td>
+				</tr>
+			</table>
+			<br><br>
+			<table id="separationResults" style="padding:3px;width:94%;margin-left:3%;border-collapse:collapse;font-size:12pt;text-align:center;">
+				<tr>
+					<th style="border:1px solid black">SEPARATIONS</th>
+					<th style="border:1px solid black">DISTANCE</th>
+				</tr>
+			</table>
+		</span>
+		<span id="ShowResultsButton" style="width:100%;display:inline-block;text-align:center;">
+			<input type="file" accept="text/text" id="importFile" style="display:none" />
+			<label for="importFile">
+				<button style="background-color:white;color:green;width:10em;height:2em;cursor:pointer;font-size:13pt" onclick="$('#importFile').click()"><strong>Import</strong></button>&nbsp; &nbsp;
+			</label>
+			<button style="background-color:green;color:white;width:10em;height:2em;cursor:pointer;font-size:13pt" onclick="Save()"><strong>Save</strong></button>&nbsp; &nbsp;
+			<button style="background-color:#ff6600;color:black;width:10em;height:2em;cursor:pointer;font-size:13pt" onclick="BackToEdit()"><strong>Show Class List</strong></button>&nbsp; &nbsp;
+			<button style="background-color:black;color:#ff6600;width:10em;height:2em;cursor:pointer;font-size:13pt" onclick="BackToResults()"><strong>Show Results</strong></button>
+			<br>
+			<span id="SaveAsLink"></span>
+		</span>
+	</span>
+</body>
+</html>
