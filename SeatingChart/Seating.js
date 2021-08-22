@@ -65,47 +65,41 @@ $(function() {
 	AddChair(43, 99, 180);
 	AddChair(60, 99, 180);*/
 
-	AddChair(7, 0, 0);
-	AddChair(24, 0, 0);
-	AddChair(41, 0, 0);
-	AddChair(58, 0, 0);
-	AddChair(75, 0, 0);
-	AddChair(92, 0, 0);
+	AddChair(-14, 20, 90);
+	AddChair(14, 20, 270);
+	AddChair(18, 20, 90);
+	AddChair(46, 20, 270);
+	AddChair(50, 20, 90);
+	AddChair(78, 20, 270);
+	AddChair(82, 20, 90);
+	AddChair(110, 20, 270);
 
-	AddChair(7, 20, 0);
-	AddChair(24, 20, 0);
-	AddChair(41, 20, 0);
-	AddChair(58, 20, 0);
-	AddChair(75, 20, 0);
-	AddChair(92, 20, 0);
+	AddChair(-14, 33, 90);
+	AddChair(14, 33, 270);
+	AddChair(18, 33, 90);
+	AddChair(46, 33, 270);
+	AddChair(50, 33, 90);
+	AddChair(78, 33, 270);
+	AddChair(82, 33, 90);
+	AddChair(110, 33, 270);
 
-	AddChair(7, 40, 0);
-	AddChair(24, 40, 0);
-	AddChair(41, 40, 0);
-	AddChair(58, 40, 0);
-	AddChair(75, 40, 0);
-	AddChair(92, 40, 0);
+	AddChair(-14, 52, 90);
+	AddChair(14, 52, 270);
+	AddChair(18, 52, 90);
+	AddChair(46, 52, 270);
+	AddChair(50, 52, 90);
+	AddChair(78, 52, 270);
+	AddChair(82, 52, 90);
+	AddChair(110, 52, 270);
 
-	AddChair(7, 60, 0);
-	AddChair(24, 60, 0);
-	AddChair(41, 60, 0);
-	AddChair(58, 60, 0);
-	AddChair(75, 60, 0);
-	AddChair(92, 60, 0);
-
-	AddChair(7, 80, 0);
-	AddChair(24, 80, 0);
-	AddChair(41, 80, 0);
-	AddChair(58, 80, 0);
-	AddChair(75, 80, 0);
-	AddChair(92, 80, 0);
-
-	AddChair(7, 100, 0);
-	AddChair(24, 100, 0);
-	AddChair(41, 100, 0);
-	AddChair(58, 100, 0);
-	AddChair(75, 100, 0);
-	AddChair(92, 100, 0);
+	AddChair(-14, 65, 90);
+	AddChair(14, 65, 270);
+	AddChair(18, 65, 90);
+	AddChair(46, 65, 270);
+	AddChair(50, 65, 90);
+	AddChair(78, 65, 270);
+	AddChair(82, 65, 90);
+	AddChair(110, 65, 270);
 
 	SetChairs();
 });
