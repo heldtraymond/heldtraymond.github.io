@@ -1,0 +1,398 @@
+<html>
+<head>
+    <title>Golf 2023</title>
+    <!--meta name="viewport" content="width=device-width,initial-scale=1.0"-->
+    <meta charset="UTF-8">
+    <link rel="icon" href="https://heldtraymond.github.io/Golf/trophyicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@800&display=swap" rel="stylesheet">
+    <script src="jquery.js"></script>
+    <style>
+        @font-face {
+            font-family: 'amasis_mt_stdblack';
+            src: url('fonts/amasis_mt_std_black-webfont.woff2') format('woff2'),
+                 url('fonts/amasis_mt_std_black-webfont.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'amasis_mtregular';
+            src: url('fonts/amasis_mt_regular-webfont.woff2') format('woff2'),
+                 url('fonts/amasis_mt_regular-webfont.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+
+        }
+        @font-face {
+            font-family: 'key_lime_demoregular';
+            src: url('fonts/keylimedemo-regular-webfont.woff2') format('woff2'),
+                 url('fonts/keylimedemo-regular-webfont.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Meadow';
+            src: url('fonts/MeadowRegular.woff2') format('woff2'),
+                 url('fonts/MeadowRegular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        #trophy {
+            max-width:99%;
+        }
+
+        .playerPhoto {
+            vertical-align:bottom;
+            max-width:99%;
+            max-height:110px;
+        }
+        #playerPhotos td {
+            vertical-align:bottom;
+            padding-top:5px;
+        }
+        #totalScores td {
+            padding-top:0px;
+            padding-bottom:5px;
+            line-height:0.9em;
+        }
+        .tableCell {
+            text-align:center;
+            padding-left:1px;
+            padding-right:1px;
+        }
+        .tableCell:nth-child(2n) {
+            background-color:#00C459;
+        }
+        .edgeCell {
+            width:45px;
+            text-align:center;
+        }
+        .playerName {
+            font-family: 'Meadow';
+            font-weight: 600;
+            letter-spacing:1.7px;
+            line-height:0.8em;
+            padding-top:7px;
+        }
+        .playerTotal {
+            font-family: 'amasis_mt_stdblack';
+            font-weight: normal;
+        }
+        .roundNum {
+            font-family: 'amasis_mt_stdblack';
+            font-weight: normal;
+        }
+        #scoreboard {
+            width:100%;
+            border-collapse: collapse;
+        }
+        .scoringRow:has(.scoreInput):hover .edgeCell {
+            background-color:#77ee99;
+        }
+        .playerRoundScore:has(.scoreInput):hover {
+            background-color:#77ee99;
+        }
+        .playerRoundScore:has(.roundInProgress):hover {
+            background-color:#006600 !important;
+        }
+        .playerRoundScore:not(:has(.scoreInput)):hover {
+            cursor:not-allowed;
+        }
+/*        .scoreInput:hover  {
+            display:hidden;
+        }*/
+        .scoreInput {
+            border:none;
+            text-align:center;
+            font-family: 'amasis_mtregular';
+            width:100%;
+        }
+        .roundInProgress {
+            background-color:#77ee99 !important;
+        }
+        .playerRoundScore:nth-child(2n) .scoreInput {
+            background-color:#00C459;
+        }
+        .playerRoundScore:nth-child(2n+1) .scoreInput {
+            background-color:#00B050;
+        }
+        .playerRoundScore:nth-child(2n) .roundInProgress {
+            background-color:#88ffaa !important;
+        }
+        .playerRoundScore:nth-child(2n+1) .roundInProgress {
+            background-color:#77ee99 !important;
+        }
+        #openFile {
+            width: 30px;
+        }
+
+    </style>
+</head>
+<body style="overflow-y:hidden;text-align:center;background-color:#00B050;margin:5px 0px 0px 0px" onresize="PopulateScores()">
+    <table id="scoreboard">
+        <tr id="playerPhotos"></tr>
+        <tr id="playerNames">
+            <td id='openFileContainer' class='edgeCell'>
+                <input type='file' id='openFile' style='display:none' />
+            </td>
+        </tr>
+        <tr id="totalScores"></tr>
+        <tr id="round1" class="scoringRow"></tr>
+        <tr id="round2" class="scoringRow"></tr>
+        <tr id="round3" class="scoringRow"></tr>
+        <tr id="round4" class="scoringRow"></tr>
+        <tr id="round5" class="scoringRow"></tr>
+        <tr id="round6" class="scoringRow"></tr>
+        <tr id="round7" class="scoringRow"></tr>
+        <tr id="round8" class="scoringRow"></tr>
+        <tr id="round9" class="scoringRow"></tr>
+    </table>
+    <img id="bottomBanner" src="bottomBanner.png" style="width:100%" />
+    <script type="text/javascript">
+        var PLAYER_SCORES = [
+            {name: "Angela", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Dari", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "David", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Diane", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Elizabeth", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Jeff", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Justin", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Lauren", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Michael", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Michelle", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Nicholas", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Nicole", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Ray", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Samantha", scores: [null, null, null, null, null, null, null, null, null]},
+            {name: "Tracy", scores: [null, null, null, null, null, null, null, null, null]},
+        ];
+
+        var TARGET_ID_CLICKED = null;
+        var ALPHABETICAL = false;
+        var NUMERICAL = false;
+        var ALTERNATE = false;
+
+        var primaryBg = "#00B050";
+        var alternateBg = "#00C459";
+
+        var savedScoresJSON = localStorage.getItem("GOLF_23_PLAYER_SCORES");
+        if (typeof savedScoresJSON != "undefined" && savedScoresJSON != null) {
+            PLAYER_SCORES = JSON.parse(savedScoresJSON);
+        }
+
+        $("#openFile").on("change", function(e) {
+            console.log("CHANGE");
+
+            var _FirstFile = e.target.files[0];
+            var _Reader = new FileReader();
+            _Reader.onload = function(e) {
+                var _ConvertedArray = new Uint8Array(e.target.result);
+
+                var _String = "";
+
+                for (var i = 0; i < _ConvertedArray.length; i++) {
+                    _String += String.fromCharCode(_ConvertedArray[i]);
+                }
+
+                ImportFetchedData(_String);
+                $("#openFile").hide();
+                $("#openFile").val(null);
+            };
+
+            _Reader.readAsArrayBuffer(_FirstFile);
+        });
+
+
+        setTimeout(PopulateScores, 100);
+
+        function ImportFetchedData(JSONdata) {
+            console.log("IMPORT");
+            PLAYER_SCORES = JSON.parse(JSONdata);
+            PopulateScores();
+        }
+
+        function PopulateScores() {
+            var windowWidth = $(window).width();
+            var cellWidth = Math.floor((windowWidth - 90)/(PLAYER_SCORES).length);
+            var nameSize = Math.floor(windowWidth / 55);
+            var totalSize = Math.floor(windowWidth / 45);
+            var roundSize = Math.floor(totalSize * 0.77);
+            var roundScoreSize = Math.floor(totalSize * 0.73);
+            var highestRoundCompleted = GetHighestRoundCompleted();
+            var highestRoundEntered = GetHighestRoundEntered();
+            var photosHtml = "<td class='edgeCell'></td>";
+            var namesHtml = "";
+            var scoresHtml = "<td class='edgeCell'><a id='saveLink' onclick='OnClickTrophy(event)'><img src='trophy.png' /></a></td>";
+            var roundScores = [];
+            for (var i = 1; i <= 9; i++) {
+                var roundInProgress = (highestRoundEntered == i && i > highestRoundCompleted);
+                roundScores.push("<td class='edgeCell roundNum " + (roundInProgress ? "roundInProgress" : "") +
+                    "'>" + i + "</td>");
+            }
+            var SORTED_PLAYER_SCORES = [];
+            for (var i = 0; i < PLAYER_SCORES.length; i++) {
+                SORTED_PLAYER_SCORES.push(PLAYER_SCORES[i]);
+            }
+            if (!ALPHABETICAL) {
+                SORTED_PLAYER_SCORES.sort(function(a, b) {
+                    var totalScoreA = 0;
+                    var totalScoreB = 0;
+                    for (var i = 0; i < (NUMERICAL ? highestRoundEntered : highestRoundCompleted); i++) {
+                        if (a.scores[i] != null) {
+                            totalScoreA += a.scores[i];
+                        }
+                        if (b.scores[i] != null) {
+                            totalScoreB += b.scores[i];
+                        }
+                    }
+
+                    if (totalScoreA == totalScoreB) {
+                        return ((totalScoreA.name < totalScoreB.name) ? -2 : 2);
+                    }
+                    else {
+                        return totalScoreB - totalScoreA;
+                    }
+                });
+            }
+            $.each(SORTED_PLAYER_SCORES, function(index) {
+                var numRoundsEntered = 0;
+                var totalScore = 0;
+                for (var i = 0; i < 9; i++) {
+                    if (this.scores[i] != null) {
+                        totalScore += this.scores[i];
+                        numRoundsEntered++;
+                    }
+                }
+
+                var allRoundsEntered = (numRoundsEntered >= highestRoundEntered);
+                photosHtml += "<td class='tableCell'><img id='photo" + this.name + "' class='playerPhoto' src='players/23/" + this.name + ".png' /></td>";
+                namesHtml += "<td class='tableCell playerName' id='name" + this.name + "' style='font-size:" + nameSize + "pt"
+                  + (allRoundsEntered ? "" : ";color:white") + "'>" + this.name + "</td>";
+                scoresHtml += "<td class='tableCell playerTotal' style='font-size:" + totalSize + "pt" +
+                    (allRoundsEntered ? "" : ";color:white") + "'>" + totalScore + "</td>";
+
+                for (var i = 0; i < 9; i++) {
+                    var inProgress = (highestRoundEntered == (i + 1) && !allRoundsEntered);
+                    roundScores[i] += "<td class='tableCell playerRoundScore " +
+                            (inProgress ? "roundInProgress" : "") + "'>" +
+                            (i > 9 /*highestRoundCompleted*/ ? "</td>" : 
+                            ("<input type='text' class='scoreInput " + (inProgress ? "roundInProgress" : "") +
+                            "' id='" + this.name + (i + 1) + "' onfocus='OnFocus(event)'" +
+                            " onchange='OnScoreEntry(\"" + this.name + "\", " + (i + 1) + ", event)'" +
+                            (this.scores[i] == null ? "" : ("value='" + this.scores[i] + "'")) + " /></td>"));
+                }
+            });
+            for (var i = 1; i <= 9; i++) {
+                var roundInProgress = (highestRoundEntered == i && i > highestRoundCompleted);
+                roundScores[i - 1] += "<td class='edgeCell roundNum " + (roundInProgress ? "roundInProgress" : "") +
+                    "'>" + i + "</td>";
+                $("#round" + i).html(roundScores[i - 1]);
+            }
+            $("#playerPhotos").html(photosHtml + "<td class='edgeCell'></td>");
+            $("#totalScores").html(scoresHtml + "<td class='edgeCell'></td>");
+            namesHtml += "<td class='edgeCell'></td>";
+            $("#playerNames td").not("#openFileContainer").remove();
+            $("#playerNames").append(namesHtml);
+            $(".tableCell").css("width", cellWidth);
+            $(".roundNum").css("font-size", roundSize + "pt");
+            $(".scoreInput").css("font-size", roundScoreSize + "pt");
+
+            $("#nameElizabeth").css("letter-spacing", "1px");
+            $("#nameSamantha").css("letter-spacing", "0.3px");
+            $("#photoAngela").attr("onclick", "ALPHABETICAL = !ALPHABETICAL;NUMERICAL = false;PopulateScores()");
+            $("#photoRay").attr("onclick", "NUMERICAL = !NUMERICAL;ALPHABETICAL = false;PopulateScores()");
+            $("#photoSamantha").attr("src", (ALTERNATE ? "players/23/Samantha2.png" : "players/23/Samantha.png"));
+            $("#photoSamantha").attr("onclick", "ALTERNATE = !ALTERNATE;PopulateScores()");
+
+            UpdateSaveLink();
+
+            setTimeout(function() {
+                var windowHeight = $(window).height();
+                var scoreboardHeight = $("#scoreboard").height();
+                var bannerHeight = $("#bottomBanner").height();
+                var bannerPadding = Math.floor((windowHeight - scoreboardHeight - bannerHeight) / 2) - 10;
+                $("#bottomBanner").css("margin-top", (bannerPadding > 0 ? ("" + bannerPadding + "px") : "0px"));
+            }, 50);
+
+            if (TARGET_ID_CLICKED != null) {
+                $("#" + TARGET_ID_CLICKED).focus();
+            }
+
+            TARGET_ID_CLICKED = null;
+        }
+
+        function OnScoreEntry(name, roundNum, event) {
+            var textInput = $("#" + name + roundNum).val();
+            var pointsInRound = parseInt(textInput);
+            $.each(PLAYER_SCORES, function(index) {
+                if (this.name == name) {
+                    this.scores[roundNum - 1] = isNaN(pointsInRound) ? null : pointsInRound;
+                }
+            });
+
+            if (name + roundNum == TARGET_ID_CLICKED) {
+                TARGET_ID_CLICKED = null;
+            }
+
+            localStorage.setItem("GOLF_23_PLAYER_SCORES", JSON.stringify(PLAYER_SCORES));
+
+            setTimeout(PopulateScores,50);
+        }
+
+        function GetHighestRoundEntered() {
+            var highest = 0;
+            for (var i = 0; i < 9; i++) {
+                for (var p = 0; p < PLAYER_SCORES.length; p++) {
+                    var score = PLAYER_SCORES[p].scores[i];
+                    if (score != null && typeof score != "undefined") {
+                        highest = i + 1;
+                    }
+                }
+            }
+            return highest;
+        }
+
+        function OnFocus(event) {
+            if (TARGET_ID_CLICKED != event.target.id) {
+                TARGET_ID_CLICKED = event.target.id;
+            }
+            else {
+                TARGET_ID_CLICKED = null;
+            }
+        }
+
+        function UpdateSaveLink() {
+            var scoreDataJSON = JSON.stringify(PLAYER_SCORES);
+            var now = new Date();
+
+            var _Link = $("#saveLink");
+            _Link.attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent(scoreDataJSON));
+            _Link.attr("download", "Golf_23_scores_" + now.getHours() + "_" + now.getMinutes() + "_" + now.getSeconds() + ".txt");
+        }
+
+        function OnClickTrophy(e) {
+            e.preventDefault();
+            $("#openFile").toggle();
+        }
+
+        function GetHighestRoundCompleted() {
+            var highest = 0;
+            for (var i = 0; i < 9; i++) {
+                var allEntered = true;
+                for (var p = 0; p < PLAYER_SCORES.length; p++) {
+                    var score = PLAYER_SCORES[p].scores[i];
+                    if (score == null || typeof score == "undefined") {
+                        allEntered = false;
+                    }
+                }
+                if (allEntered == false) {
+                    return highest;
+                }
+                highest = i + 1;
+            }
+            return highest;
+        }
+    </script>
+</body>
+</html>
