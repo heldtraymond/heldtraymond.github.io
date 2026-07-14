@@ -1,0 +1,301 @@
+RK,Player Name,Team,Pos,BYE,Trend,Points,YDS,YPC,Rush,REC,TD,YPR,Rec/Tar Game,QB Att/Game,QB YPC
+1,Jahmyr Gibbs,DET,RB,6,rising,341.8,1908,4.9,264,74,19,8.1,4.4/5.4,0.0,0.0
+2,Bijan Robinson,ATL,RB,11,rising,329.5,2121,4.8,291,79,13,9.3,4.6/5.9,0.0,0.0
+3,Puka Nacua,LAR,WR,11,rising,296.9,1694,6.9,14,123,11,13.0,7.2/9.8,0.0,0.0
+4,Ja'Marr Chase,CIN,WR,6,rising,259.6,1426,5.1,3,114,10,12.4,6.7/9.9,0.0,0.0
+5,Christian McCaffrey,SF,RB,8,down,331.7,1887,4.0,285,82,17,9.0,4.8/6.2,0.0,0.0
+6,Jaxon Smith-Njigba,SEA,WR,11,rising,278.2,1652,5.2,5,118,9,13.8,6.9/9.9,0.0,0.0
+7,Jonathan Taylor,IND,RB,13,rising,307.4,1886,4.7,329,46,16,7.6,2.7/3.4,0.0,0.0
+8,CeeDee Lamb,DAL,WR,14,rising,243.1,1426,6.0,3,105,8,13.4,6.2/9.4,0.0,0.0
+9,Amon-Ra St. Brown,DET,WR,6,rising,258.0,1395,5.7,2,117,10,11.8,6.9/9.9,0.0,0.0
+10,James Cook III,BUF,RB,7,no change,278.2,1757,4.7,304,37,14,8.6,2.2/2.8,0.0,0.0
+11,Justin Jefferson,MIN,WR,6,no change,241.1,1393,4.2,2,108,8,12.9,6.3/9.6,0.0,0.0
+12,Saquon Barkley,PHI,RB,10,down,255.2,1632,4.3,305,40,12,8.4,2.4/3.3,0.0,0.0
+13,Ashton Jeanty,LV,RB,13,rising,270.0,1682,4.1,278,71,11,7.5,4.2/5.5,0.0,0.0
+14,Derrick Henry,BAL,RB,13,down,277.7,1762,4.9,311,23,15,9.8,1.4/1.8,0.0,0.0
+15,Drake London,ATL,WR,11,rising,208.8,1193,0.0,N/A,95,7,12.6,5.6/9.1,0.0,0.0
+16,Kenneth Walker III,KC,RB,5,rising,253.5,1578,4.4,274,48,12,7.7,2.8/3.4,0.0,0.0
+17,Chase Brown,CIN,RB,6,down,250.2,1507,4.4,237,67,11,6.9,3.9/5.0,0.0,0.0
+18,Omarion Hampton,LAC,RB,7,rising,253.6,1501,4.3,266,51,13,6.9,3.0/3.6,0.0,0.0
+19,Nico Collins,HOU,WR,8,down,219.5,1275,6.5,2,88,8,14.4,5.2/8.3,0.0,0.0
+20,George Pickens,DAL,WR,14,rising,215.3,1203,0.0,N/A,82,9,14.7,4.8/7.5,0.0,0.0
+21,De'Von Achane,MIA,RB,6,down,268.4,1789,4.9,257,71,9,7.5,4.2/5.5,0.0,0.0
+22,A.J. Brown,NE,WR,11,rising,184.4,1063,0.0,N/A,72,7,14.7,4.2/6.5,0.0,0.0
+23,Brock Bowers,LV,TE,13,rising,201.9,1089,3.2,5,102,7,10.5,6.0/8.4,0.0,0.0
+24,Chris Olave,NO,WR,8,rising,191.8,1078,0.0,N/A,84,7,12.8,4.9/7.9,0.0,0.0
+25,Jeremiyah Love,ARI,RB,14,no change,233.6,1496,4.4,236,60,9,7.6,3.5/4.9,0.0,0.0
+26,Devonta Smith,PHI,WR,10,rising,199.6,1086,0.0,N/A,86,8,12.6,5.1/7.6,0.0,0.0
+27,Kyren Williams,LAR,RB,11,down,228.3,1348,4.6,248,31,13,6.9,1.8/2.5,0.0,0.0
+28,Javonte Williams,DAL,RB,14,rising,236.0,1445,4.4,279,39,12,5.9,2.3/3.2,0.0,0.0
+29,Josh Allen,BUF,QB,7,rising,389.2,4700,5.1,114,N/A,40,0.0,N/A,31.1,11.7
+30,Trey McBride,ARI,TE,14,rising,203.3,1063,0.0,N/A,110,7,9.7,6.5/9.0,0.0,0.0
+31,Travis Etienne Jr.,NO,RB,8,down,219.9,1424,4.3,249,47,9,7.7,2.8/3.7,0.0,0.0
+32,Tee Higgins,CIN,WR,6,down,195.2,1017,0.0,N/A,79,9,12.9,4.6/7.6,0.0,0.0
+33,Josh Jacobs,GB,RB,11,down,252.7,1432,4.1,275,39,15,7.9,2.3/2.9,0.0,0.0
+34,Breece Hall,NYJ,RB,13,down,233.8,1593,4.4,262,53,8,8.4,3.1/4.0,0.0,0.0
+35,Zay Flowers,BAL,WR,13,rising,216.4,1259,6.1,10,85,8,14.1,5.0/7.4,0.0,0.0
+36,Davante Adams,LAR,WR,11,rising,183.3,894,0.0,N/A,68,10,13.2,4.0/7.1,0.0,0.0
+37,Rashee Rice,KC,WR,5,no change,221.4,1220,4.7,7,103,8,11.6,6.0/8.8,0.0,0.0
+38,Colston Loveland,CHI,TE,10,rising,159.8,858,0.0,N/A,76,6,11.3,4.5/6.5,0.0,0.0
+39,Ladd McConkey,LAC,WR,7,down,171.7,930,0.0,N/A,73,7,12.7,4.3/6.6,0.0,0.0
+40,Terry Mclaurin,WAS,WR,7,rising,189.3,1074,0.0,N/A,80,7,13.5,4.7/7.1,0.0,0.0
+41,Garrett Wilson,NYJ,WR,13,down,190.6,1073,5.2,2,95,6,11.2,5.6/8.7,0.0,0.0
+42,Emeka Egbuka,TB,WR,10,rising,168.1,953,5.7,2,62,7,15.3,3.6/6.4,0.0,0.0
+43,Luther Burden III,CHI,WR,10,rising,187.3,1058,5.5,7,79,7,12.9,4.6/7.0,0.0,0.0
+44,D'Andre Swift,CHI,RB,10,rising,203.0,1332,4.6,229,32,9,9.1,1.9/2.6,0.0,0.0
+45,Jaylen Waddle,DEN,WR,10,rising,187.1,1056,5.4,3,79,7,13.1,4.6/7.5,0.0,0.0
+46,Tetairoa McMillan,CAR,WR,5,no change,190.0,1095,0.0,N/A,77,7,14.2,4.5/7.5,0.0,0.0
+47,Lamar Jackson,BAL,QB,13,rising,329.8,4602,5.5,119,N/A,30,0.0,N/A,28.0,12.7
+48,Malik Nabers,NYG,WR,8,down,181.7,1013,0.0,N/A,77,7,13.2,4.8/7.9,0.0,0.0
+49,Jameson Williams,DET,WR,6,rising,192.9,1119,6.0,7,66,8,16.3,3.9/6.4,0.0,0.0
+50,Mike Evans,SF,WR,8,down,145.9,834,0.0,N/A,53,6,15.7,3.1/5.5,0.0,0.0
+51,Cam Skattebo,NYG,RB,8,rising,229.5,1404,4.2,254,46,11,7.6,2.7/3.5,0.0,0.0
+52,David Montgomery,HOU,RB,8,rising,190.4,1159,4.3,220,29,10,7.4,1.7/2.2,0.0,0.0
+53,DJ Moore,BUF,WR,7,rising,155.8,931,5.2,5,65,5,13.9,3.8/6.0,0.0,0.0
+54,Jayden Daniels,WAS,QB,7,rising,333.3,4599,5.1,136,N/A,30,0.0,N/A,31.2,11.0
+55,Christian Watson,GB,WR,11,no change,166.3,953,5.9,3,58,7,16.1,3.4/6.0,0.0,0.0
+56,Quinshon Judkins,CLE,RB,11,rising,217.1,1458,4.0,304,35,9,6.8,2.0/2.6,0.0,0.0
+57,TreVeyon Henderson,NE,RB,11,down,192.2,1128,4.5,189,39,10,7.3,2.3/2.8,0.0,0.0
+58,Bhayshul Tuten,JAX,RB,7,rising,201.9,1249,4.2,239,34,10,7.5,2.0/2.9,0.0,0.0
+59,Bucky Irving,TB,RB,10,down,208.3,1358,4.1,259,37,9,8.1,2.2/2.7,0.0,0.0
+60,Drake Maye,NE,QB,11,rising,333.5,4772,5.0,102,N/A,32,0.0,N/A,31.6,11.6
+61,Jadarian Price,SEA,RB,11,no change,199.5,1185,4.2,225,30,11,8.0,1.8/2.4,0.0,0.0
+62,Jordyn Tyson,NO,WR,8,no change,143.6,871,0.0,N/A,65,4,13.4,3.8/6.3,0.0,0.0
+63,Tony Pollard,TEN,RB,9,down,182.9,1261,4.4,245,30,7,6.2,1.7/2.2,0.0,0.0
+64,Joe Burrow,CIN,QB,6,rising,312.3,4466,3.6,45,N/A,36,0.0,N/A,35.1,10.6
+65,Carnell Tate,TEN,WR,9,no change,145.5,849,0.0,N/A,61,5,13.9,3.6/6.0,0.0,0.0
+66,Chuba Hubbard,CAR,RB,5,down,198.5,1270,4.1,228,47,8,7.2,2.8/3.6,0.0,0.0
+67,Marvin Harrison Jr.,ARI,WR,14,down,162.2,932,0.0,N/A,66,6,14.1,3.9/7.2,0.0,0.0
+68,Rhamondre Stevenson,NE,RB,11,rising,180.0,1079,4.4,181,36,9,7.8,2.1/2.6,0.0,0.0
+69,Parker Washington,JAX,WR,7,rising,168.7,1032,5.6,10,71,5,13.7,4.2/6.8,0.0,0.0
+70,Jalen Hurts,PHI,QB,10,rising,334.3,4133,4.1,111,N/A,35,0.0,N/A,29.2,11.3
+71,Tyler Warren,IND,TE,13,rising,174.6,940,2.3,9,89,6,10.3,5.2/7.2,0.0,0.0
+72,Rico Dowdle,PIT,RB,9,rising,180.6,1226,4.3,228,32,7,7.3,1.9/2.5,0.0,0.0
+73,Rome Odunze,CHI,WR,10,down,181.8,1063,0.0,N/A,67,7,15.9,3.9/7.7,0.0,0.0
+74,Caleb Williams,CHI,QB,10,rising,315.4,4584,5.5,74,N/A,30,0.0,N/A,33.8,12.0
+75,Brian Thomas Jr.,JAX,WR,7,down,147.6,886,6.3,3,58,5,14.9,3.4/5.9,0.0,0.0
+76,DK Metcalf,PIT,WR,9,down,152.6,861,0.0,N/A,61,6,14.1,3.6/6.2,0.0,0.0
+77,Tucker Kraft,GB,TE,11,rising,166.2,882,0.0,N/A,72,7,12.3,4.2/5.9,0.0,0.0
+78,Jaylen Warren,PIT,RB,9,down,171.3,1143,4.4,189,42,6,7.7,2.5/3.1,0.0,0.0
+79,Justin Herbert,LAC,QB,7,rising,321.1,4502,4.8,80,N/A,33,0.0,N/A,32.8,11.2
+80,Jordan Addison,MIN,WR,6,no change,159.9,910,6.2,2,66,6,13.7,3.9/6.4,0.0,0.0
+81,Courtland Sutton,DEN,WR,10,down,169.1,926,0.0,N/A,69,7,13.4,4.1/7.1,0.0,0.0
+82,Trevor Lawrence,JAX,QB,7,rising,325.4,4555,4.5,78,N/A,33,0.0,N/A,34.4,11.7
+83,J.K. Dobbins,DEN,RB,10,down,186.8,1157,4.6,223,22,10,6.0,1.3/1.7,0.0,0.0
+84,Jakobi Meyers,JAX,WR,7,down,149.8,838,5.7,5,72,5,11.2,4.2/6.5,0.0,0.0
+85,Dak Prescott,DAL,QB,14,rising,319.0,4673,3.9,52,N/A,34,0.0,N/A,34.9,11.3
+86,Blake Corum,LAR,RB,11,rising,158.3,935,4.6,171,22,9,7.0,1.3/1.7,0.0,0.0
+87,Brock Purdy,SF,QB,8,no change,325.8,4662,4.4,66,N/A,35,0.0,N/A,32.5,11.8
+88,Alec Pierce,IND,WR,13,rising,175.2,1059,0.0,N/A,67,6,15.9,3.9/6.8,0.0,0.0
+89,Jaxson Dart,NYG,QB,8,no change,315.5,4361,5.6,105,N/A,29,0.0,N/A,30.4,11.3
+90,RJ Harvey,DEN,RB,10,down,162.5,867,4.1,132,44,9,7.4,2.6/3.3,0.0,0.0
+91,Michael Wilson,ARI,WR,14,rising,149.1,846,0.0,N/A,69,5,12.3,4.1/6.8,0.0,0.0
+92,Patrick Mahomes II,N/A,QB,N/A,no change,287.0,4283,5.1,51,N/A,29,0.0,N/A,32.6,11.1
+93,Kyle Pitts Sr.,ATL,TE,11,no change,151.2,857,0.0,N/A,83,4,10.3,4.9/6.9,0.0,0.0
+94,Harold Fannin Jr.,CLE,TE,11,rising,160.9,873,2.8,7,87,5,9.8,5.1/7.5,0.0,0.0
+95,Sam Laporta,DET,TE,6,down,151.1,831,0.0,N/A,76,5,10.9,4.5/5.9,0.0,0.0
+96,Michael Pittman Jr.,PIT,WR,9,down,131.4,684,0.0,N/A,66,5,10.4,3.9/6.1,0.0,0.0
+97,Josh Downs,IND,WR,13,rising,141.4,754,6.0,2,72,5,10.3,4.2/6.2,0.0,0.0
+98,Xavier Worthy,KC,WR,5,no change,166.1,984,6.8,17,63,6,13.7,3.7/6.1,0.0,0.0
+99,Matthew Stafford,LAR,QB,11,rising,306.5,4461,1.3,28,N/A,36,0.0,N/A,33.5,12.0
+100,Jayden Reed,GB,WR,11,down,155.2,902,7.6,10,70,5,11.8,4.1/5.8,0.0,0.0
+101,Kyle Monangai,CHI,RB,10,rising,160.5,1048,4.4,188,27,7,8.4,1.6/2.3,0.0,0.0
+102,Bo Nix,DEN,QB,10,rising,306.7,4287,4.4,81,N/A,32,0.0,N/A,33.9,10.6
+103,Mark Andrews,BAL,TE,13,down,170.7,762,3.4,9,69,10,10.6,4.1/5.9,0.0,0.0
+104,Makai Lemon,PHI,WR,10,no change,124.7,697,4.2,5,50,5,13.5,2.9/5.0,0.0,0.0
+105,Chris Godwin Jr.,TB,WR,10,no change,139.6,723,0.0,N/A,63,6,11.5,3.7/5.6,0.0,0.0
+106,Kenneth Gainwell,TB,RB,10,down,159.9,904,4.5,116,55,7,6.9,3.2/4.1,0.0,0.0
+107,Jordan Love,GB,QB,11,rising,289.7,4494,4.1,49,N/A,29,0.0,N/A,33.1,11.8
+108,George Kittle,SF,TE,8,no change,109.8,593,0.0,N/A,53,4,11.2,4.8/6.1,0.0,0.0
+109,Kyler Murray,MIN,QB,6,rising,278.1,4057,6.1,76,N/A,25,0.0,N/A,29.6,10.5
+110,Jordan Mason,MIN,RB,6,down,123.3,812,4.5,164,12,6,6.2,0.7/0.9,0.0,0.0
+111,Quentin Johnston,LAC,WR,7,down,154.5,834,4.5,2,58,7,14.2,3.4/5.7,0.0,0.0
+112,Ricky Pearsall,SF,WR,8,down,137.9,844,5.8,3,59,4,14.0,3.5/5.2,0.0,0.0
+113,Dalton Kincaid,BUF,TE,7,rising,140.4,779,0.0,N/A,65,5,12.0,3.8/5.3,0.0,0.0
+114,KC Concepcion,CLE,WR,11,no change,121.5,747,5.5,5,58,3,12.5,3.4/5.5,0.0,0.0
+115,Matthew Golden,GB,WR,11,down,130.4,779,6.6,7,57,4,12.9,3.4/5.2,0.0,0.0
+116,Aaron Jones Sr.,MIN,RB,6,no change,176.9,1106,4.3,174,49,7,7.4,2.9/3.8,0.0,0.0
+117,Tyler Shough,NO,QB,8,no change,289.7,4375,4.3,72,N/A,27,0.0,N/A,33.4,10.8
+118,Jared Goff,DET,QB,6,rising,299.1,4513,1.7,25,N/A,34,0.0,N/A,33.5,11.5
+119,Baker Mayfield,TB,QB,10,rising,292.3,4265,5.9,56,N/A,30,0.0,N/A,32.1,11.2
+120,Wan'dale Robinson,TEN,WR,9,down,124.7,728,5.4,7,68,3,10.2,4.0/5.9,0.0,0.0
+121,Travis Kelce,KC,TE,5,down,161.6,854,0.0,N/A,80,6,10.7,4.7/6.6,0.0,0.0
+122,Malik Willis,MIA,QB,6,no change,276.7,4313,5.3,107,N/A,21,0.0,N/A,31.3,10.9
+123,Chris Rodriguez Jr.,JAX,RB,7,no change,86.7,485,4.4,103,4,6,7.2,0.3/0.4,0.0,0.0
+124,Jonathon Brooks,CAR,RB,5,no change,121.4,794,4.2,147,24,5,7.6,1.4/1.9,0.0,0.0
+125,Jalen Coker,CAR,WR,5,no change,161.1,921,0.0,N/A,78,5,11.8,4.6/6.6,0.0,0.0
+126,Rachaad White,WAS,RB,7,rising,166.6,944,4.2,148,48,8,6.6,2.8/3.2,0.0,0.0
+127,Jake Ferguson,DAL,TE,14,down,139.4,609,0.0,N/A,73,7,8.3,4.3/5.8,0.0,0.0
+128,Isaiah Likely,NYG,TE,8,no change,159.3,894,0.0,N/A,80,5,11.2,4.7/6.4,0.0,0.0
+129,Dallas Goedert,PHI,TE,10,no change,132.6,691,0.0,N/A,67,5,10.3,3.9/5.4,0.0,0.0
+130,Keaton Mitchell,LAC,RB,7,rising,66.3,380,4.7,48,21,3,7.7,1.2/1.6,0.0,0.0
+131,Romeo Doubs,NE,WR,11,down,121.3,702,0.0,N/A,54,4,12.9,3.2/4.8,0.0,0.0
+132,Khalil Shakir,BUF,WR,7,down,138.6,786,6.0,2,72,4,10.8,4.2/5.6,0.0,0.0
+133,Sam Darnold,SEA,QB,11,rising,276.2,4417,3.0,41,N/A,28,0.0,N/A,31.6,12.0
+134,C.J. Stroud,HOU,QB,8,rising,269.8,4273,4.4,56,N/A,26,0.0,N/A,32.5,11.4
+135,Isiah Pacheco,DET,RB,6,down,131.4,799,4.2,159,19,7,6.6,1.1/1.5,0.0,0.0
+136,Tyrone Tracy Jr.,NYG,RB,8,down,93.1,620,4.2,99,26,3,7.7,1.5/2.0,0.0,0.0
+137,Jacory Croskey-Merritt,WAS,RB,7,down,123.0,817,4.3,172,11,6,7.1,0.6/0.8,0.0,0.0
+138,Jayden Higgins,HOU,WR,8,down,109.4,609,0.0,N/A,49,4,12.4,2.9/4.8,0.0,0.0
+139,Jalen McMillan,TB,WR,10,no change,127.3,710,5.8,5,53,5,12.9,3.1/4.8,0.0,0.0
+140,Oronde Gadsden II,N/A,TE,N/A,no change,114.9,590,0.0,N/A,52,5,11.4,3.0/4.2,0.0,0.0
+141,Daniel Jones,IND,QB,13,rising,276.6,4271,4.1,64,N/A,26,0.0,N/A,31.5,11.1
+142,Hunter Henry,NE,TE,11,down,123.0,639,0.0,N/A,58,5,11.0,3.4/4.9,0.0,0.0
+143,Rashid Shaheed,SEA,WR,11,down,121.0,695,6.6,12,43,5,14.3,2.5/4.2,0.0,0.0
+144,Brian Robinson Jr.,ATL,RB,11,down,96.7,616,4.2,131,10,5,6.6,0.6/0.8,0.0,0.0
+145,Omar Cooper Jr.,NYJ,WR,13,no change,105.8,638,5.8,2,48,3,13.1,2.8/4.4,0.0,0.0
+146,Jauan Jennings,MIN,WR,6,down,115.5,630,0.0,N/A,57,4,11.1,3.4/5.2,0.0,0.0
+147,Brenton Strange,JAX,TE,7,down,112.8,603,0.0,N/A,57,4,10.6,3.4/4.8,0.0,0.0
+148,Brandon Aubrey,DAL,K,14,rising,184.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+149,Chig Okonkwo,WAS,TE,7,down,105.9,549,0.0,N/A,54,4,10.2,3.2/4.4,0.0,0.0
+150,Woody Marks,HOU,RB,8,rising,123.7,762,4.1,140,23,6,8.5,1.4/2.0,0.0,0.0
+151,Denzel Boston,CLE,WR,11,no change,105.8,622,0.0,N/A,51,3,12.1,3.0/4.9,0.0,0.0
+152,Kenyon Sadiq,NYJ,TE,13,no change,121.3,653,0.0,N/A,64,4,10.2,3.8/5.1,0.0,0.0
+153,Stefon Diggs,NE,WR,14,down,144.4,798,0.0,N/A,69,5,11.5,4.1/5.6,0.0,0.0
+154,Houston Texans,N/A,DST,N/A,rising,185.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+155,Calvin Ridley,TEN,WR,9,down,120.5,735,5.5,5,46,4,15.3,2.7/5.1,0.0,0.0
+156,Cam Ward,TEN,QB,9,rising,252.7,3987,4.2,44,N/A,25,0.0,N/A,33.5,10.5
+157,Juwan Johnson,NO,TE,8,down,127.3,703,0.0,N/A,66,4,10.7,3.9/5.4,0.0,0.0
+158,Ryan Flournoy,DAL,WR,14,no change,84.6,472,5.5,3,39,3,11.7,2.3/3.4,0.0,0.0
+159,Jalen Nailor,LV,WR,13,rising,93.3,601,5.7,2,42,2,13.9,2.5/4.2,0.0,0.0
+160,Bryce Young,CAR,QB,5,rising,267.5,4164,4.8,59,N/A,26,0.0,N/A,33.1,10.6
+161,Los Angeles Rams,N/A,DST,N/A,rising,167.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+162,Seattle Seahawks,N/A,DST,N/A,rising,181.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+163,Tre Tucker,LV,WR,13,down,114.6,706,5.6,10,52,3,12.5,3.1/5.1,0.0,0.0
+164,Ka'imi Fairbairn,HOU,K,8,rising,178.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+165,Denver Broncos,N/A,DST,N/A,rising,177.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+166,Tank Bigsby,PHI,RB,10,rising,71.9,474,4.6,82,13,3,7.6,0.8/1.1,0.0,0.0
+167,Jerry Jeudy,CLE,WR,11,down,120.5,701,0.0,N/A,53,4,13.2,3.1/5.8,0.0,0.0
+168,Deebo Samuel Sr.,WAS,WR,12,down,140.6,745,4.0,20,60,6,11.0,3.5/5.3,0.0,0.0
+169,Cam Little,JAX,K,7,rising,171.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+170,T.J. Hockenson,MIN,TE,6,down,129.2,661,0.0,N/A,78,4,8.4,4.6/6.1,0.0,0.0
+171,Tyjae Spears,TEN,RB,9,no change,119.2,717,4.1,97,47,4,6.8,2.8/3.3,0.0,0.0
+172,Tyler Allgeier,ARI,RB,14,down,88.1,556,3.9,112,17,4,6.8,1.0/1.4,0.0,0.0
+173,Germie Bernard,PIT,WR,9,no change,81.9,448,0.0,N/A,38,3,11.7,2.3/3.9,0.0,0.0
+174,Pat Freiermuth,PIT,TE,9,down,126.9,654,0.0,N/A,63,5,10.4,3.7/5.1,0.0,0.0
+175,Dalton Schultz,HOU,TE,8,down,115.3,602,0.0,N/A,62,4,9.7,3.7/4.9,0.0,0.0
+176,Fernando Mendoza,LV,QB,13,no change,212.2,3534,4.2,50,N/A,18,0.0,N/A,28.6,10.8
+177,Isaac TeSlaa,DET,WR,6,rising,73.8,363,0.0,N/A,27,4,13.4,1.6/2.6,0.0,0.0
+178,Aaron Rodgers,PIT,QB,9,rising,240.4,3848,3.1,24,N/A,25,0.0,N/A,33.0,10.5
+179,Jason Myers,SEA,K,11,rising,172.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+180,Cameron Dicker,LAC,K,7,rising,165.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+181,Sean Tucker,TB,RB,10,rising,24.1,166,4.1,36,3,1,5.5,0.2/0.2,0.0,0.0
+182,Jacoby Brissett,ARI,QB,14,no change,233.4,3893,4.4,45,N/A,21,0.0,N/A,32.8,10.4
+183,Alvin Kamara,NO,RB,8,down,111.9,749,3.9,128,38,3,6.4,2.2/2.8,0.0,0.0
+184,Dylan Sampson,CLE,RB,11,down,75.8,484,4.1,65,31,2,7.2,1.8/2.2,0.0,0.0
+185,Terrance Ferguson,LAR,TE,11,rising,97.6,547,0.0,N/A,38,4,14.5,2.2/3.6,0.0,0.0
+186,Adonai Mitchell,NYJ,WR,13,rising,91.0,535,4.8,3,39,3,13.3,2.3/4.1,0.0,0.0
+187,Jonah Coleman,DEN,RB,10,no change,21.4,136,4.3,25,4,1,7.7,0.2/0.3,0.0,0.0
+188,Kaytron Allen,WAS,RB,7,no change,22.8,152,4.2,31,3,1,7.0,0.2/0.2,0.0,0.0
+189,Cooper Kupp,SEA,WR,11,down,84.9,479,0.0,N/A,38,3,12.6,2.2/3.5,0.0,0.0
+190,Gunnar Helm,TEN,TE,9,rising,88.3,445,0.0,N/A,52,3,8.6,3.0/4.0,0.0,0.0
+191,Travis Hunter,JAX,WR,7,down,73.6,436,5.9,3,36,2,11.6,2.1/3.4,0.0,0.0
+192,Antonio Williams,WAS,WR,7,no change,86.4,496,5.0,5,38,3,12.5,2.2/3.4,0.0,0.0
+193,Jordan James,SF,RB,8,rising,55.2,387,4.2,77,9,2,7.4,0.5/0.7,0.0,0.0
+194,Tre Harris,N/A,WR,N/A,rising,84.5,468,0.0,N/A,39,3,11.9,2.3/3.4,0.0,0.0
+195,Emanuel Wilson,SEA,RB,11,rising,38.1,271,4.2,47,10,1,7.4,0.6/0.8,0.0,0.0
+196,Braelon Allen,NYJ,RB,13,down,85.5,542,4.2,103,15,4,7.4,0.9/1.1,0.0,0.0
+197,Ray Davis,BUF,RB,7,down,40.4,237,4.2,38,9,2,8.2,0.6/0.7,0.0,0.0
+198,Greg Dulcich,MIA,TE,6,no change,102.0,575,0.0,N/A,53,3,10.8,3.1/4.5,0.0,0.0
+199,Minnesota Vikings,N/A,DST,N/A,rising,164.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+200,Samaje Perine,CIN,RB,6,down,97.0,607,4.4,98,25,4,7.1,1.4/1.8,0.0,0.0
+201,DJ Giddens,IND,RB,13,down,34.0,229,4.1,39,10,1,6.6,0.6/0.7,0.0,0.0
+202,Jacksonville Jaguars,N/A,DST,N/A,rising,152.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+203,Pittsburgh Steelers,N/A,DST,N/A,rising,152.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+204,Cade Otton,TB,TE,10,down,78.5,441,0.0,N/A,45,2,9.9,2.6/3.7,0.0,0.0
+205,Tank Dell,HOU,WR,8,no change,89.5,520,5.0,7,39,3,12.5,2.3/3.8,0.0,0.0
+206,Zach Charbonnet,SEA,RB,11,down,141.3,783,4.1,158,18,9,7.6,1.4/1.8,0.0,0.0
+207,MarShawn Lloyd,GB,RB,11,no change,56.9,344,4.1,69,9,3,7.2,0.5/0.8,0.0,0.0
+208,Jaydon Blue,DAL,RB,14,rising,56.2,342,4.2,69,8,3,7.0,0.5/0.6,0.0,0.0
+209,Pat Bryant,DEN,WR,10,rising,64.7,372,0.0,N/A,31,2,12.0,1.8/3.0,0.0,0.0
+210,Kayshon Boutte,NE,WR,11,down,79.8,452,0.0,N/A,33,3,13.7,1.9/2.8,0.0,0.0
+211,De'Zhaun Stribling,SF,WR,8,no change,38.8,203,0.0,N/A,13,2,15.6,0.8/1.3,0.0,0.0
+212,Mike Washington Jr.,LV,RB,13,no change,70.8,470,4.1,94,12,3,7.3,0.7/0.9,0.0,0.0
+213,Jaylin Noel,HOU,WR,8,down,41.4,252,5.5,5,20,1,11.0,1.2/1.8,0.0,0.0
+214,Los Angeles Chargers,N/A,DST,N/A,rising,163.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+215,Baltimore Ravens,N/A,DST,N/A,rising,153.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+216,Justice Hill,BAL,RB,13,down,84.2,537,4.6,45,37,2,8.8,2.2/2.9,0.0,0.0
+217,Zachariah Branch,ATL,WR,11,no change,40.8,243,0.0,N/A,21,1,11.5,1.2/1.9,0.0,0.0
+218,Dontayvion Wicks,PHI,WR,10,down,53.8,298,0.0,N/A,24,2,12.4,1.4/2.4,0.0,0.0
+219,Malik Washington,MIA,WR,6,down,93.3,523,5.9,15,46,3,9.4,2.7/4.0,0.0,0.0
+220,Devaughn Vele,NO,WR,8,rising,54.9,294,0.0,N/A,27,2,10.9,1.6/2.5,0.0,0.0
+221,Keenan Allen,N/A,WR,N/A,down,105.3,549,0.0,N/A,53,4,10.4,3.1/4.7,0.0,0.0
+222,Troy Franklin,DEN,WR,10,down,41.8,218,5.2,3,16,2,12.4,0.9/1.5,0.0,0.0
+223,AJ Barner,SEA,TE,11,down,101.4,484,2.6,9,46,5,10.0,2.7/3.7,0.0,0.0
+224,Christian Kirk,SF,WR,8,no change,67.1,356,0.0,N/A,27,3,13.1,1.6/2.5,0.0,0.0
+225,Emmett Johnson,KC,RB,5,no change,53.6,371,4.2,72,9,2,7.5,0.5/0.7,0.0,0.0
+226,Mike Gesicki,CIN,TE,6,down,90.3,443,0.0,N/A,44,4,10.1,2.6/3.8,0.0,0.0
+227,Tua Tagovailoa,ATL,QB,11,rising,140.7,2523,2.6,11,N/A,14,0.0,N/A,31.7,10.5
+228,Nicholas Singleton,TEN,RB,9,no change,20.2,127,4.2,25,3,1,7.3,0.2/0.2,0.0,0.0
+229,Rashod Bateman,BAL,WR,13,down,96.6,596,0.0,N/A,38,3,15.7,2.2/4.0,0.0,0.0
+230,Jalen Tolbert,MIA,WR,6,down,73.7,431,0.0,N/A,37,2,11.6,2.2/3.8,0.0,0.0
+231,Najee Harris,N/A,RB,N/A,down,58.5,388,4.0,68,15,2,7.5,0.9/1.2,0.0,0.0
+232,Kendrick Bourne,ARI,WR,14,down,55.4,296,0.0,N/A,27,2,10.8,1.6/2.4,0.0,0.0
+233,Malachi Fields,NYG,WR,8,no change,55.5,306,0.0,N/A,26,2,11.9,1.5/2.3,0.0,0.0
+234,Andrei Iosivas,CIN,WR,6,down,69.4,367,0.0,N/A,29,3,12.5,1.7/2.9,0.0,0.0
+235,Mack Hollins,NE,WR,11,rising,48.6,258,0.0,N/A,22,2,11.8,1.3/1.9,0.0,0.0
+236,Darnell Mooney,NYG,WR,8,down,93.0,600,0.0,N/A,42,2,14.3,2.5/3.4,0.0,0.0
+237,Geno Smith,NYJ,QB,13,rising,229.9,4043,3.8,53,N/A,20,0.0,N/A,31.9,10.6
+238,Colby Parkinson,LAR,TE,11,no change,64.6,311,0.0,N/A,31,3,10.1,1.8/2.5,0.0,0.0
+239,Chimere Dike,TEN,WR,9,down,53.6,300,5.2,12,23,2,10.3,1.4/2.1,0.0,0.0
+240,Marvin Mims Jr.,DEN,WR,10,down,50.7,277,4.9,5,22,2,11.5,1.3/1.9,0.0,0.0
+241,David Njoku,LAC,TE,7,down,78.2,407,0.0,N/A,39,3,10.4,2.3/3.2,0.0,0.0
+242,Demond Claiborne,MIN,RB,6,no change,22.3,143,4.3,28,4,1,6.0,0.2/0.3,0.0,0.0
+243,Jack Bech,LV,WR,13,rising,86.3,519,0.0,N/A,45,2,11.6,2.6/4.1,0.0,0.0
+244,Kaelon Black,SF,RB,8,no change,31.4,227,4.1,45,5,1,7.8,0.3/0.4,0.0,0.0
+245,Ty Johnson,BUF,RB,7,down,76.7,417,4.2,48,22,4,9.8,1.3/1.8,0.0,0.0
+246,Ted Hurst,TB,WR,10,no change,48.2,265,0.0,N/A,20,2,13.6,1.1/1.8,0.0,0.0
+247,Tyreek Hill,MIA,WR,12,down,145.5,777,5.0,3,64,6,12.0,4.9/7.3,0.0,0.0
+248,Chris Brazzell II,CAR,WR,5,no change,52.4,290,0.0,N/A,23,2,12.7,1.3/2.2,0.0,0.0
+249,Chris Bell,MIA,WR,6,no change,91.2,567,0.0,N/A,45,2,12.6,2.6/4.5,0.0,0.0
+250,Deshaun Watson,CLE,QB,11,no change,122.0,2043,4.3,24,N/A,11,0.0,N/A,30.5,10.3
+251,Kalif Raymond,CHI,WR,10,down,49.0,295,5.8,3,27,1,10.2,1.6/2.2,0.0,0.0
+252,Eddy Pineiro,SF,K,8,rising,151.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+253,Jahan Dotson,ATL,WR,11,down,56.9,324,0.0,N/A,25,2,13.0,1.5/2.7,0.0,0.0
+254,Chris Brooks,GB,RB,11,down,41.3,213,4.2,24,16,2,7.1,0.9/1.3,0.0,0.0
+255,Tory Horton,SEA,WR,11,down,57.0,330,0.0,N/A,24,2,13.8,1.4/2.4,0.0,0.0
+256,Darnell Washington,PIT,TE,9,rising,65.7,363,0.0,N/A,35,2,10.4,2.0/2.9,0.0,0.0
+257,Evan Engram,DEN,TE,10,down,82.2,457,0.0,N/A,49,2,9.3,2.9/4.2,0.0,0.0
+258,Michael Mayer,LV,TE,13,down,61.7,367,0.0,N/A,38,1,9.7,2.2/3.3,0.0,0.0
+259,Darius Slayton,NYG,WR,8,down,46.2,252,0.0,N/A,18,2,14.0,1.1/1.8,0.0,0.0
+260,Tyler Loop,BAL,K,13,rising,155.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+261,Dawson Knox,BUF,TE,7,down,45.3,228,0.0,N/A,21,2,10.8,1.2/1.9,0.0,0.0
+262,Joshua Palmer,BUF,WR,7,down,33.6,196,0.0,N/A,16,1,12.3,0.9/1.6,0.0,0.0
+263,Kimani Vidal,LAC,RB,7,rising,62.4,392,4.1,75,11,3,7.9,0.6/0.8,0.0,0.0
+264,Marquise Brown,N/A,WR,N/A,down,47.3,247,0.0,N/A,21,2,11.7,1.2/1.9,0.0,0.0
+265,Caleb Douglas,MIA,WR,6,no change,107.7,652,0.0,N/A,49,3,13.3,2.9/4.9,0.0,0.0
+266,Chris Boswell,PIT,K,9,rising,144.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+267,Will Reichard,MIN,K,6,rising,152.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+268,Elijah Arroyo,SEA,TE,11,down,49.9,263,0.0,N/A,23,2,11.4,1.4/2.0,0.0,0.0
+269,KaVontae Turpin,DAL,WR,14,down,51.9,316,5.9,17,17,2,13.0,1.0/1.5,0.0,0.0
+270,Elic Ayomanor,TEN,WR,9,down,42.4,218,0.0,N/A,17,2,12.7,1.0/1.9,0.0,0.0
+271,Jake Bates,DET,K,6,rising,160.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+272,Tez Johnson,TB,WR,10,rising,20.8,110,5.9,3,8,1,11.7,0.5/0.7,0.0,0.0
+273,Skyler Bell,BUF,WR,7,no change,25.8,144,0.0,N/A,11,1,13.3,0.6/1.1,0.0,0.0
+274,Brashard Smith,KC,RB,5,down,44.7,253,4.1,35,15,2,7.6,0.9/1.2,0.0,0.0
+275,Keon Coleman,BUF,WR,7,down,54.9,269,0.0,N/A,20,3,13.4,1.2/2.1,0.0,0.0
+276,Chicago Bears,N/A,DST,N/A,rising,151.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+277,Jaylen Wright,MIA,RB,6,no change,45.5,285,4.1,52,10,2,7.2,0.6/0.8,0.0,0.0
+278,Noah Gray,KC,TE,5,down,49.3,286,0.0,N/A,29,1,9.7,1.7/2.6,0.0,0.0
+279,Cole Kmet,CHI,TE,10,down,63.4,309,0.0,N/A,29,3,10.7,1.7/2.5,0.0,0.0
+280,Philadelphia Eagles,N/A,DST,N/A,rising,150.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+281,New England Patriots,N/A,DST,N/A,rising,149.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+282,James Conner,ARI,RB,14,down,35.2,251,4.0,50,8,1,6.6,0.5/0.6,0.0,0.0
+283,Kirk Cousins,LV,QB,13,no change,43.2,869,1.7,4,N/A,3,0.0,N/A,30.8,10.6
+284,Isaiah Davis,NYJ,RB,13,down,32.8,215,4.7,29,11,1,7.5,0.6/0.8,0.0,0.0
+285,Tyler Higbee,LAR,TE,11,down,42.4,205,0.0,N/A,20,2,10.4,1.2/1.7,0.0,0.0
+286,Treylon Burks,WAS,WR,7,no change,43.8,231,0.0,N/A,17,2,13.3,1.0/1.8,0.0,0.0
+287,Tyquan Thornton,KC,WR,5,down,62.7,335,0.0,N/A,22,3,15.1,1.3/2.5,0.0,0.0
+288,Dallas Cowboys,N/A,DST,N/A,rising,115.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+289,Brandon Aiyuk,SF,WR,8,no change,135.3,761,0.0,N/A,59,5,13.0,3.4/5.3,0.0,0.0
+290,Shedeur Sanders,CLE,QB,11,no change,103.8,1742,5.1,20,N/A,9,0.0,N/A,29.9,11.1
+291,Kansas City Chiefs,N/A,DST,N/A,rising,125.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+292,Harrison Butker,KC,K,5,rising,149.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+293,Trevor Etienne,CAR,RB,5,down,11.6,100,4.2,19,3,N/A,7.1,0.2/0.2,0.0,0.0
+294,New York Giants,N/A,DST,N/A,rising,133.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+295,Buffalo Bills,N/A,DST,N/A,rising,146.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+296,Harrison Mevis,LAR,K,11,no change,150.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+297,Chase McLaughlin,TB,K,10,rising,150.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+298,San Francisco 49ers,N/A,DST,N/A,rising,126.0,N/A,0.0,N/A,N/A,N/A,0.0,N/A,0.0,0.0
+299,Ollie Gordon II,MIA,RB,6,down,35.7,217,4.1,46,4,2,7.1,0.2/0.4,0.0,0.0
+300,Eli Stowers,PHI,TE,10,no change,37.6,217,2.8,5,20,1,10.2,1.2/1.6,0.0,0.0
