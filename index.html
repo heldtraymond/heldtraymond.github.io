@@ -1,156 +1,1608 @@
 <html>
 <head>
-	<title>Online Portfolio | Raymond Anthony Heldt</title>
-	<meta name="viewport" content="width=device-width,initial-scale=1.0">
-	<script src="jquery.js"></script>
-	<script src="portfolio.js"></script>
-	<script src="bootstrap/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css"></link>
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-	<style>
-		body {
-			background-color:#002200;color:white;font-family:'Open Sans Condensed',sans-serif;
-		}
-		.section {
-			padding:5px;
-		}
-		hr {
-			margin-bottom:25px;margin-top:35px;border:1px solid white
-		}
-		#topheader {
-			text-align:center;
-		}
-		#name {
-			font-size:36pt;font-weight:bold;text-align:center;color:#bbbbff;
-		}
-		#resume {
-			font-size:24pt;font-weight:bold;text-align:center;color:#6666ff;
-		}
-		#sourceCode {
-			font-size:16pt;font-weight:bold;text-align:left;color:#6666ff;margin-top:30px;
-		}
-		#resume:hover, #sourceCode:hover {
-			cursor:pointer;color:#3333ff;
-		}
-		.subtitle {
-			font-size:18pt;line-height:110%;
-		}
-		#topSubtitle {
-			text-align:center;margin-top:10px;
-		}
-		#gamesSection {
-			text-align:left;margin-bottom:10px;
-		}
-		.title {
-			font-size:28pt;font-weight:bold;
-		}
-		#gamesTitle {
-			color:gold;
-		}
-		#gamesSubtitle {
-			text-align:left;
-		}
-		#games {
-			text-align:center;
-		}
-		.gamecontainer {
-			text-align:center;padding-left:10px;padding-right:10px;vertical-align:middle;padding-top:8px;height:90px;}
-		.game {
-			border:5px solid white;border-radius:20px;font-size:20pt;font-weight:bold;font-style:normal;height:100%;vertical-align:middle;line-height:100%;text-align:center;color:gold;font-family:'Open Sans',sans-serif;
-		}
-		.game:hover {
-			border-color:gold;cursor:pointer;font-weight:bold;
-		}
-		#memory:hover {
-			background-color:#99ff99;color:#004400;
-		}
-		#one:hover {
-			background-color:#ffcc99;color:red;
-		}
-		#trivia:hover {
-			background-color:#9999ff;color:#000044;
-		}
-		#fiveDice:hover {
-			background-color:white;color:black;
-		}
-		.vertical-aligner {
-			height:100%;vertical-align:middle;display:inline-block;
-		}
-		.vertical-aligned-text {
-			vertical-align:middle;line-height:10%;
-		}
-		#contactSection {
-			text-align:left;
-		}
-		#contactTitle {
-			color:#66ff66;
-		}
-		.contactinfo {
-			font-size:20pt;font-weight:bold;text-align:left;color:#66ff66;
-		}
-		.optimizedSection {
-			font-size:15pt;color:gold;font-style:italic;margin-top:20px;
-		}
-	</style>
+    <title>Draft Day 2026</title>
+    <!--meta name="viewport" content="width=device-width,initial-scale=1.0"-->
+    <meta charset="UTF-8">
+    <link rel="icon" href="FoxIcon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@800&display=swap" rel="stylesheet">
+    <script src="jquery.js"></script>
+    <style>
+        @font-face {
+            font-family: 'Meadow';
+            src: url('fonts/MeadowRegular.woff2') format('woff2'),
+                 url('fonts/MeadowRegular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Franklin';
+            src: url('fonts/Franklin Gothic Condensed.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        #controls button {
+            border:3px solid #000066;
+            border-radius:5px;
+            font-family: 'Arial';
+            font-weight: bold;
+            font-size:12pt;
+            padding:7px; 
+            cursor:pointer;
+        }
+        #controls {
+            color:white;
+            font-family: 'Arial';
+            font-weight: bold;
+            font-size:14pt;
+        }
+        #controls input {
+            color:#aaffbb;
+            font-family: 'Franklin';
+            font-size:15pt;
+            width:2.8em;
+            text-align:right;
+            background-color:black;
+            border:1px solid black;
+            border-radius:3px;
+        }
+        #fullScreen {
+            background-color:#8888ff;
+            color:white;
+        }
+        #savePicks {
+            background-color:#aaffaa;
+            color:#004400;
+        }
+        #loadPicks {
+            background-color:#ff8833;
+            color:black;
+        }
+        #show2025Picks {
+            background-color:#white;
+            color:#aa00aa;
+        }
+        #clearPicks {
+            background-color:white;
+            color:red;
+        }
+
+        .ownerName input {
+            font-family: 'Meadow';
+            font-weight: 600;
+            letter-spacing:1.7px;
+            line-height:0.8em;
+            text-align:center;
+            font-size:36pt;
+            border:none;
+            background-color:#008800;
+            width:100%;
+            color:white;
+            height:0.86em;
+            padding-top:3px;
+        }
+        .roundNum {
+            font-family: 'Franklin';
+            font-weight: normal;
+            font-size:24pt;
+            color:white;
+            width:3.5%;
+        }
+        .roundNumLeft {
+            text-align:center;
+        }
+        .roundNumRight {
+            text-align:center;
+        }
+        #draftBoard {
+            width:100%;
+            border-collapse: collapse;
+        }
+        .draftSlotInput {
+            border:none;
+            text-align:center;
+            font-family: 'Franklin';
+            width:100%;
+            color:black;
+            font-size:23pt;
+            position:relative;
+            top:0px;
+            left:0px;
+            background-color:#ffffff;
+            padding:0px;
+            padding-block:0px;
+            padding-inline:0px;
+            height:0.92em;
+        }
+        .draftSlotInput:not(.QB,.RB,.WR,.TE,.K,.DEF) {
+            font-family: 'Meadow';
+            background-color:white;
+            font-size:24pt;
+            letter-spacing:-1px;
+            color:black;
+            height:1.5em;
+        }
+        .draftSlotInput.manualName {
+            font-family: 'Meadow';
+            background-color:white;
+            font-size:24pt;
+            letter-spacing:0px;
+            color:black;
+        }
+        .roundInProgress {
+            /*background-color:#77ee99 !important;*/
+            background-color:#7799ee !important;
+        }
+        .draftSlot:hover {
+            background-color:#ff8833;
+            border:3px solid #ff8833
+        }
+        .draftSlot.selected {
+            background-color:#ff8833;
+        }
+        /*.draftSlot:hover .draftSlotInput {
+            background-color:#bbbbff;
+        }*/
+        .draftSlot.selected .draftSlotInput {
+            background-color:#ff8833;
+            font-family:'Meadow';
+        }
+        .draftSlot:hover:not(.QB,.RB,.WR,.TE,.K,.DEF) .draftSlotInput {
+            background-color:#ff8833;
+        }
+        .altColorSlot .draftSlotInput {
+            background-color:#eeeeee;
+        }
+        .draftSlot {
+            background-color:#ffffff;
+            border:3px solid #008800;
+        }
+        .altColorSlot {
+            background-color:#eeeeee;
+        }
+        #openFile {
+            width: 30px;
+        }
+        .QB {
+            background-color:#ff0000;
+            color:white;
+        }
+        .WR {
+            background-color:#000000;
+            color:white;
+        }
+        .altColorSlot .QB {
+            background-color:#ff0000;
+            color:white;
+        }
+        .altColorSlot .WR {
+            background-color:#000000;
+            color:white;
+        }
+        .RB {
+            background-color:#0000ff;
+            color:white;
+        }
+        .altColorSlot .RB {
+            background-color:#0000ff;
+            color:white;
+        }
+        .DEF {
+            background-color:#ffdd00;
+            color:black;
+        }
+        .TE {
+            background-color:#66ff66;
+            color:black;
+        }
+        .K {
+            /*background-color:#ff9944;*/
+            background-color:#aaaaaa;
+            color:black;
+        }
+        .altColorSlot .DEF {
+            background-color:#ffdd00;
+            color:black;
+        }
+        .altColorSlot .TE {
+            background-color:#66ff66;
+            color:black;
+        }
+        .altColorSlot .K {
+            background-color:#aaaaaa;
+            color:black;
+        }
+        .team {
+            float:left;
+            font-size:7pt;
+            margin-left:2px;
+            text-align:right;
+            font-family: 'Arial';
+            margin-top:-19px;
+        }
+        .firstName {
+            font-size:13.5pt;
+            text-align:center;
+            font-family: 'Franklin';
+            font-weight:normal;
+            width:100%;
+            display:inline-block;
+            margin-top:-12px;
+        }
+        .position {
+            float:right;
+            margin-right:2px;
+            font-size:7pt;
+            text-align:right;
+            font-family: 'Arial';
+        }
+        .longName {
+            letter-spacing:-1px;
+            font-size:22pt;
+        }
+        .veryLongName {
+            letter-spacing:-1px;
+            font-size:21pt;
+        }
+        .veryVeryLongName {
+            letter-spacing:-1.5px;
+            font-size:17pt;
+        }
+
+
+    </style>
 </head>
-<body>
-	<div class="container-fluid">
-		<div class="row section" id="topheader">
-			<div class="col-xs-12 col-sm-12 my-auto" id="name">Raymond Heldt</div>
-			<div class="col-xs-12 col-sm-12 subtitle" id="topSubtitle"><i>Software Developer who's too cheap to pay for a domain name and will gladly keep using his old MSU student account, which for some reason is still active despite having graduated in 2013.</i></div>
-			<div class="col-xs-12 col-sm-12 my-auto" id="resume">View Resume</div>
-		</div>
-		<hr id="divider1">
-		<div class="row section" id="gamesSection">
-			<div class="col-xs-12 col-sm-12 title" id="gamesTitle">Free HTML5 Games</div>
-			<div class="col-xs-12 col-sm-12 subtitle" id="gamesSubtitle"><i>Occasionally I make webpage games as birthday or Christmas gifts for family/friends. These are some of my favorites, with some modifications since the originals contained photos of people that you probably don't know.</i></div>
-		</div>
-		<div id="games" class="row section">
-			<div class="col-xs-12 col-md-6 optimizedSection">
-				<span id="optimizeddesktop">Optimized for desktop</span>
-				<div class="row">
-					<div class="col-xs-12 col-md-6 my-auto gamecontainer">
-						<div class="game" id="memory">
-							<span class="vertical-aligner"></span>
-							<span class="vertical-aligned-text">MEMORY</span>
-						</div>
-					</div>
-					<div class="col-xs-12 col-md-6 my-auto gamecontainer">
-						<div class="game" id="one">
-							<span class="vertical-aligner"></span>
-							<span class="vertical-aligned-text">ONE CARD</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-12 col-md-6 optimizedSection">
-				<span id="optimizedmobile">Optimized for mobile</span>
-				<div class="row">
-					<div class="col-xs-12 col-md-6 my-auto gamecontainer">
-						<div class="game" id="fiveDice">
-							<span class="vertical-aligner"></span>
-							<span class="vertical-aligned-text">FIVE DICE</span>
-						</div>
-					</div>
-					<div class="col-xs-12 col-md-6 my-auto gamecontainer">
-						<div class="game" id="trivia">
-							<span class="vertical-aligner"></span>
-							<span class="vertical-aligned-text">TEAM TRIVIA</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-12 col-sm-12" id="sourceCode">
-				<a>Download source code of all games</a>
-			</div>
-		</div>
-		<hr id="divider2">
-		<div class="row section" id="contactSection">
-			<div class="col-xs-12 col-sm-12 title" id="contactTitle">Contact</div>
-			<div class="col-xs-12 col-md-12 my-auto contactinfo">heldt.raymond3@gmail.com</div>
-			<div class="col-xs-12 col-md-12 my-auto contactinfo">(517) 528-2550</div>
-		</div>
-	</div>
+<body style="text-align:center;background-color:#008800;color:black;margin:5px 0px 0px 0px;padding:0px">
+    <table id="controlsTable" style="width:100%">
+        <tr id="controls">
+            <td colspan="2" style="text-align:right">
+                <button id='fullScreen' onclick="ToggleFullScreen()">Full-Screen</button>
+            </td>
+            <td colspan="3" style="text-align:center">
+                <input type="number" id="numTeams" min="6" max="16" value="10" onchange="UpdateNumTeams()" />
+                <label for="numTeams">Teams</label>
+                &nbsp; &nbsp;
+                <input type="number" id="numRounds" min="10" max="20" value="14" onchange="UpdateNumRounds()" />
+                <label for="numRounds">Rounds</label>
+            </td>
+            <td colspan="4" style="text-align:center">
+                <button id="savePicks" onclick="SaveCurrentData()">Save Draft Board</button>
+                <button id="loadPicks" onclick="ToggleOpenFile()">Load draft from file</button>
+                <input type='file' id='openFile' style='width:90px;display:none' />
+            </td>
+            <td colspan="3" style="text-align:center">
+                <button id="show2025Picks" onclick="Show2025Picks()">Show 2025 Draft</button>
+                <button id="clearPicks" onclick="ClearPicks()">Clear Draft</button>
+            </td>
+        </tr>
+    </table>
+    <table id="draftBoard" style="table-layout:fixed">
+        <tr id="ownerNames">
+            <td></td>
+            <td id="ownerRowBlankRight"></td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        var DRAFT_PICKS = [
+            {name: "1", picks: [null, null, null, null, null, null, null, null, null, null, null, null, null, null]},
+            {name: "2", picks: [null, null, null, null, null, null, null, null, null, null, null, null, null, null]},
+            {name: "3", picks: [null, null, null, null, null, null, null, null, null, null, null, null, null, null]},
+            {name: "4", picks: [null, null, null, null, null, null, null, null, null, null, null, null, null, null]},
+            {name: "5", picks: [null, null, null, null, null, null, null, null, null, null, null, null, null, null]},
+            {name: "6", picks: [null, null, null, null, null, null, null, null, null, null, null, null, null, null]},
+            {name: "7", picks: [null, null, null, null, null, null, null, null, null, null, null, null, null, null]},
+            {name: "8", picks: [null, null, null, null, null, null, null, null, null, null, null, null, null, null]},
+            {name: "9", picks: [null, null, null, null, null, null, null, null, null, null, null, null, null, null]},
+            {name: "10", picks: [null, null, null, null, null, null, null, null, null, null, null, null, null, null]},
+        ];
+        var PICKS_2025 = [{"name":"Joe","picks":[{"first":"Ja'Marr","last":"Chase","team":"CIN","position":"WR","id":3,"slotNum":101},{"first":"Jayden","last":"Daniels","team":"WAS","position":"QB","id":56,"slotNum":201},{"first":"Josh","last":"Jacobs","team":"GB","position":"RB","id":36,"slotNum":301},{"first":"Mike","last":"Evans","team":"SF","position":"WR","id":57,"slotNum":401},{"first":"George","last":"Kittle","team":"SF","position":"TE","id":103,"slotNum":501},{"first":"Kenneth","last":"Walker III","team":"KC","position":"RB","id":24,"slotNum":601},{"first":"EAGLES","last":"PHILADELPHIA","team":"PHI","position":"DEF","id":193,"slotNum":701},{"first":"RJ","last":"Harvey","team":"DEN","position":"RB","id":87,"slotNum":801},{"first":"George","last":"Pickens","team":"DAL","position":"WR","id":21,"slotNum":901},{"first":"Patrick","last":"Mahomes II","team":"KC","position":"QB","id":97,"slotNum":1001},{"first":"Chris","last":"Olave","team":"NO","position":"WR","id":25,"slotNum":1101},{"first":"Juwan","last":"Johnson","team":"NO","position":"TE","id":142,"slotNum":1201},{"first":"Jakobi","last":"Meyers","team":"JAC","position":"WR","id":100,"slotNum":1301},{"first":"Ka'imi","last":"Fairbairn","team":"HOU","position":"K","id":203,"slotNum":1401}]},{"name":"Roger","picks":[{"first":"Bijan","last":"Robinson","team":"ATL","position":"RB","id":1,"slotNum":102},{"first":"Malik","last":"Nabers","team":"NYG","position":"WR","id":40,"slotNum":202},{"first":"Joe","last":"Burrow","team":"CIN","position":"QB","id":46,"slotNum":302},{"first":"James","last":"Cook III","team":"BUF","position":"RB","id":11,"slotNum":402},{"first":"Chuba","last":"Hubbard","team":"CAR","position":"RB","id":80,"slotNum":502},{"first":"Marvin","last":"Harrison Jr.","team":"ARI","position":"WR","id":71,"slotNum":602},{"first":"Mark","last":"Andrews","team":"BAL","position":"TE","id":125,"slotNum":702},{"first":"Tyrone","last":"Tracy Jr.","team":"NYG","position":"RB","id":126,"slotNum":802},{"first":"Javonte","last":"Williams","team":"DAL","position":"RB","id":41,"slotNum":902},{"first":"Jayden","last":"Reed","team":"GB","position":"WR","id":112,"slotNum":1002},{"first":"Chase","last":"McLaughlin","team":"TB","position":"K","id":247,"slotNum":1102},{"first":"Stefon","last":"Diggs","team":"FA","position":"WR","id":182,"slotNum":1202},{"first":"TEXANS","last":"HOUSTON","team":"HOU","position":"DEF","id":175,"slotNum":1302},{"first":"Zach","last":"Charbonnet","team":"SEA","position":"RB","id":131,"slotNum":1402}]},{"name":"Camden","picks":[{"first":"Jahmyr","last":"Gibbs","team":"DET","position":"RB","id":2,"slotNum":103},{"first":"Nico","last":"Collins","team":"HOU","position":"WR","id":15,"slotNum":203},{"first":"A.J.","last":"Brown","team":"NE","position":"WR","id":16,"slotNum":303},{"first":"Jaxon","last":"Smith-Njigba","team":"SEA","position":"WR","id":5,"slotNum":403},{"first":"Alvin","last":"Kamara","team":"NO","position":"RB","id":144,"slotNum":503},{"first":"David","last":"Montgomery","team":"HOU","position":"RB","id":62,"slotNum":603},{"first":"Tetairoa","last":"McMillan","team":"CAR","position":"WR","id":29,"slotNum":703},{"first":"Justin","last":"Herbert","team":"LAC","position":"QB","id":68,"slotNum":803},{"first":"Matthew","last":"Golden","team":"GB","position":"WR","id":136,"slotNum":903},{"first":"Dallas","last":"Goedert","team":"PHI","position":"TE","id":119,"slotNum":1003},{"first":"Cam","last":"Skattebo","team":"NYG","position":"RB","id":50,"slotNum":1103},{"first":"C.J.","last":"Stroud","team":"HOU","position":"QB","id":139,"slotNum":1203},{"first":"Jake","last":"Elliott","team":"PHI","position":"K","id":392,"slotNum":1303},{"first":"BUCCANEERS","last":"TAMPA BAY","team":"TB","position":"DEF","id":394,"slotNum":1403}]},{"name":"Gretchen","picks":[{"first":"Saquon","last":"Barkley","team":"PHI","position":"RB","id":19,"slotNum":104},{"first":"Jalen","last":"Hurts","team":"PHI","position":"QB","id":60,"slotNum":204},{"first":"Davante","last":"Adams","team":"LAR","position":"WR","id":49,"slotNum":304},{"first":"Trey","last":"McBride","team":"ARI","position":"TE","id":22,"slotNum":404},{"first":"James","last":"Conner","team":"ARI","position":"RB","id":178,"slotNum":504},{"first":"DK","last":"Metcalf","team":"PIT","position":"WR","id":73,"slotNum":604},{"first":"Rashee","last":"Rice","team":"KC","position":"WR","id":27,"slotNum":704},{"first":"Joe","last":"Mixon","team":"FA","position":"RB","id":314,"slotNum":804},{"first":"Jake","last":"Bates","team":"DET","position":"K","id":233,"slotNum":904},{"first":"BRONCOS","last":"DENVER","team":"DEN","position":"DEF","id":180,"slotNum":1004},{"first":"Jaylen","last":"Waddle","team":"DEN","position":"WR","id":44,"slotNum":1104},{"first":"Jaylen","last":"Warren","team":"PIT","position":"RB","id":69,"slotNum":1204},{"first":"Tucker","last":"Kraft","team":"GB","position":"TE","id":65,"slotNum":1304},{"first":"Aaron","last":"Rodgers","team":"PIT","position":"QB","id":226,"slotNum":1404}]},{"name":"Lou","picks":[{"first":"Justin","last":"Jefferson","team":"MIN","position":"WR","id":10,"slotNum":105},{"first":"Puka","last":"Nacua","team":"LAR","position":"WR","id":4,"slotNum":205},{"first":"Jonathan","last":"Taylor","team":"IND","position":"RB","id":8,"slotNum":305},{"first":"Dak","last":"Prescott","team":"DAL","position":"QB","id":81,"slotNum":405},{"first":"Evan","last":"Engram","team":"DEN","position":"TE","id":249,"slotNum":505},{"first":"Breece","last":"Hall","team":"NYJ","position":"RB","id":38,"slotNum":605},{"first":"Harrison","last":"Butker","team":"KC","position":"K","id":248,"slotNum":705},{"first":"Jerry","last":"Jeudy","team":"CLE","position":"WR","id":155,"slotNum":805},{"first":"Jeremiyah","last":"Love","team":"ARI","position":"RB","id":31,"slotNum":905},{"first":"Austin","last":"Ekeler","team":"FA","position":"RB","id":382,"slotNum":1005},{"first":"Rome","last":"Odunze","team":"CHI","position":"WR","id":63,"slotNum":1105},{"first":"Tank","last":"Bigsby","team":"PHI","position":"RB","id":154,"slotNum":1205},{"first":"J.K.","last":"Dobbins","team":"DEN","position":"RB","id":95,"slotNum":1305},{"first":"SEAHAWKS","last":"SEATTLE","team":"SEA","position":"DEF","id":184,"slotNum":1405}]},{"name":"Bill","picks":[{"first":"Ashton","last":"Jeanty","team":"LV","position":"RB","id":12,"slotNum":106},{"first":"CeeDee","last":"Lamb","team":"DAL","position":"WR","id":9,"slotNum":206},{"first":"TreVeyon","last":"Henderson","team":"NE","position":"RB","id":54,"slotNum":306},{"first":"Omarion","last":"Hampton","team":"LAC","position":"RB","id":20,"slotNum":406},{"first":"Terry","last":"McLaurin","team":"WAS","position":"WR","id":47,"slotNum":506},{"first":"Courtland","last":"Sutton","team":"DEN","position":"WR","id":79,"slotNum":606},{"first":"Bo","last":"Nix","team":"DEN","position":"QB","id":99,"slotNum":706},{"first":"Brandon","last":"Aubrey","team":"DAL","position":"K","id":198,"slotNum":806},{"first":"BILLS","last":"BUFFALO","team":"BUF","position":"DEF","id":237,"slotNum":906},{"first":"Tyler","last":"Warren","team":"IND","position":"TE","id":58,"slotNum":1006},{"first":"Ricky","last":"Pearsall","team":"SF","position":"WR","id":102,"slotNum":1106},{"first":"Sam","last":"Darnold","team":"SEA","position":"QB","id":148,"slotNum":1206},{"first":"Quinshon","last":"Judkins","team":"CLE","position":"RB","id":53,"slotNum":1306},{"first":"Rico","last":"Dowdle","team":"PIT","position":"RB","id":82,"slotNum":1406}]},{"name":"Trent","picks":[{"first":"Christian","last":"McCaffrey","team":"SF","position":"RB","id":7,"slotNum":107},{"first":"Garrett","last":"Wilson","team":"NYJ","position":"WR","id":37,"slotNum":207},{"first":"Travis","last":"Etienne Jr.","team":"NO","position":"RB","id":45,"slotNum":307},{"first":"Sam","last":"LaPorta","team":"DET","position":"TE","id":84,"slotNum":407},{"first":"DeVonta","last":"Smith","team":"PHI","position":"WR","id":28,"slotNum":507},{"first":"Kyler","last":"Murray","team":"MIN","position":"QB","id":114,"slotNum":607},{"first":"Brandon","last":"Aiyuk","team":"SF","position":"WR","id":252,"slotNum":707},{"first":"Zay","last":"Flowers","team":"BAL","position":"WR","id":32,"slotNum":807},{"first":"Tyler","last":"Allgeier","team":"ARI","position":"RB","id":134,"slotNum":907},{"first":"Rachaad","last":"White","team":"WAS","position":"RB","id":109,"slotNum":1007},{"first":"Jordan","last":"Addison","team":"MIN","position":"WR","id":107,"slotNum":1107},{"first":"49ERS","last":"SAN FRANCISCO","team":"SF","position":"DEF","id":299,"slotNum":1207},{"first":"Chris","last":"Boswell","team":"PIT","position":"K","id":265,"slotNum":1307},{"first":"Emmett","last":"Johnson","team":"KC","position":"RB","id":196,"slotNum":1407}]},{"name":"Ray","picks":[{"first":"Josh","last":"Allen","team":"BUF","position":"QB","id":26,"slotNum":108},{"first":"De'Von","last":"Achane","team":"MIA","position":"RB","id":14,"slotNum":208},{"first":"Drake","last":"London","team":"ATL","position":"WR","id":13,"slotNum":308},{"first":"Brock","last":"Bowers","team":"LV","position":"TE","id":17,"slotNum":408},{"first":"Tyreek","last":"Hill","team":"FA","position":"WR","id":270,"slotNum":508},{"first":"Tee","last":"Higgins","team":"CIN","position":"WR","id":30,"slotNum":608},{"first":"D'Andre","last":"Swift","team":"CHI","position":"RB","id":55,"slotNum":708},{"first":"Aaron","last":"Jones Sr.","team":"MIN","position":"RB","id":108,"slotNum":808},{"first":"David","last":"Njoku","team":"LAC","position":"TE","id":212,"slotNum":908},{"first":"Cameron","last":"Dicker","team":"LAC","position":"K","id":205,"slotNum":1008},{"first":"STEELERS","last":"PITTSBURGH","team":"PIT","position":"DEF","id":202,"slotNum":1108},{"first":"VIKINGS","last":"MINNESOTA","team":"MIN","position":"DEF","id":204,"slotNum":1208},{"first":"Audric","last":"Estime","team":"NO","position":"RB","id":320,"slotNum":1308},{"first":"Andrei","last":"Iosivas","team":"CIN","position":"WR","id":318,"slotNum":1408}]},{"name":"Chris","picks":[{"first":"Chase","last":"Brown","team":"CIN","position":"RB","id":18,"slotNum":109},{"first":"Amon-Ra","last":"St. Brown","team":"DET","position":"WR","id":6,"slotNum":209},{"first":"Ladd","last":"McConkey","team":"LAC","position":"WR","id":39,"slotNum":309},{"first":"Bucky","last":"Irving","team":"TB","position":"RB","id":52,"slotNum":409},{"first":"Isiah","last":"Pacheco","team":"DET","position":"RB","id":138,"slotNum":509},{"first":"Xavier","last":"Worthy","team":"KC","position":"WR","id":120,"slotNum":609},{"first":"Jared","last":"Goff","team":"DET","position":"QB","id":110,"slotNum":709},{"first":"Travis","last":"Kelce","team":"KC","position":"TE","id":105,"slotNum":809},{"first":"Jacory","last":"Croskey-Merritt","team":"WAS","position":"RB","id":115,"slotNum":909},{"first":"T.J.","last":"Hockenson","team":"MIN","position":"TE","id":170,"slotNum":1009},{"first":"Hunter","last":"Henry","team":"NE","position":"TE","id":147,"slotNum":1109},{"first":"RAVENS","last":"BALTIMORE","team":"BAL","position":"DEF","id":219,"slotNum":1209},{"first":"J.J.","last":"McCarthy","team":"MIN","position":"QB","id":327,"slotNum":1309},{"first":"Deebo","last":"Samuel Sr.","team":"FA","position":"WR","id":209,"slotNum":1409}]},{"name":"Nick","picks":[{"first":"Lamar","last":"Jackson","team":"BAL","position":"QB","id":34,"slotNum":110},{"first":"Derrick","last":"Henry","team":"BAL","position":"RB","id":23,"slotNum":210},{"first":"Brian","last":"Thomas Jr.","team":"JAC","position":"WR","id":77,"slotNum":310},{"first":"Kyren","last":"Williams","team":"LAR","position":"RB","id":33,"slotNum":410},{"first":"DJ","last":"Moore","team":"BUF","position":"WR","id":61,"slotNum":510},{"first":"Jameson","last":"Williams","team":"DET","position":"WR","id":51,"slotNum":610},{"first":"Calvin","last":"Ridley","team":"TEN","position":"WR","id":176,"slotNum":710},{"first":"Baker","last":"Mayfield","team":"TB","position":"QB","id":122,"slotNum":810},{"first":"Colston","last":"Loveland","team":"CHI","position":"TE","id":43,"slotNum":910},{"first":"Tony","last":"Pollard","team":"TEN","position":"RB","id":76,"slotNum":1010},{"first":"Cooper","last":"Kupp","team":"SEA","position":"WR","id":222,"slotNum":1110},{"first":"Tyler","last":"Bass","team":"BUF","position":"K","id":383,"slotNum":1210},{"first":"LIONS","last":"DETROIT","team":"DET","position":"DEF","id":236,"slotNum":1310},{"first":"Michael","last":"Pittman Jr.","team":"PIT","position":"WR","id":93,"slotNum":1410}]}];
+
+        //LoadHtmlFields();
+        ImportLocalStorageData();
+        RedisplayDraftBoard();
+
+        function UpdateNumRounds() {
+            var prevNumRounds = GetNumberRounds();
+            var newNumRounds = $("#numRounds").val();
+            if (newNumRounds < 10) newNumRounds = 10;
+            if (newNumRounds > 20) newNumRounds = 20;
+            $("#numRounds").val(newNumRounds);
+
+            if (newNumRounds == prevNumRounds) {
+                console.log("returning" + newNumRounds);
+                return;
+            }
+            var prevNumRounds = GetNumberRounds();
+
+            if (newNumRounds < prevNumRounds) {
+                for (var i = 0; i < DRAFT_PICKS.length; i++) {
+                    var newTeamPicks = [];
+                    for (var j = 0; j < newNumRounds; j++) {
+                        newTeamPicks.push(DRAFT_PICKS[i].picks[j]);
+                    }
+                    DRAFT_PICKS[i].picks = newTeamPicks;
+                }
+            }
+            else if (newNumRounds > prevNumRounds) {
+                var numPicksToAdd = (newNumRounds - prevNumRounds);
+                for (var i = 0; i < DRAFT_PICKS.length; i++) {
+                    for (var j = 0; j < numPicksToAdd; j++) {
+                        DRAFT_PICKS[i].picks.push(null);
+                    }
+                }                
+            }
+
+            RedisplayDraftBoard();
+        }
+
+        function UpdateNumTeams() {
+            console.log("checking");
+            var prevNumTeams = DRAFT_PICKS.length;
+            var newNumTeams = $("#numTeams").val();
+            if (newNumTeams < 6) newNumTeams = 6;
+            if (newNumTeams > 16) newNumTeams = 16;
+            $("#numTeams").val(newNumTeams);
+
+            if (newNumTeams == prevNumTeams) {
+                console.log("returning" + newNumTeams);
+                return;
+            }
+
+            if (prevNumTeams > newNumTeams) {
+                var numToDelete = prevNumTeams - newNumTeams;
+                for (var i = 0; i < numToDelete; i++) {
+                   /* $(".ownerName").eq(DRAFT_PICKS.length - 1).remove();
+                    $.each($(".draftRound"), function($index) {
+                        $(this).find("td").eq(DRAFT_PICKS.length).remove();
+                    });*/
+                    DRAFT_PICKS.pop();
+                }
+            }
+            else if (prevNumTeams < newNumTeams) {
+                var numRounds = GetNumberRounds();
+                var numToAdd = newNumTeams - prevNumTeams;
+                for (var i = 0; i < numToAdd; i++) {
+                    var newTeamData = {name: "" + (prevNumTeams + i + 1), picks:[]};
+                    for (var j = 0; j < numRounds; j++) {
+                        newTeamData.picks.push(null);
+                    }
+                    DRAFT_PICKS.push(newTeamData);
+                }
+            }
+
+            RedisplayDraftBoard();
+        }
+
+        function ToggleOpenFile() {
+            $("#openFile").toggle();
+        }
+
+        $("#openFile").on("change", function(e) {
+            console.log("CHANGE");
+
+            var _FirstFile = e.target.files[0];
+            var _Reader = new FileReader();
+            _Reader.onload = function(e) {
+                var _ConvertedArray = new Uint8Array(e.target.result);
+
+                var _String = "";
+
+                for (var i = 0; i < _ConvertedArray.length; i++) {
+                    _String += String.fromCharCode(_ConvertedArray[i]);
+                }
+
+                DRAFT_PICKS = JSON.parse(_String);
+                RedisplayDraftBoard();
+
+                $("#openFile").hide();
+                $("#openFile").val(null);
+            };
+
+            _Reader.readAsArrayBuffer(_FirstFile);
+        });
+
+/*        function LoadHtmlFields() {
+            $("#ownerNames").append("<td></td>");
+            for (var j = 0; j < NUM_ROUNDS; j++) {
+                $("#round" + (j+1)).append("<td class='roundNum roundNumLeft'>" + (j+1) + "</td>");
+                for (var i = 0; i < DRAFT_PICKS.length; i++) {
+                    var draftSlotNum = (j*DRAFT_PICKS.length) + (j % 2 == 0 ? (i+1) : (DRAFT_PICKS.length-i));
+                    $("#round" + (j+1)).append("<td onclick='SelectSlot(" + draftSlotNum + ")' id='draftSlot" + draftSlotNum + "' class='draftSlot" + (i % 2 == 0 ? " altColorSlot" : "") + "'><span class='position'></span><span class='firstName'></span><span class='team'></span><br><input type='text' class='draftSlotInput' onfocus='SelectSlot(" + draftSlotNum + ")' onkeydown='SlotKeyPress(event," + draftSlotNum + ")' onblur='DeselectSlot(event, " + draftSlotNum + ")' id='draftSlotInput" + draftSlotNum + "' /></td>");
+
+                    if (j == 0) {
+                        $("#ownerNames").append("<td class='ownerName'><input type='text' value='" + DRAFT_PICKS[i].name + "' onchange='OwnerNameEdited(" + i + ")' /></td>");
+                    }
+                }
+                var middleHtml = "" + (j+1);
+                var title="Break time! I vote for bacon cheeseburger."
+                if (j == 6) middleHtml = "<img src='pizza.png' style='height:40px' title='" + title + "' />";
+                if (j == 7) middleHtml = "<img src='FoxIcon.png' style='height:40px' title='" + title + "' />";
+                $("#round" + (j+1)).append("<td class='roundNum roundNumRight'>" + middleHtml + "</td>");
+            }
+            $("#ownerNames").append("<td></td>");
+        }*/
+
+        function OwnerNameEdited(teamIndex) {
+            DRAFT_PICKS[teamIndex].name = $(".ownerName input").eq(teamIndex).val();
+            localStorage.setItem("DRAFT_PICKS_DATA", JSON.stringify(DRAFT_PICKS));
+        }
+
+        function SaveCurrentData() {
+            var textToSave = JSON.stringify(DRAFT_PICKS);
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(textToSave));
+            element.setAttribute('download', "DraftPicks2026");
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+        }
+
+        function Show2025Picks() {
+            if (confirm("Are you sure you want to overwrite everything in this draft board with the 2025 draft results?")) {
+                DRAFT_PICKS = JSON.parse(JSON.stringify(PICKS_2025));
+                RedisplayDraftBoard();
+            }
+        }
+
+        function ClearPicks() {
+            if (confirm("Are you sure you want to clear all picks in this draft board?")) {
+            var numRounds = GetNumberRounds();
+                for (var i = 0; i < DRAFT_PICKS.length; i++) {
+                    DRAFT_PICKS[i].picks = [];
+                    DRAFT_PICKS[i].name = "" + (i+1);
+                    for (var p = 0; p < numRounds; p++) {
+                        DRAFT_PICKS[i].picks[p] = null;
+                    }
+                }
+
+                RedisplayDraftBoard();
+                /*$.each($(".ownerName input"), function($index) {
+                    $(this).val("" + ($index+1));
+                });
+                $(".draftSlotInput").val("");
+                $(".draftSlot .firstName").html("");
+                $(".draftSlot .team").html("");
+                $(".draftSlot .position").html("");
+                $(".QB").removeClass("QB");
+                $(".RB").removeClass("RB");
+                $(".WR").removeClass("WR");
+                $(".TE").removeClass("TE");
+                $(".K").removeClass("K");
+                $(".DEF").removeClass("DEF");
+                $(".longName").removeClass("longName");
+                $(".veryLongName").removeClass("veryLongName");
+                $(".veryVeryLongName").removeClass("veryVeryLongName");
+                $(".manualName").removeClass("manualName");*/
+            }
+        }
+
+        function ToggleFullScreen() {
+            if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {  // current working methods
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.body.msRequestFullscreen) {
+                    document.body.msRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) {
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+            }
+        }
+
+        function ImportLocalStorageData() {
+            console.log("IMPORT");
+            var savedPicksJSON = localStorage.getItem("DRAFT_PICKS_DATA");
+            if (typeof savedPicksJSON != "undefined" && savedPicksJSON != null) {
+                DRAFT_PICKS = JSON.parse(savedPicksJSON);
+            }
+        }
+
+        function GetNumberRounds() {
+            return DRAFT_PICKS[0].picks.length;
+        }
+
+        function ConstructBlankSlot(slotNum) {
+            return $("<td onclick='SelectSlot(" + slotNum + ")' id='draftSlot" + slotNum + "' class='draftSlot" + "'><span class='position'></span><span class='firstName'></span><span class='team'></span><br><input type='text' class='draftSlotInput' onfocus='SelectSlot(" + slotNum + ")' onkeydown='SlotKeyPress(event," + slotNum + ")' onblur='DeselectSlot(event, " + slotNum + ")' id='draftSlotInput" + slotNum + "' /></td>");
+        }
+
+        function RedisplayDraftBoard() {
+            var numTeams = DRAFT_PICKS.length;
+            var numRounds = GetNumberRounds();
+            $("#numTeams").val(numTeams);
+            $("#numRounds").val(numRounds);
+
+            var numDisplayingTeams = $(".ownerName").length;
+            var numDisplayingRounds = $(".draftRound").length;
+
+            if (numRounds < numDisplayingRounds) {
+                $.each($(".draftRound"), function($index) {
+                    if ($index >= numRounds) {
+                        $(this).remove();
+                    }
+                });
+            }
+            else if (numRounds > numDisplayingRounds) {
+                var numNewRounds = numRounds - numDisplayingRounds;
+                for (var i = 0; i < numNewRounds; i++) {
+                    var currRoundNumber = (numDisplayingRounds + i + 1);
+                    var newRound = $("<tr></tr>");
+                    newRound.addClass("draftRound");
+                    newRound.attr("id", "round" + currRoundNumber);
+                    newRound.append("<td class='roundNum roundNumLeft'>" + currRoundNumber + "</td>");
+
+                    for (var j = 0; j < numDisplayingTeams; j++) {
+                        var draftSlotNum = (100*currRoundNumber) + j + 1;
+                        newRound.append(ConstructBlankSlot(draftSlotNum));
+                    }
+
+                    newRound.append("<td class='roundNum roundNumRight'>" + currRoundNumber + "</td>");
+                    $("#draftBoard").append(newRound);
+                }
+            }
+
+            if (numTeams < numDisplayingTeams) {
+                $.each($(".ownerName"), function($index) {
+                    if ($index >= numTeams) {
+                        $(this).remove();
+                    }
+                });
+                $.each($(".draftRound"), function() {
+                    $.each($(this).find(".draftSlot"), function($index) {
+                        if ($index >= numTeams) {
+                            $(this).remove();
+                        }
+                    });
+                });
+            }
+            else if (numTeams > numDisplayingTeams) {
+                var numNewTeams = numTeams - numDisplayingTeams;
+                for (var i = 0; i < numNewTeams; i++) {
+                    for (var j = 0; j < numRounds; j++) {
+                        var draftSlotNum = (100*(j+1)) + numDisplayingTeams + i + 1;
+                        var draftSlotEl = ConstructBlankSlot(draftSlotNum);
+                        draftSlotEl.insertBefore($("#round" + (j + 1) + " .roundNumRight"));
+                    }
+                    var teamNumber = numDisplayingTeams + i;
+                    var ownerNameEl = $("<td class='ownerName'><input type='text' value='" + DRAFT_PICKS[teamNumber].name + "' onchange='OwnerNameEdited(" + teamNumber + ")' /></td>");
+                    ownerNameEl.insertBefore($("#ownerRowBlankRight"));
+                }
+            }
+
+            $(".ownerName").css("width", "" + (92 / numTeams) + "%");
+
+            for (var i = 0; i < DRAFT_PICKS.length; i++) {
+                $(".ownerName input").eq(i).val(DRAFT_PICKS[i].name);
+                for (var p = 0; p < DRAFT_PICKS[i].picks.length; p++) {
+                    var pick = DRAFT_PICKS[i].picks[p];
+                    if (pick != null) {
+                        PopulateSlot(pick.slotNum, pick.first, pick.last, pick.position, pick.team, pick.manualName);
+                    }
+                    else {
+                        var slotNumber = (100*(p+1)) + i + 1;
+                        PopulateSlot(slotNumber, null, null, null, null, null);
+                    }
+                }
+            }
+
+            var halfwayRound = Math.floor(numRounds / 2);
+            var halfEndsOnRight = (halfwayRound % 2 == 1);
+            var title="Break time! I vote for bacon cheeseburger."
+            var break1Html = "<img src='pizza.png' style='height:40px' title='" + title + "' />";
+            var break2Html = "<img src='FoxIcon.png' style='height:40px' title='" + title + "' />";
+
+            $.each($(".roundNumLeft"), function($index) {
+                $(this).html("" + ($index + 1));
+                if (!halfEndsOnRight && ($index + 1) == halfwayRound) {
+                    $(this).html(break1Html);
+                }
+                if (!halfEndsOnRight && ($index) == halfwayRound) {
+                    $(this).html(break2Html);
+                }
+            });
+            $.each($(".roundNumRight"), function($index) {
+                $(this).html("" + ($index + 1));
+                if (halfEndsOnRight && ($index + 1) == halfwayRound) {
+                    $(this).html(break1Html);
+                }
+                if (halfEndsOnRight && ($index) == halfwayRound) {
+                    $(this).html(break2Html);
+                }
+            });
+        }
+
+        function SelectSlot(slotNum) {
+            $(".draftSlot").removeClass("selected");
+            $("#draftSlot" + slotNum).addClass("selected");
+            $("#draftSlotInput" + slotNum).attr("prevVal",$("#draftSlotInput" + slotNum).val());
+        }
+
+        function SlotKeyPress(event, slotNum) {
+            if (event.code == "Tab" || event.code == "Enter") {
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (event.code == "Enter") {
+                    //$(".draftSlotInput").blur();
+                    //return;
+                }
+
+                var numRounds = GetNumberRounds();
+                var numTeams = DRAFT_PICKS.length;
+                var currRound = Math.floor(slotNum / 100);
+                var draftPosition = slotNum % 100;
+                var increment = 1;
+
+                var moveForward = (!(event.shiftKey));
+                if (moveForward) {
+                    if (currRound % 2 == 0 && draftPosition == 1) {
+                        increment = 100;
+                    }
+                    else if (currRound % 2 == 1 && draftPosition == numTeams) {
+                        increment = 100;
+                    }
+                    else {
+                        increment = ((currRound % 2 == 0) ? -1 : 1);
+                    }
+                }
+                else {
+                    if (currRound % 2 == 1 && draftPosition == 1) {
+                        increment = -100;
+                    }
+                    else if (currRound % 2 == 0 && draftPosition == numTeams) {
+                        increment = -100;
+                    }
+                    else {
+                        increment = ((currRound % 2 == 0) ? 1 : -1);
+                    }
+                }
+
+                var newSlotNum = slotNum + increment;
+                if ($("#draftSlotInput" + newSlotNum).length > 0) {
+                    $("#draftSlotInput" + newSlotNum).click().focus();                    
+                }
+                else {
+                    $(".draftSlotInput").blur();
+                }
+            }
+        }
+
+        function DeselectSlot(event, slotNum) {
+            var roundIndex = Math.floor(slotNum / 100) - 1;
+            var teamIndex = (slotNum % 100) - 1;
+
+            if ($("#draftSlotInput" + slotNum).attr("prevVal") == $("#draftSlotInput" + slotNum).val()) {
+                $(".draftSlot").removeClass("selected");
+                return;
+            }
+/*            $("#draftSlot" + slotNum).removeClass("selected");
+            $("#draftSlot" + slotNum).removeClass("QB");
+            $("#draftSlot" + slotNum).removeClass("RB");
+            $("#draftSlot" + slotNum).removeClass("WR");
+            $("#draftSlot" + slotNum).removeClass("TE");
+            $("#draftSlot" + slotNum).removeClass("K");
+            $("#draftSlot" + slotNum).removeClass("DEF");
+            $("#draftSlotInput" + slotNum).removeClass("QB");
+            $("#draftSlotInput" + slotNum).removeClass("RB");
+            $("#draftSlotInput" + slotNum).removeClass("WR");
+            $("#draftSlotInput" + slotNum).removeClass("TE");
+            $("#draftSlotInput" + slotNum).removeClass("K");
+            $("#draftSlotInput" + slotNum).removeClass("DEF");
+            $("#draftSlotInput" + slotNum).removeClass("longName");
+            $("#draftSlotInput" + slotNum).removeClass("veryLongName");
+            $("#draftSlotInput" + slotNum).removeClass("veryVeryLongName");
+            $("#draftSlotInput" + slotNum).removeClass("manualName");
+
+            $("#draftSlot" + slotNum + " .team").html("");
+            $("#draftSlot" + slotNum + " .position").html("");
+            $("#draftSlot" + slotNum + " .firstName").html("");*/
+
+            if ($("#draftSlotInput" + slotNum).val() == "") {
+                var prevPick = DRAFT_PICKS[teamIndex].picks[roundIndex];
+                DRAFT_PICKS[teamIndex].picks[roundIndex] = null;
+                localStorage.setItem("DRAFT_PICKS_DATA", JSON.stringify(DRAFT_PICKS));
+                RedisplayDraftBoard();
+                return;
+            }
+
+            var pickText = $("#draftSlotInput" + slotNum).val();
+            pickText = pickText.toLowerCase().replace(" jr","").replace(" sr","").replace(" iii","").replace(" ii","").replace("  ", " ").replace("'","").replace(".","").replace(".","").replace("-","").replace(",","").trim();
+
+            console.log("Checking pick text ");
+            console.log(pickText);
+
+            for (var i = 0; i < PLAYER_DATA.length; i++) {
+                var checkName = PLAYER_DATA[i].first + " " + PLAYER_DATA[i].last;
+                checkName = checkName.toLowerCase().replace("'","").replace(".","").replace(".","").replace("-","").replace(",","").replace(" jr","").replace(" sr","").replace(" iii","").replace(" ii","").trim();
+
+                if (checkName.indexOf(pickText) >= 0 && !AlreadyPicked(PLAYER_DATA[i].id, slotNum)) {
+                    console.log(PLAYER_DATA[i]);
+                    DRAFT_PICKS[teamIndex].picks[roundIndex] = PLAYER_DATA[i];
+                    DRAFT_PICKS[teamIndex].picks[roundIndex].slotNum = slotNum;
+
+                    localStorage.setItem("DRAFT_PICKS_DATA", JSON.stringify(DRAFT_PICKS));
+                    RedisplayDraftBoard();
+
+                    return;
+                }
+            }
+
+            DRAFT_PICKS[teamIndex].picks[roundIndex] = {manualName: $("#draftSlotInput" + slotNum).val()};
+            DRAFT_PICKS[teamIndex].picks[roundIndex].slotNum = slotNum;
+            localStorage.setItem("DRAFT_PICKS_DATA", JSON.stringify(DRAFT_PICKS));
+            RedisplayDraftBoard();
+        }
+
+        function AlreadyPicked(id, slotNum) {
+            for (var i = 0; i < DRAFT_PICKS.length; i++) {
+                for (var p = 0; p < DRAFT_PICKS[i].picks.length; p++) {
+                    var pick = DRAFT_PICKS[i].picks[p];
+                    if (pick != null) {
+                        if (typeof pick.id != "undefined" && pick.id == id) {
+                            if (typeof pick.slotNum != "undefined" && pick.slotNum == slotNum) {
+                                return false;
+                            }
+                            return true;
+                        }                        
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        function PopulateSlot(slotNum, first, last, position, team, manualName) {
+            $("#draftSlot" + slotNum).removeClass("QB");
+            $("#draftSlot" + slotNum).removeClass("RB");
+            $("#draftSlot" + slotNum).removeClass("WR");
+            $("#draftSlot" + slotNum).removeClass("TE");
+            $("#draftSlot" + slotNum).removeClass("K");
+            $("#draftSlot" + slotNum).removeClass("DEF");
+            $("#draftSlot" + slotNum).removeClass("manualName");
+            $("#draftSlot" + slotNum).removeClass("veryLongName");
+            $("#draftSlot" + slotNum).removeClass("veryVeryLongName");
+            $("#draftSlot" + slotNum).removeClass("longName");
+            $("#draftSlot" + slotNum + " .firstName").html("");
+            $("#draftSlot" + slotNum + " .team").html("");
+            $("#draftSlot" + slotNum + " .position").html("");
+            $("#draftSlotInput" + slotNum).val("");
+            $("#draftSlotInput" + slotNum).removeClass("QB");
+            $("#draftSlotInput" + slotNum).removeClass("RB");
+            $("#draftSlotInput" + slotNum).removeClass("WR");
+            $("#draftSlotInput" + slotNum).removeClass("TE");
+            $("#draftSlotInput" + slotNum).removeClass("K");
+            $("#draftSlotInput" + slotNum).removeClass("DEF");
+            $("#draftSlotInput" + slotNum).removeClass("manualName");
+            $("#draftSlotInput" + slotNum).removeClass("veryLongName");
+            $("#draftSlotInput" + slotNum).removeClass("veryVeryLongName");
+            $("#draftSlotInput" + slotNum).removeClass("longName");
+
+            if (typeof manualName != "undefined") {
+                $("#draftSlotInput" + slotNum).val(manualName);
+                $("#draftSlotInput" + slotNum).addClass("manualName");
+                return;
+            }
+
+            $("#draftSlotInput" + slotNum).val(last);
+            $("#draftSlot" + slotNum).addClass(position);
+            $("#draftSlotInput" + slotNum).addClass(position);
+            $("#draftSlot" + slotNum + " .team").html(team == "FA" ? "&nbsp; &nbsp; &nbsp; &nbsp;" : team);
+            $("#draftSlot" + slotNum + " .position").html(position);
+            $("#draftSlot" + slotNum + " .firstName").html(first.toUpperCase());
+
+            if (last.length > 13 || (last.length > 10 && position == "DEF")) {
+                $("#draftSlotInput" + slotNum).addClass("veryVeryLongName");
+            }
+            else if (last.length > 11 || (last.length > 9 && position == "DEF")) {
+                $("#draftSlotInput" + slotNum).addClass("veryLongName");
+            }
+            else if (last.length > 9 || (last.length > 8 && position == "DEF")) {
+                $("#draftSlotInput" + slotNum).addClass("longName");
+            }
+        }
+
+        var PLAYER_DATA = [
+{first:"Bijan",last:"Robinson",team:"ATL",position:"RB",id:1},
+{first:"Jahmyr",last:"Gibbs",team:"DET",position:"RB",id:2},
+{first:"Ja'Marr",last:"Chase",team:"CIN",position:"WR",id:3},
+{first:"Puka",last:"Nacua",team:"LAR",position:"WR",id:4},
+{first:"Jaxon",last:"Smith-Njigba",team:"SEA",position:"WR",id:5},
+{first:"Amon-Ra",last:"St. Brown",team:"DET",position:"WR",id:6},
+{first:"Christian",last:"McCaffrey",team:"SF",position:"RB",id:7},
+{first:"Jonathan",last:"Taylor",team:"IND",position:"RB",id:8},
+{first:"CeeDee",last:"Lamb",team:"DAL",position:"WR",id:9},
+{first:"Justin",last:"Jefferson",team:"MIN",position:"WR",id:10},
+{first:"James",last:"Cook III",team:"BUF",position:"RB",id:11},
+{first:"Ashton",last:"Jeanty",team:"LV",position:"RB",id:12},
+{first:"Drake",last:"London",team:"ATL",position:"WR",id:13},
+{first:"De'Von",last:"Achane",team:"MIA",position:"RB",id:14},
+{first:"Nico",last:"Collins",team:"HOU",position:"WR",id:15},
+{first:"A.J.",last:"Brown",team:"NE",position:"WR",id:16},
+{first:"Brock",last:"Bowers",team:"LV",position:"TE",id:17},
+{first:"Chase",last:"Brown",team:"CIN",position:"RB",id:18},
+{first:"Saquon",last:"Barkley",team:"PHI",position:"RB",id:19},
+{first:"Omarion",last:"Hampton",team:"LAC",position:"RB",id:20},
+{first:"George",last:"Pickens",team:"DAL",position:"WR",id:21},
+{first:"Trey",last:"McBride",team:"ARI",position:"TE",id:22},
+{first:"Derrick",last:"Henry",team:"BAL",position:"RB",id:23},
+{first:"Kenneth",last:"Walker III",team:"KC",position:"RB",id:24},
+{first:"Chris",last:"Olave",team:"NO",position:"WR",id:25},
+{first:"Josh",last:"Allen",team:"BUF",position:"QB",id:26},
+{first:"Rashee",last:"Rice",team:"KC",position:"WR",id:27},
+{first:"DeVonta",last:"Smith",team:"PHI",position:"WR",id:28},
+{first:"Tetairoa",last:"McMillan",team:"CAR",position:"WR",id:29},
+{first:"Tee",last:"Higgins",team:"CIN",position:"WR",id:30},
+{first:"Jeremiyah",last:"Love",team:"ARI",position:"RB",id:31},
+{first:"Zay",last:"Flowers",team:"BAL",position:"WR",id:32},
+{first:"Kyren",last:"Williams",team:"LAR",position:"RB",id:33},
+{first:"Lamar",last:"Jackson",team:"BAL",position:"QB",id:34},
+{first:"Drake",last:"Maye",team:"NE",position:"QB",id:35},
+{first:"Josh",last:"Jacobs",team:"GB",position:"RB",id:36},
+{first:"Garrett",last:"Wilson",team:"NYJ",position:"WR",id:37},
+{first:"Breece",last:"Hall",team:"NYJ",position:"RB",id:38},
+{first:"Ladd",last:"McConkey",team:"LAC",position:"WR",id:39},
+{first:"Malik",last:"Nabers",team:"NYG",position:"WR",id:40},
+{first:"Javonte",last:"Williams",team:"DAL",position:"RB",id:41},
+{first:"Emeka",last:"Egbuka",team:"TB",position:"WR",id:42},
+{first:"Colston",last:"Loveland",team:"CHI",position:"TE",id:43},
+{first:"Jaylen",last:"Waddle",team:"DEN",position:"WR",id:44},
+{first:"Travis",last:"Etienne Jr.",team:"NO",position:"RB",id:45},
+{first:"Joe",last:"Burrow",team:"CIN",position:"QB",id:46},
+{first:"Terry",last:"McLaurin",team:"WAS",position:"WR",id:47},
+{first:"Luther",last:"Burden III",team:"CHI",position:"WR",id:48},
+{first:"Davante",last:"Adams",team:"LAR",position:"WR",id:49},
+{first:"Cam",last:"Skattebo",team:"NYG",position:"RB",id:50},
+{first:"Jameson",last:"Williams",team:"DET",position:"WR",id:51},
+{first:"Bucky",last:"Irving",team:"TB",position:"RB",id:52},
+{first:"Quinshon",last:"Judkins",team:"CLE",position:"RB",id:53},
+{first:"TreVeyon",last:"Henderson",team:"NE",position:"RB",id:54},
+{first:"D'Andre",last:"Swift",team:"CHI",position:"RB",id:55},
+{first:"Jayden",last:"Daniels",team:"WAS",position:"QB",id:56},
+{first:"Mike",last:"Evans",team:"SF",position:"WR",id:57},
+{first:"Tyler",last:"Warren",team:"IND",position:"TE",id:58},
+{first:"Christian",last:"Watson",team:"GB",position:"WR",id:59},
+{first:"Jalen",last:"Hurts",team:"PHI",position:"QB",id:60},
+{first:"DJ",last:"Moore",team:"BUF",position:"WR",id:61},
+{first:"David",last:"Montgomery",team:"HOU",position:"RB",id:62},
+{first:"Rome",last:"Odunze",team:"CHI",position:"WR",id:63},
+{first:"Bhayshul",last:"Tuten",team:"JAC",position:"RB",id:64},
+{first:"Tucker",last:"Kraft",team:"GB",position:"TE",id:65},
+{first:"Caleb",last:"Williams",team:"CHI",position:"QB",id:66},
+{first:"Jadarian",last:"Price",team:"SEA",position:"RB",id:67},
+{first:"Justin",last:"Herbert",team:"LAC",position:"QB",id:68},
+{first:"Jaylen",last:"Warren",team:"PIT",position:"RB",id:69},
+{first:"Carnell",last:"Tate",team:"TEN",position:"WR",id:70},
+{first:"Marvin",last:"Harrison Jr.",team:"ARI",position:"WR",id:71},
+{first:"Alec",last:"Pierce",team:"IND",position:"WR",id:72},
+{first:"DK",last:"Metcalf",team:"PIT",position:"WR",id:73},
+{first:"Trevor",last:"Lawrence",team:"JAC",position:"QB",id:74},
+{first:"Rhamondre",last:"Stevenson",team:"NE",position:"RB",id:75},
+{first:"Tony",last:"Pollard",team:"TEN",position:"RB",id:76},
+{first:"Brian",last:"Thomas Jr.",team:"JAC",position:"WR",id:77},
+{first:"Harold",last:"Fannin Jr.",team:"CLE",position:"TE",id:78},
+{first:"Courtland",last:"Sutton",team:"DEN",position:"WR",id:79},
+{first:"Chuba",last:"Hubbard",team:"CAR",position:"RB",id:80},
+{first:"Dak",last:"Prescott",team:"DAL",position:"QB",id:81},
+{first:"Rico",last:"Dowdle",team:"PIT",position:"RB",id:82},
+{first:"Kyle",last:"Pitts Sr.",team:"ATL",position:"TE",id:83},
+{first:"Sam",last:"LaPorta",team:"DET",position:"TE",id:84},
+{first:"Chris",last:"Godwin Jr.",team:"TB",position:"WR",id:85},
+{first:"Jaxson",last:"Dart",team:"NYG",position:"QB",id:86},
+{first:"RJ",last:"Harvey",team:"DEN",position:"RB",id:87},
+{first:"Parker",last:"Washington",team:"JAC",position:"WR",id:88},
+{first:"Jordyn",last:"Tyson",team:"NO",position:"WR",id:89},
+{first:"Kyle",last:"Monangai",team:"CHI",position:"RB",id:90},
+{first:"Brock",last:"Purdy",team:"SF",position:"QB",id:91},
+{first:"Michael",last:"Wilson",team:"ARI",position:"WR",id:92},
+{first:"Michael",last:"Pittman Jr.",team:"PIT",position:"WR",id:93},
+{first:"Blake",last:"Corum",team:"LAR",position:"RB",id:94},
+{first:"J.K.",last:"Dobbins",team:"DEN",position:"RB",id:95},
+{first:"Makai",last:"Lemon",team:"PHI",position:"WR",id:96},
+{first:"Patrick",last:"Mahomes II",team:"KC",position:"QB",id:97},
+{first:"Quentin",last:"Johnston",team:"LAC",position:"WR",id:98},
+{first:"Bo",last:"Nix",team:"DEN",position:"QB",id:99},
+{first:"Jakobi",last:"Meyers",team:"JAC",position:"WR",id:100},
+{first:"Kenny",last:"Gainwell",team:"TB",position:"RB",id:101},
+{first:"Ricky",last:"Pearsall",team:"SF",position:"WR",id:102},
+{first:"George",last:"Kittle",team:"SF",position:"TE",id:103},
+{first:"Matthew",last:"Stafford",team:"LAR",position:"QB",id:104},
+{first:"Travis",last:"Kelce",team:"KC",position:"TE",id:105},
+{first:"Wan'Dale",last:"Robinson",team:"TEN",position:"WR",id:106},
+{first:"Jordan",last:"Addison",team:"MIN",position:"WR",id:107},
+{first:"Aaron",last:"Jones Sr.",team:"MIN",position:"RB",id:108},
+{first:"Rachaad",last:"White",team:"WAS",position:"RB",id:109},
+{first:"Jared",last:"Goff",team:"DET",position:"QB",id:110},
+{first:"Josh",last:"Downs",team:"IND",position:"WR",id:111},
+{first:"Jayden",last:"Reed",team:"GB",position:"WR",id:112},
+{first:"Dalton",last:"Kincaid",team:"BUF",position:"TE",id:113},
+{first:"Kyler",last:"Murray",team:"MIN",position:"QB",id:114},
+{first:"Jacory",last:"Croskey-Merritt",team:"WAS",position:"RB",id:115},
+{first:"Jake",last:"Ferguson",team:"DAL",position:"TE",id:116},
+{first:"Jordan",last:"Mason",team:"MIN",position:"RB",id:117},
+{first:"Isaiah",last:"Likely",team:"NYG",position:"TE",id:118},
+{first:"Dallas",last:"Goedert",team:"PHI",position:"TE",id:119},
+{first:"Xavier",last:"Worthy",team:"KC",position:"WR",id:120},
+{first:"Jordan",last:"Love",team:"GB",position:"QB",id:121},
+{first:"Baker",last:"Mayfield",team:"TB",position:"QB",id:122},
+{first:"Tyler",last:"Shough",team:"NO",position:"QB",id:123},
+{first:"Jayden",last:"Higgins",team:"HOU",position:"WR",id:124},
+{first:"Mark",last:"Andrews",team:"BAL",position:"TE",id:125},
+{first:"Tyrone",last:"Tracy Jr.",team:"NYG",position:"RB",id:126},
+{first:"Khalil",last:"Shakir",team:"BUF",position:"WR",id:127},
+{first:"Chris",last:"Rodriguez Jr.",team:"JAC",position:"RB",id:128},
+{first:"Jonathon",last:"Brooks",team:"CAR",position:"RB",id:129},
+{first:"Romeo",last:"Doubs",team:"NE",position:"WR",id:130},
+{first:"Zach",last:"Charbonnet",team:"SEA",position:"RB",id:131},
+{first:"KC",last:"Concepcion",team:"CLE",position:"WR",id:132},
+{first:"Malik",last:"Willis",team:"MIA",position:"QB",id:133},
+{first:"Tyler",last:"Allgeier",team:"ARI",position:"RB",id:134},
+{first:"Jalen",last:"Coker",team:"CAR",position:"WR",id:135},
+{first:"Matthew",last:"Golden",team:"GB",position:"WR",id:136},
+{first:"Woody",last:"Marks",team:"HOU",position:"RB",id:137},
+{first:"Isiah",last:"Pacheco",team:"DET",position:"RB",id:138},
+{first:"C.J.",last:"Stroud",team:"HOU",position:"QB",id:139},
+{first:"Dylan",last:"Sampson",team:"CLE",position:"RB",id:140},
+{first:"Tyjae",last:"Spears",team:"TEN",position:"RB",id:141},
+{first:"Juwan",last:"Johnson",team:"NO",position:"TE",id:142},
+{first:"Brenton",last:"Strange",team:"JAC",position:"TE",id:143},
+{first:"Alvin",last:"Kamara",team:"NO",position:"RB",id:144},
+{first:"Rashid",last:"Shaheed",team:"SEA",position:"WR",id:145},
+{first:"Oronde",last:"Gadsden II",team:"LAC",position:"TE",id:146},
+{first:"Hunter",last:"Henry",team:"NE",position:"TE",id:147},
+{first:"Sam",last:"Darnold",team:"SEA",position:"QB",id:148},
+{first:"Cam",last:"Ward",team:"TEN",position:"QB",id:149},
+{first:"Chig",last:"Okonkwo",team:"WAS",position:"TE",id:150},
+{first:"Keaton",last:"Mitchell",team:"LAC",position:"RB",id:151},
+{first:"Omar",last:"Cooper Jr.",team:"NYJ",position:"WR",id:152},
+{first:"Jauan",last:"Jennings",team:"MIN",position:"WR",id:153},
+{first:"Tank",last:"Bigsby",team:"PHI",position:"RB",id:154},
+{first:"Jerry",last:"Jeudy",team:"CLE",position:"WR",id:155},
+{first:"Brian",last:"Robinson Jr.",team:"ATL",position:"RB",id:156},
+{first:"Daniel",last:"Jones",team:"IND",position:"QB",id:157},
+{first:"Denzel",last:"Boston",team:"CLE",position:"WR",id:158},
+{first:"Dalton",last:"Schultz",team:"HOU",position:"TE",id:159},
+{first:"Bryce",last:"Young",team:"CAR",position:"QB",id:160},
+{first:"Tre",last:"Tucker",team:"LV",position:"WR",id:161},
+{first:"Jonah",last:"Coleman",team:"DEN",position:"RB",id:162},
+{first:"Jalen",last:"McMillan",team:"TB",position:"WR",id:163},
+{first:"Travis",last:"Hunter",team:"JAC",position:"WR",id:164},
+{first:"Adonai",last:"Mitchell",team:"NYJ",position:"WR",id:165},
+{first:"Braelon",last:"Allen",team:"NYJ",position:"RB",id:166},
+{first:"Tre'",last:"Harris",team:"LAC",position:"WR",id:167},
+{first:"Kenyon",last:"Sadiq",team:"NYJ",position:"TE",id:168},
+{first:"AJ",last:"Barner",team:"SEA",position:"TE",id:169},
+{first:"T.J.",last:"Hockenson",team:"MIN",position:"TE",id:170},
+{first:"Kayshon",last:"Boutte",team:"NE",position:"WR",id:171},
+{first:"Ryan",last:"Flournoy",team:"DAL",position:"WR",id:172},
+{first:"Troy",last:"Franklin",team:"DEN",position:"WR",id:173},
+{first:"Emanuel",last:"Wilson",team:"SEA",position:"RB",id:174},
+{first:"TEXANS",last:"HOUSTON",team:"HOU",position:"DEF",id:175},
+{first:"Calvin",last:"Ridley",team:"TEN",position:"WR",id:176},
+{first:"Isaac",last:"TeSlaa",team:"DET",position:"WR",id:177},
+{first:"James",last:"Conner",team:"ARI",position:"RB",id:178},
+{first:"Kimani",last:"Vidal",team:"LAC",position:"RB",id:179},
+{first:"BRONCOS",last:"DENVER",team:"DEN",position:"DEF",id:180},
+{first:"Gunnar",last:"Helm",team:"TEN",position:"TE",id:181},
+{first:"Stefon",last:"Diggs",team:"FA",position:"WR",id:182},
+{first:"Jalen",last:"Nailor",team:"LV",position:"WR",id:183},
+{first:"SEAHAWKS",last:"SEATTLE",team:"SEA",position:"DEF",id:184},
+{first:"Ray",last:"Davis",team:"BUF",position:"RB",id:185},
+{first:"Jaylin",last:"Noel",team:"HOU",position:"WR",id:186},
+{first:"LOS ANGELES",last:"LA RAMS",team:"LAR",position:"DEF",id:187},
+{first:"Malik",last:"Washington",team:"MIA",position:"WR",id:188},
+{first:"Sean",last:"Tucker",team:"TB",position:"RB",id:189},
+{first:"Darnell",last:"Mooney",team:"NYG",position:"WR",id:190},
+{first:"Jacoby",last:"Brissett",team:"ARI",position:"QB",id:191},
+{first:"De'Zhaun",last:"Stribling",team:"SF",position:"WR",id:192},
+{first:"EAGLES",last:"PHILADELPHIA",team:"PHI",position:"DEF",id:193},
+{first:"Pat",last:"Bryant",team:"DEN",position:"WR",id:194},
+{first:"JAGUARS",last:"JACKSONVILLE",team:"JAC",position:"DEF",id:195},
+{first:"Emmett",last:"Johnson",team:"KC",position:"RB",id:196},
+{first:"Nicholas",last:"Singleton",team:"TEN",position:"RB",id:197},
+{first:"Brandon",last:"Aubrey",team:"DAL",position:"K",id:198},
+{first:"Mike",last:"Washington Jr.",team:"LV",position:"RB",id:199},
+{first:"PATRIOTS",last:"NEW ENGLAND",team:"NE",position:"DEF",id:200},
+{first:"Pat",last:"Freiermuth",team:"PIT",position:"TE",id:201},
+{first:"STEELERS",last:"PITTSBURGH",team:"PIT",position:"DEF",id:202},
+{first:"Ka'imi",last:"Fairbairn",team:"HOU",position:"K",id:203},
+{first:"VIKINGS",last:"MINNESOTA",team:"MIN",position:"DEF",id:204},
+{first:"Cameron",last:"Dicker",team:"LAC",position:"K",id:205},
+{first:"Tank",last:"Dell",team:"HOU",position:"WR",id:206},
+{first:"Ted",last:"Hurst III",team:"TB",position:"WR",id:207},
+{first:"Terrance",last:"Ferguson",team:"LAR",position:"TE",id:208},
+{first:"Deebo",last:"Samuel Sr.",team:"FA",position:"WR",id:209},
+{first:"Dontayvion",last:"Wicks",team:"PHI",position:"WR",id:210},
+{first:"Cam",last:"Little",team:"JAC",position:"K",id:211},
+{first:"David",last:"Njoku",team:"LAC",position:"TE",id:212},
+{first:"Rashod",last:"Bateman",team:"BAL",position:"WR",id:213},
+{first:"Jason",last:"Myers",team:"SEA",position:"K",id:214},
+{first:"Antonio",last:"Williams",team:"WAS",position:"WR",id:215},
+{first:"LOS ANGELES",last:"LA CHARGERS",team:"LAC",position:"DEF",id:216},
+{first:"MarShawn",last:"Lloyd",team:"GB",position:"RB",id:217},
+{first:"Jaylen",last:"Wright",team:"MIA",position:"RB",id:218},
+{first:"RAVENS",last:"BALTIMORE",team:"BAL",position:"DEF",id:219},
+{first:"Chimere",last:"Dike",team:"TEN",position:"WR",id:220},
+{first:"Cade",last:"Otton",team:"TB",position:"TE",id:221},
+{first:"Cooper",last:"Kupp",team:"SEA",position:"WR",id:222},
+{first:"Kaytron",last:"Allen",team:"WAS",position:"RB",id:223},
+{first:"Eddy",last:"Pineiro",team:"SF",position:"K",id:224},
+{first:"Tyler",last:"Loop",team:"BAL",position:"K",id:225},
+{first:"Aaron",last:"Rodgers",team:"PIT",position:"QB",id:226},
+{first:"Geno",last:"Smith",team:"NYJ",position:"QB",id:227},
+{first:"CHIEFS",last:"KANSAS CITY",team:"KC",position:"DEF",id:228},
+{first:"Colby",last:"Parkinson",team:"LAR",position:"TE",id:229},
+{first:"Ollie",last:"Gordon II",team:"MIA",position:"RB",id:230},
+{first:"Germie",last:"Bernard",team:"PIT",position:"WR",id:231},
+{first:"PACKERS",last:"GREEN BAY",team:"GB",position:"DEF",id:232},
+{first:"Jake",last:"Bates",team:"DET",position:"K",id:233},
+{first:"Seth",last:"McGowan",team:"IND",position:"RB",id:234},
+{first:"Cairo",last:"Santos",team:"CHI",position:"K",id:235},
+{first:"LIONS",last:"DETROIT",team:"DET",position:"DEF",id:236},
+{first:"BILLS",last:"BUFFALO",team:"BUF",position:"DEF",id:237},
+{first:"Justice",last:"Hill",team:"BAL",position:"RB",id:238},
+{first:"Zachariah",last:"Branch",team:"ATL",position:"WR",id:239},
+{first:"Fernando",last:"Mendoza",team:"LV",position:"QB",id:240},
+{first:"Andy",last:"Borregales",team:"NE",position:"K",id:241},
+{first:"Evan",last:"McPherson",team:"CIN",position:"K",id:242},
+{first:"Elic",last:"Ayomanor",team:"TEN",position:"WR",id:243},
+{first:"Keon",last:"Coleman",team:"BUF",position:"WR",id:244},
+{first:"Harrison",last:"Mevis",team:"LAR",position:"K",id:245},
+{first:"Jack",last:"Bech",team:"LV",position:"WR",id:246},
+{first:"Chase",last:"McLaughlin",team:"TB",position:"K",id:247},
+{first:"Harrison",last:"Butker",team:"KC",position:"K",id:248},
+{first:"Evan",last:"Engram",team:"DEN",position:"TE",id:249},
+{first:"BROWNS",last:"CLEVELAND",team:"CLE",position:"DEF",id:250},
+{first:"Malik",last:"Davis",team:"DAL",position:"RB",id:251},
+{first:"Brandon",last:"Aiyuk",team:"SF",position:"WR",id:252},
+{first:"Ty",last:"Johnson",team:"BUF",position:"RB",id:253},
+{first:"Chris",last:"Brooks",team:"GB",position:"RB",id:254},
+{first:"Chris",last:"Bell",team:"MIA",position:"WR",id:255},
+{first:"Oscar",last:"Delp",team:"NO",position:"TE",id:256},
+{first:"Christian",last:"Kirk",team:"SF",position:"WR",id:257},
+{first:"Eli",last:"Stowers",team:"PHI",position:"TE",id:258},
+{first:"DJ",last:"Giddens",team:"IND",position:"RB",id:259},
+{first:"Jaydon",last:"Blue",team:"DAL",position:"RB",id:260},
+{first:"Elijah",last:"Sarratt",team:"BAL",position:"WR",id:261},
+{first:"Tory",last:"Horton",team:"SEA",position:"WR",id:262},
+{first:"Samaje",last:"Perine",team:"CIN",position:"RB",id:263},
+{first:"Tua",last:"Tagovailoa",team:"ATL",position:"QB",id:264},
+{first:"Chris",last:"Boswell",team:"PIT",position:"K",id:265},
+{first:"Jordan",last:"James",team:"SF",position:"RB",id:266},
+{first:"Tyquan",last:"Thornton",team:"KC",position:"WR",id:267},
+{first:"George",last:"Holani",team:"SEA",position:"RB",id:268},
+{first:"Malachi",last:"Fields",team:"NYG",position:"WR",id:269},
+{first:"Tyreek",last:"Hill",team:"FA",position:"WR",id:270},
+{first:"Trey",last:"Benson",team:"ARI",position:"RB",id:271},
+{first:"Kaleb",last:"Johnson",team:"PIT",position:"RB",id:272},
+{first:"Wil",last:"Lutz",team:"DEN",position:"K",id:273},
+{first:"Marvin",last:"Mims Jr.",team:"DEN",position:"WR",id:274},
+{first:"Michael",last:"Penix Jr.",team:"ATL",position:"QB",id:275},
+{first:"Devin",last:"Neal",team:"NO",position:"RB",id:276},
+{first:"Chris",last:"Brazzell II",team:"CAR",position:"WR",id:277},
+{first:"Demond",last:"Claiborne",team:"MIN",position:"RB",id:278},
+{first:"LeQuint",last:"Allen Jr.",team:"JAC",position:"RB",id:279},
+{first:"Isaiah",last:"Davis",team:"NYJ",position:"RB",id:280},
+{first:"Theo",last:"Johnson",team:"NYG",position:"TE",id:281},
+{first:"Darius",last:"Slayton",team:"NYG",position:"WR",id:282},
+{first:"Devaughn",last:"Vele",team:"NO",position:"WR",id:283},
+{first:"Mason",last:"Taylor",team:"NYJ",position:"TE",id:284},
+{first:"Xavier",last:"Legette",team:"CAR",position:"WR",id:285},
+{first:"Greg",last:"Dulcich",team:"MIA",position:"TE",id:286},
+{first:"Shedeur",last:"Sanders",team:"CLE",position:"QB",id:287},
+{first:"Will",last:"Reichard",team:"MIN",position:"K",id:288},
+{first:"Emari",last:"Demercado",team:"KC",position:"RB",id:289},
+{first:"Kaelon",last:"Black",team:"SF",position:"RB",id:290},
+{first:"Devin",last:"Singletary",team:"NYG",position:"RB",id:291},
+{first:"Brashard",last:"Smith",team:"KC",position:"RB",id:292},
+{first:"Hollywood",last:"Brown",team:"PHI",position:"WR",id:293},
+{first:"Kirk",last:"Cousins",team:"LV",position:"QB",id:294},
+{first:"FALCONS",last:"ATLANTA",team:"ATL",position:"DEF",id:295},
+{first:"Kendre",last:"Miller",team:"NO",position:"RB",id:296},
+{first:"Mack",last:"Hollins",team:"NE",position:"WR",id:297},
+{first:"Kyle",last:"Williams",team:"NE",position:"WR",id:298},
+{first:"49ERS",last:"SAN FRANCISCO",team:"SF",position:"DEF",id:299},
+{first:"Deshaun",last:"Watson",team:"CLE",position:"QB",id:300},
+{first:"Keenan",last:"Allen",team:"LAC",position:"WR",id:301},
+{first:"Jerome",last:"Ford",team:"WAS",position:"RB",id:302},
+{first:"Najee",last:"Harris",team:"LAC",position:"RB",id:303},
+{first:"Trevor",last:"Etienne",team:"CAR",position:"RB",id:304},
+{first:"Adam",last:"Randall",team:"BAL",position:"RB",id:305},
+{first:"Mike",last:"Gesicki",team:"CIN",position:"TE",id:306},
+{first:"Isaiah",last:"Bond",team:"CLE",position:"WR",id:307},
+{first:"Charlie",last:"Smyth",team:"NO",position:"K",id:308},
+{first:"Tahj",last:"Brooks",team:"CIN",position:"RB",id:309},
+{first:"Skyler",last:"Bell",team:"BUF",position:"WR",id:310},
+{first:"Jaleel",last:"McLaughlin",team:"DEN",position:"RB",id:311},
+{first:"Ja'Kobi",last:"Lane",team:"BAL",position:"WR",id:312},
+{first:"Isaac",last:"Guerendo",team:"SF",position:"RB",id:313},
+{first:"Joe",last:"Mixon",team:"FA",position:"RB",id:314},
+{first:"COLTS",last:"INDIANAPOLIS",team:"IND",position:"DEF",id:315},
+{first:"Jarquez",last:"Hunter",team:"LAR",position:"RB",id:316},
+{first:"Jake",last:"Tonges",team:"SF",position:"TE",id:317},
+{first:"Andrei",last:"Iosivas",team:"CIN",position:"WR",id:318},
+{first:"Kareem",last:"Hunt",team:"FA",position:"RB",id:319},
+{first:"Audric",last:"Estime",team:"NO",position:"RB",id:320},
+{first:"SAINTS",last:"NEW ORLEANS",team:"NO",position:"DEF",id:321},
+{first:"BEARS",last:"CHICAGO",team:"CHI",position:"DEF",id:322},
+{first:"Will",last:"Shipley",team:"PHI",position:"RB",id:323},
+{first:"Darnell",last:"Washington",team:"PIT",position:"TE",id:324},
+{first:"Cedric",last:"Tillman",team:"CLE",position:"WR",id:325},
+{first:"Jalen",last:"Royals",team:"KC",position:"WR",id:326},
+{first:"J.J.",last:"McCarthy",team:"MIN",position:"QB",id:327},
+{first:"Tez",last:"Johnson",team:"TB",position:"WR",id:328},
+{first:"Konata",last:"Mumpfield",team:"LAR",position:"WR",id:329},
+{first:"Jahan",last:"Dotson",team:"ATL",position:"WR",id:330},
+{first:"Calvin",last:"Austin III",team:"NYG",position:"WR",id:331},
+{first:"Luke",last:"McCaffrey",team:"WAS",position:"WR",id:332},
+{first:"Caleb",last:"Douglas",team:"MIA",position:"WR",id:333},
+{first:"Max",last:"Klare",team:"LAR",position:"TE",id:334},
+{first:"Elijah",last:"Arroyo",team:"SEA",position:"TE",id:335},
+{first:"Noah",last:"Gray",team:"KC",position:"TE",id:336},
+{first:"Olamide",last:"Zaccheaus",team:"ATL",position:"WR",id:337},
+{first:"Mac",last:"Jones",team:"SF",position:"QB",id:338},
+{first:"Jalen",last:"Tolbert",team:"MIA",position:"WR",id:339},
+{first:"Cole",last:"Kmet",team:"CHI",position:"TE",id:340},
+{first:"Carson",last:"Beck",team:"ARI",position:"QB",id:341},
+{first:"Bam",last:"Knight",team:"ARI",position:"RB",id:342},
+{first:"Joshua",last:"Palmer",team:"BUF",position:"WR",id:343},
+{first:"Dawson",last:"Knox",team:"BUF",position:"TE",id:344},
+{first:"Michael",last:"Mayer",team:"LV",position:"TE",id:345},
+{first:"Eli",last:"Heidenreich",team:"PIT",position:"RB",id:346},
+{first:"Xavier",last:"Hutchinson",team:"HOU",position:"WR",id:347},
+{first:"Dont'e",last:"Thornton Jr.",team:"LV",position:"WR",id:348},
+{first:"Tyler",last:"Higbee",team:"LAR",position:"TE",id:349},
+{first:"Ja'Tavion",last:"Sanders",team:"CAR",position:"TE",id:350},
+{first:"Kendrick",last:"Bourne",team:"ARI",position:"WR",id:351},
+{first:"Brenen",last:"Thompson",team:"LAC",position:"WR",id:352},
+{first:"Justin",last:"Fields",team:"KC",position:"QB",id:353},
+{first:"Jawhar",last:"Jordan",team:"HOU",position:"RB",id:354},
+{first:"DeMario",last:"Douglas",team:"NE",position:"WR",id:355},
+{first:"John",last:"Metchie III",team:"CAR",position:"WR",id:356},
+{first:"Nick",last:"Chubb",team:"FA",position:"RB",id:357},
+{first:"J'Mari",last:"Taylor",team:"JAC",position:"RB",id:358},
+{first:"Bryce",last:"Lance",team:"NO",position:"WR",id:359},
+{first:"Anthony",last:"Richardson Sr.",team:"IND",position:"QB",id:360},
+{first:"PANTHERS",last:"CAROLINA",team:"CAR",position:"DEF",id:361},
+{first:"Treylon",last:"Burks",team:"WAS",position:"WR",id:362},
+{first:"Raheim",last:"Sanders",team:"CLE",position:"RB",id:363},
+{first:"Savion",last:"Williams",team:"GB",position:"WR",id:364},
+{first:"Jaylin",last:"Lane",team:"WAS",position:"WR",id:365},
+{first:"Michael",last:"Carter",team:"TEN",position:"RB",id:366},
+{first:"Kalif",last:"Raymond",team:"CHI",position:"WR",id:367},
+{first:"Ty",last:"Simpson",team:"LAR",position:"QB",id:368},
+{first:"Noah",last:"Fant",team:"NO",position:"TE",id:369},
+{first:"Nick",last:"Westbrook-Ikhine",team:"IND",position:"WR",id:370},
+{first:"Justin",last:"Joly",team:"DEN",position:"TE",id:371},
+{first:"KaVontae",last:"Turpin",team:"DAL",position:"WR",id:372},
+{first:"Zavion",last:"Thomas",team:"CHI",position:"WR",id:373},
+{first:"Kevin",last:"Coleman Jr.",team:"MIA",position:"WR",id:374},
+{first:"Luke",last:"Musgrave",team:"GB",position:"TE",id:375},
+{first:"Eli",last:"Raridon",team:"NE",position:"TE",id:376},
+{first:"COWBOYS",last:"DALLAS",team:"DAL",position:"DEF",id:377},
+{first:"Tutu",last:"Atwell",team:"MIA",position:"WR",id:378},
+{first:"Tommy",last:"Tremble",team:"CAR",position:"TE",id:379},
+{first:"Zane",last:"Gonzalez",team:"MIA",position:"K",id:380},
+{first:"Ben",last:"Sinnott",team:"WAS",position:"TE",id:381},
+{first:"Austin",last:"Ekeler",team:"FA",position:"RB",id:382},
+{first:"Tyler",last:"Bass",team:"BUF",position:"K",id:383},
+{first:"Erick",last:"All Jr.",team:"CIN",position:"TE",id:384},
+{first:"Jordan",last:"Whittington",team:"LAR",position:"WR",id:385},
+{first:"Deion",last:"Burks",team:"IND",position:"WR",id:386},
+{first:"Phil",last:"Mafah",team:"DAL",position:"RB",id:387},
+{first:"Dameon",last:"Pierce",team:"PHI",position:"RB",id:388},
+{first:"Elijah",last:"Higgins",team:"ARI",position:"TE",id:389},
+{first:"Mitchell",last:"Evans",team:"CAR",position:"TE",id:390},
+{first:"Daniel",last:"Bellinger",team:"TEN",position:"TE",id:391},
+{first:"Jake",last:"Elliott",team:"PHI",position:"K",id:392},
+{first:"Cyrus",last:"Allen",team:"KC",position:"WR",id:393},
+{first:"BUCCANEERS",last:"TAMPA BAY",team:"TB",position:"DEF",id:394},
+{first:"Greg",last:"Dortch",team:"DET",position:"WR",id:395},
+{first:"BENGALS",last:"CINCINNATI",team:"CIN",position:"DEF",id:396},
+{first:"Austin",last:"Hooper",team:"ATL",position:"TE",id:397},
+{first:"Devontez",last:"Walker",team:"BAL",position:"WR",id:398},
+{first:"Dyami",last:"Brown",team:"WAS",position:"WR",id:399},
+{first:"Jam",last:"Miller",team:"NE",position:"RB",id:400},
+{first:"CJ",last:"Daniels",team:"LAR",position:"WR",id:401},
+{first:"Roschon",last:"Johnson",team:"CHI",position:"RB",id:402},
+{first:"Joe",last:"Flacco",team:"CIN",position:"QB",id:403},
+{first:"Kyle",last:"Juszczyk",team:"SF",position:"RB",id:404},
+{first:"John",last:"Bates",team:"WAS",position:"TE",id:405},
+{first:"Marlin",last:"Klein",team:"HOU",position:"TE",id:406},
+{first:"Tommy",last:"Myers",team:"FA",position:"TE",id:407},
+{first:"NEW YORK",last:"NY GIANTS",team:"NYG",position:"DEF",id:408},
+{first:"Terrell",last:"Jennings",team:"NE",position:"RB",id:409},
+{first:"Zach",last:"Ertz",team:"FA",position:"TE",id:410},
+{first:"Damien",last:"Martinez",team:"GB",position:"RB",id:411},
+{first:"Darren",last:"Waller",team:"FA",position:"TE",id:412},
+{first:"Josh",last:"Oliver",team:"MIN",position:"TE",id:413},
+{first:"Tyler",last:"Lockett",team:"LV",position:"WR",id:414},
+{first:"Jeremy",last:"McNichols",team:"WAS",position:"RB",id:415},
+{first:"Luke",last:"Schoonmaker",team:"DAL",position:"TE",id:416},
+{first:"Trey",last:"Smack",team:"GB",position:"K",id:417},
+{first:"Jonnu",last:"Smith",team:"FA",position:"TE",id:418},
+{first:"Odell",last:"Beckham Jr.",team:"NYG",position:"WR",id:419},
+{first:"Rasheen",last:"Ali",team:"BAL",position:"RB",id:420},
+{first:"Joe",last:"Milton III",team:"DAL",position:"QB",id:421},
+{first:"Antonio",last:"Gibson",team:"FA",position:"RB",id:422},
+{first:"Marcus",last:"Mariota",team:"WAS",position:"QB",id:423},
+{first:"Jaret",last:"Patterson",team:"LAC",position:"RB",id:424},
+{first:"Mitch",last:"Tinsley",team:"CIN",position:"WR",id:425},
+{first:"Colbie",last:"Young",team:"CIN",position:"WR",id:426},
+{first:"Frank",last:"Gore Jr.",team:"BUF",position:"RB",id:427},
+{first:"Jameis",last:"Winston",team:"NYG",position:"QB",id:428},
+{first:"Dylan",last:"Laube",team:"LV",position:"RB",id:429},
+{first:"Charlie",last:"Kolar",team:"LAC",position:"TE",id:430},
+{first:"Malik",last:"Benson",team:"LV",position:"WR",id:431},
+{first:"Ashton",last:"Dulin",team:"IND",position:"WR",id:432},
+{first:"Nate",last:"Boerkircher",team:"JAC",position:"TE",id:433},
+{first:"Adam",last:"Trautman",team:"DEN",position:"TE",id:434},
+{first:"DOLPHINS",last:"MIAMI",team:"MIA",position:"DEF",id:435},
+{first:"Jahdae",last:"Walker",team:"CHI",position:"WR",id:436},
+{first:"Mo",last:"Alie-Cox",team:"IND",position:"TE",id:437},
+{first:"Durham",last:"Smythe",team:"BAL",position:"TE",id:438},
+{first:"Sam",last:"Roush",team:"CHI",position:"TE",id:439},
+{first:"Sterling",last:"Shepard",team:"FA",position:"WR",id:440},
+{first:"Xavier",last:"Smith",team:"LAR",position:"WR",id:441},
+{first:"Cade",last:"Klubnik",team:"NYJ",position:"QB",id:442},
+{first:"DeAndre",last:"Hopkins",team:"BAL",position:"WR",id:443},
+{first:"Demarcus",last:"Robinson",team:"SF",position:"WR",id:444},
+{first:"Hunter",last:"Luepke",team:"DAL",position:"RB",id:445},
+{first:"Raheem",last:"Mostert",team:"LV",position:"RB",id:446},
+{first:"AJ",last:"Dillon",team:"CAR",position:"RB",id:447},
+{first:"Tyler",last:"Goodson",team:"ATL",position:"RB",id:448},
+{first:"Van",last:"Jefferson",team:"WAS",position:"WR",id:449},
+{first:"Sione",last:"Vaki",team:"DET",position:"RB",id:450},
+{first:"Spencer",last:"Shrader",team:"IND",position:"K",id:451},
+{first:"Myles",last:"Montgomery",team:"NE",position:"RB",id:452},
+{first:"Khalil",last:"Herbert",team:"FA",position:"RB",id:453},
+{first:"Jaydn",last:"Ott",team:"KC",position:"RB",id:454},
+{first:"Robert",last:"Henry Jr.",team:"WAS",position:"RB",id:455},
+{first:"COMMANDERS",last:"WASHINGTON",team:"WAS",position:"DEF",id:456},
+{first:"Zavier",last:"Scott",team:"MIN",position:"RB",id:457},
+{first:"Tanner",last:"Hudson",team:"CIN",position:"TE",id:458},
+{first:"Ty",last:"Chandler",team:"NO",position:"RB",id:459},
+{first:"Jackson",last:"Hawes",team:"BUF",position:"TE",id:460},
+{first:"Brock",last:"Wright",team:"DET",position:"TE",id:461},
+{first:"Drew",last:"Sample",team:"CIN",position:"TE",id:462},
+{first:"Ronnie",last:"Rivers",team:"LAR",position:"RB",id:463},
+{first:"Tim",last:"Patrick",team:"NYJ",position:"WR",id:464},
+{first:"Desmond",last:"Reid",team:"FA",position:"RB",id:465},
+{first:"Kevin",last:"Austin Jr.",team:"NO",position:"WR",id:466},
+{first:"Elijah",last:"Moore",team:"PHI",position:"WR",id:467},
+{first:"Roman",last:"Wilson",team:"PIT",position:"WR",id:468},
+{first:"Miles",last:"Sanders",team:"FA",position:"RB",id:469},
+{first:"Mecole",last:"Hardman Jr.",team:"BUF",position:"WR",id:470},
+{first:"Diontae",last:"Johnson",team:"FA",position:"WR",id:471},
+{first:"Brandin",last:"Cooks",team:"FA",position:"WR",id:472},
+{first:"Brittain",last:"Brown",team:"CHI",position:"RB",id:473},
+{first:"Matt",last:"Hibner",team:"BAL",position:"TE",id:474},
+{first:"Cam",last:"Akers",team:"FA",position:"RB",id:475},
+{first:"Graig",last:"Cooper",team:"FA",position:"RB",id:476},
+{first:"Max",last:"Bredeson",team:"MIN",position:"RB",id:477},
+{first:"Will",last:"Kacmarek",team:"MIA",position:"TE",id:478},
+{first:"TITANS",last:"TENNESSEE",team:"TEN",position:"DEF",id:479},
+{first:"Elijah",last:"Mitchell",team:"PHI",position:"RB",id:480},
+{first:"Alec",last:"Ingold",team:"LAC",position:"RB",id:481},
+{first:"Nick",last:"Folk",team:"ATL",position:"K",id:482},
+{first:"Zay",last:"Jones",team:"FA",position:"WR",id:483},
+{first:"Ameer",last:"Abdullah",team:"JAC",position:"RB",id:484},
+{first:"Josh",last:"Reynolds",team:"FA",position:"WR",id:485},
+{first:"Blake",last:"Grupe",team:"IND",position:"K",id:486},
+{first:"Jacardia",last:"Wright",team:"SEA",position:"RB",id:487},
+{first:"Jacob",last:"Saylors",team:"DET",position:"RB",id:488},
+{first:"Ben",last:"Sauls",team:"NYG",position:"K",id:489},
+{first:"Clyde",last:"Edwards-Helaire",team:"FA",position:"RB",id:490},
+{first:"Patrick",last:"Ricard",team:"NYG",position:"RB",id:491},
+{first:"Miles",last:"Davis",team:"CAR",position:"RB",id:492},
+{first:"Cash",last:"Jones",team:"ATL",position:"RB",id:493},
+{first:"Joey",last:"Slye",team:"TEN",position:"K",id:494},
+{first:"Montrell",last:"Johnson Jr.",team:"FA",position:"RB",id:495},
+{first:"Adam",last:"Prentice",team:"DEN",position:"RB",id:496},
+{first:"Donovan",last:"Edwards",team:"MIA",position:"RB",id:497},
+{first:"Roman",last:"Hemby",team:"LV",position:"RB",id:498},
+{first:"Michael",last:"Burton",team:"CLE",position:"RB",id:499},
+{first:"Kalel",last:"Mullings",team:"TEN",position:"RB",id:500},
+{first:"Taysom",last:"Hill",team:"FA",position:"TE",id:501},
+{first:"Hunter",last:"Renfrow",team:"FA",position:"WR",id:502},
+{first:"Noah",last:"Whittington",team:"HOU",position:"RB",id:503},
+{first:"Anthony",last:"Gould",team:"IND",position:"WR",id:504},
+{first:"Albert",last:"Okwuegbunam Jr.",team:"LV",position:"TE",id:505},
+{first:"Pierre",last:"Strong Jr.",team:"GB",position:"RB",id:506},
+{first:"Myles",last:"Gaskin",team:"FA",position:"RB",id:507},
+{first:"Tai",last:"Felton",team:"MIN",position:"WR",id:508},
+{first:"Dontae",last:"McMillan",team:"BAL",position:"RB",id:509},
+{first:"Zamir",last:"White",team:"LV",position:"RB",id:510},
+{first:"Michael",last:"Trigg",team:"DAL",position:"TE",id:511},
+{first:"Scotty",last:"Miller",team:"CHI",position:"WR",id:512},
+{first:"Jermaine",last:"Burton",team:"FA",position:"WR",id:513},
+{first:"Nate",last:"Adkins",team:"DEN",position:"TE",id:514},
+{first:"Julius",last:"Chestnut",team:"TEN",position:"RB",id:515},
+{first:"Riley",last:"Leonard",team:"IND",position:"QB",id:516},
+{first:"Alexander",last:"Mattison",team:"FA",position:"RB",id:517},
+{first:"Will",last:"Dissly",team:"FA",position:"TE",id:518},
+{first:"Jordan",last:"Waters",team:"LAR",position:"RB",id:519},
+{first:"Ronnie",last:"Bell",team:"NO",position:"WR",id:520},
+{first:"Russell",last:"Gage Jr.",team:"FA",position:"WR",id:521},
+{first:"Will",last:"Mallory",team:"IND",position:"TE",id:522},
+{first:"Trey",last:"Sermon",team:"FA",position:"RB",id:523},
+{first:"Ja'Lynn",last:"Polk",team:"NO",position:"WR",id:524},
+{first:"Elijah",last:"Tau-Tolliver",team:"BAL",position:"RB",id:525},
+{first:"Gardner",last:"Minshew II",team:"ARI",position:"QB",id:526},
+{first:"Kendrick",last:"Law",team:"DET",position:"WR",id:527},
+{first:"Salvon",last:"Ahmed",team:"CHI",position:"RB",id:528},
+{first:"Lew",last:"Nichols III",team:"PIT",position:"RB",id:529},
+{first:"Reggie",last:"Gilliam",team:"NE",position:"RB",id:530},
+{first:"Deon",last:"Jackson",team:"FA",position:"RB",id:531},
+{first:"Moliki",last:"Matavao",team:"NO",position:"TE",id:532},
+{first:"Tyler",last:"Badie",team:"DEN",position:"RB",id:533},
+{first:"Tyler",last:"Conklin",team:"DET",position:"TE",id:534},
+{first:"Jordan",last:"Akins",team:"FA",position:"TE",id:535},
+{first:"JuJu",last:"Smith-Schuster",team:"NYG",position:"WR",id:536},
+{first:"Reggie",last:"Virgil",team:"ARI",position:"WR",id:537},
+{first:"Marquez",last:"Valdes-Scantling",team:"DAL",position:"WR",id:538},
+{first:"Julian",last:"Hill",team:"NE",position:"TE",id:539},
+{first:"Quinn",last:"Ewers",team:"MIA",position:"QB",id:540},
+{first:"Xavier",last:"Restrepo",team:"TEN",position:"WR",id:541},
+{first:"Jakobie",last:"Keeney-James",team:"FA",position:"WR",id:542},
+{first:"Dante",last:"Miller",team:"NYG",position:"RB",id:543},
+{first:"Kenny",last:"McIntosh",team:"SEA",position:"RB",id:544},
+{first:"Elijah",last:"Dotson",team:"FA",position:"RB",id:545},
+{first:"Montorie",last:"Foster Jr.",team:"SEA",position:"WR",id:546},
+{first:"Jermar",last:"Jefferson",team:"FA",position:"RB",id:547},
+{first:"Riley",last:"Nowakowski",team:"PIT",position:"TE",id:548},
+{first:"Devonte",last:"Boyd",team:"FA",position:"WR",id:549},
+{first:"Avery",last:"Williams",team:"FA",position:"RB",id:550},
+{first:"Michael",last:"Woods II",team:"FA",position:"WR",id:551},
+{first:"Sincere",last:"McCormick",team:"SF",position:"RB",id:552},
+{first:"Xavier",last:"Weaver",team:"ARI",position:"WR",id:553},
+{first:"Jabari",last:"Small",team:"DET",position:"RB",id:554},
+{first:"Michael",last:"Briscoe",team:"MIN",position:"WR",id:555},
+{first:"Lil'Jordan",last:"Humphrey",team:"DEN",position:"WR",id:556},
+{first:"Nathan",last:"Carter",team:"ATL",position:"RB",id:557},
+{first:"Kaden",last:"Wetjen",team:"PIT",position:"WR",id:558},
+{first:"Quez",last:"Watkins",team:"PHI",position:"WR",id:559},
+{first:"Seydou",last:"Traore",team:"MIA",position:"TE",id:560},
+{first:"Jack",last:"Stoll",team:"CLE",position:"TE",id:561},
+{first:"Anthony",last:"McFarland Jr.",team:"FA",position:"RB",id:562},
+{first:"Chip",last:"Trayanum",team:"NYJ",position:"RB",id:563},
+{first:"Ray-Ray",last:"McCloud III",team:"FA",position:"WR",id:564},
+{first:"Jonathan",last:"Williams",team:"FA",position:"RB",id:565},
+{first:"Foster",last:"Moreau",team:"HOU",position:"TE",id:566},
+{first:"Evan",last:"Hull",team:"HOU",position:"RB",id:567},
+{first:"Myles",last:"Price",team:"MIN",position:"WR",id:568},
+{first:"Nick",last:"Bawden",team:"FA",position:"RB",id:569},
+{first:"Kendric",last:"Pryor",team:"CIN",position:"WR",id:570},
+{first:"Kye",last:"Robichaux",team:"DET",position:"RB",id:571},
+{first:"Jack",last:"Endries",team:"CIN",position:"TE",id:572},
+{first:"Omarius",last:"Hines",team:"FA",position:"WR",id:573},
+{first:"Miles",last:"Kitselman",team:"DET",position:"TE",id:574},
+{first:"Velus",last:"Jones Jr.",team:"SEA",position:"WR",id:575},
+{first:"Dean",last:"Connors",team:"LAR",position:"RB",id:576},
+{first:"Carsen",last:"Ryan",team:"CLE",position:"TE",id:577},
+{first:"Wendell",last:"Smallwood",team:"FA",position:"RB",id:578},
+{first:"Chad",last:"Ryland",team:"ARI",position:"K",id:579},
+{first:"Royce",last:"Freeman",team:"FA",position:"RB",id:580},
+{first:"Michael",last:"Bandy",team:"DEN",position:"WR",id:581},
+{first:"Joe",last:"Royer",team:"CLE",position:"TE",id:582},
+{first:"Jalen",last:"Brooks",team:"ARI",position:"WR",id:583},
+{first:"Jake",last:"Bobo",team:"SEA",position:"WR",id:584},
+{first:"Skyy",last:"Moore",team:"GB",position:"WR",id:585},
+{first:"British",last:"Brooks",team:"HOU",position:"RB",id:586},
+{first:"David",last:"Moore",team:"CAR",position:"WR",id:587},
+{first:"Khalil",last:"Dinkins",team:"SF",position:"TE",id:588},
+{first:"Brandon",last:"McManus",team:"FA",position:"K",id:589},
+{first:"Isaiah",last:"Williams",team:"FA",position:"WR",id:590},
+{first:"Ryan",last:"Fitzgerald",team:"CAR",position:"K",id:591},
+{first:"Daniel",last:"Carlson",team:"LV",position:"K",id:592},
+{first:"Craig",last:"Reynolds",team:"FA",position:"RB",id:593},
+{first:"Michael",last:"Wortham",team:"JAC",position:"WR",id:594},
+{first:"Gus",last:"Edwards",team:"FA",position:"RB",id:595},
+{first:"Jordan",last:"Mims",team:"FA",position:"RB",id:596},
+{first:"Ja'Quinden",last:"Jackson",team:"FA",position:"RB",id:597},
+{first:"Josh",last:"Cuevas",team:"BAL",position:"TE",id:598},
+{first:"Theo",last:"Wease Jr.",team:"MIA",position:"WR",id:599},
+{first:"Kejon",last:"Owens",team:"MIN",position:"RB",id:600},
+{first:"Barion",last:"Brown",team:"NO",position:"WR",id:601},
+{first:"Logan",last:"Thomas",team:"FA",position:"TE",id:602},
+{first:"Kendall",last:"Milton",team:"CIN",position:"RB",id:603},
+{first:"Jase",last:"McClellan",team:"FA",position:"RB",id:604},
+{first:"Bo",last:"Melton",team:"GB",position:"WR",id:605},
+{first:"David",last:"Sills V",team:"TB",position:"WR",id:606},
+{first:"Jaheim",last:"Bell",team:"PIT",position:"TE",id:607},
+{first:"Darrynton",last:"Evans",team:"FA",position:"RB",id:608},
+{first:"Dominic",last:"Lovett",team:"DET",position:"WR",id:609},
+{first:"Corey",last:"Kiner",team:"ARI",position:"RB",id:610},
+{first:"Lewis",last:"Bond",team:"HOU",position:"WR",id:611},
+{first:"Jordan",last:"Watkins",team:"SF",position:"WR",id:612},
+{first:"Luke",last:"Farrell",team:"SF",position:"TE",id:613},
+{first:"Anthony",last:"Smith",team:"DAL",position:"WR",id:614},
+{first:"Emmanuel",last:"Henderson Jr.",team:"SEA",position:"WR",id:615},
+{first:"Joshua",last:"Pitsenberger",team:"HOU",position:"RB",id:616},
+{first:"Josh",last:"Cameron",team:"JAC",position:"WR",id:617},
+{first:"Ricky",last:"White III",team:"SEA",position:"WR",id:618},
+{first:"Kaden",last:"Prather",team:"FA",position:"WR",id:619},
+{first:"Trayveon",last:"Williams",team:"FA",position:"RB",id:620},
+{first:"Tyler",last:"Johnson",team:"DAL",position:"WR",id:621},
+{first:"Bauer",last:"Sharp",team:"TB",position:"TE",id:622},
+{first:"Charlie",last:"Woerner",team:"ATL",position:"TE",id:623},
+{first:"DeeJay",last:"Dallas",team:"JAC",position:"RB",id:624},
+{first:"Dale",last:"Moss",team:"FA",position:"WR",id:625},
+{first:"Arian",last:"Smith",team:"NYJ",position:"WR",id:626},
+{first:"Andrew",last:"Beck",team:"NYJ",position:"TE",id:627},
+{first:"CJ",last:"Williams",team:"JAC",position:"WR",id:628},
+{first:"Blake",last:"Watson",team:"FA",position:"RB",id:629},
+{first:"Carlos",last:"Washington Jr.",team:"MIA",position:"RB",id:630},
+{first:"Carson",last:"Steele",team:"PHI",position:"RB",id:631},
+{first:"Chase",last:"Edmonds",team:"WAS",position:"RB",id:632},
+{first:"Chris",last:"Evans",team:"FA",position:"RB",id:633},
+{first:"D'Ernest",last:"Johnson",team:"FA",position:"RB",id:634},
+{first:"Malik",last:"Taylor",team:"FA",position:"WR",id:635},
+{first:"D'Onta",last:"Foreman",team:"FA",position:"RB",id:636},
+{first:"Kameron",last:"Johnson",team:"TB",position:"WR",id:637},
+{first:"Dare",last:"Ogunbowale",team:"FA",position:"RB",id:638},
+{first:"Deuce",last:"Vaughn",team:"FA",position:"RB",id:639},
+{first:"Dillon",last:"Johnson",team:"FA",position:"RB",id:640},
+{first:"Dontrell",last:"Hilliard",team:"FA",position:"RB",id:641},
+{first:"Eric",last:"Gray",team:"NYG",position:"RB",id:642},
+{first:"Hassan",last:"Haskins",team:"LAC",position:"RB",id:643},
+{first:"Israel",last:"Abanikanda",team:"DAL",position:"RB",id:644},
+{first:"JaMycal",last:"Hasty",team:"FA",position:"RB",id:645},
+{first:"Jashaun",last:"Corbin",team:"FA",position:"RB",id:646},
+{first:"Bisi",last:"Johnson",team:"FA",position:"WR",id:647},
+{first:"Jeff",last:"Wilson Jr.",team:"FA",position:"RB",id:648},
+{first:"Jonathan",last:"Ward",team:"FA",position:"RB",id:649},
+{first:"Kevin",last:"Harris",team:"FA",position:"RB",id:650},
+{first:"Gage",last:"Larvadain",team:"CLE",position:"WR",id:651},
+{first:"Ross",last:"Dwelley",team:"FA",position:"TE",id:652},
+{first:"Raheem",last:"Blackshear",team:"FA",position:"RB",id:653},
+{first:"Tanner",last:"Conner",team:"NYG",position:"TE",id:654},
+{first:"Johnny",last:"Mundt",team:"PHI",position:"TE",id:655},
+{first:"Drew",last:"Ogletree",team:"IND",position:"TE",id:656},
+{first:"Cade",last:"Stover",team:"HOU",position:"TE",id:657},
+{first:"Jimmy",last:"Horn Jr.",team:"CAR",position:"WR",id:658},
+{first:"Josiah",last:"Deguara",team:"FA",position:"TE",id:659},
+{first:"Ryan",last:"Griffin",team:"FA",position:"TE",id:660},
+{first:"Pharaoh",last:"Brown",team:"FA",position:"TE",id:661},
+{first:"Tip",last:"Reiman",team:"ARI",position:"TE",id:662},
+{first:"Connor",last:"Heyward",team:"LV",position:"TE",id:663},
+{first:"Gavin",last:"Bartholomew",team:"MIN",position:"TE",id:664},
+{first:"Anthony",last:"Firkser",team:"WAS",position:"TE",id:665},
+{first:"Ben",last:"Sims",team:"MIA",position:"TE",id:666},
+{first:"Brevyn",last:"Spann-Ford",team:"DAL",position:"TE",id:667},
+{first:"Jared",last:"Wiley",team:"KC",position:"TE",id:668},
+{first:"Braxton",last:"Berrios",team:"NYG",position:"WR",id:669},
+{first:"Tucker",last:"Fisk",team:"FA",position:"TE",id:670},
+{first:"Casey",last:"Washington",team:"FA",position:"WR",id:671},
+{first:"Ian",last:"Thomas",team:"LV",position:"TE",id:672},
+{first:"Jeremy",last:"Ruckert",team:"NYJ",position:"TE",id:673},
+{first:"Josh",last:"Whyle",team:"GB",position:"TE",id:674},
+{first:"Cedrick",last:"Wilson Jr.",team:"DET",position:"WR",id:675},
+{first:"Geoff",last:"Swaim",team:"FA",position:"TE",id:676},
+{first:"Harrison",last:"Bryant",team:"SEA",position:"TE",id:677},
+{first:"Hunter",last:"Long",team:"JAC",position:"TE",id:678},
+{first:"James",last:"Mitchell",team:"CAR",position:"TE",id:679},
+{first:"Tyrion",last:"Davis-Price",team:"FA",position:"RB",id:680},
+{first:"Lucas",last:"Krull",team:"DEN",position:"TE",id:681},
+{first:"Stone",last:"Smartt",team:"PHI",position:"TE",id:682},
+{first:"Brayden",last:"Willis",team:"SF",position:"TE",id:683},
+{first:"Chris",last:"Manhertz",team:"NYG",position:"TE",id:684},
+{first:"Cole",last:"Turner",team:"MIA",position:"TE",id:685},
+{first:"Isaiah",last:"Hodgins",team:"NYG",position:"WR",id:686},
+{first:"Devin",last:"Culp",team:"TB",position:"TE",id:687},
+{first:"Eric",last:"Saubert",team:"SEA",position:"TE",id:688},
+{first:"Jesper",last:"Horsted",team:"FA",position:"TE",id:689},
+{first:"Michael",last:"Jacobson",team:"FA",position:"TE",id:690},
+{first:"Noah",last:"Brown",team:"FA",position:"WR",id:691},
+{first:"Payne",last:"Durham",team:"TB",position:"TE",id:692},
+{first:"Teagan",last:"Quitoriano",team:"ARI",position:"TE",id:693},
+{first:"Quintin",last:"Morris",team:"JAC",position:"TE",id:694},
+{first:"Blake",last:"Whiteheart",team:"CLE",position:"TE",id:695},
+{first:"Brevin",last:"Jordan",team:"HOU",position:"TE",id:696},
+{first:"Brycen",last:"Hopkins",team:"FA",position:"TE",id:697},
+{first:"CJ",last:"Dippre",team:"NE",position:"TE",id:698},
+{first:"Curtis",last:"Hodges",team:"FA",position:"TE",id:699},
+{first:"Davis",last:"Allen",team:"LAR",position:"TE",id:700},
+{first:"Gerald",last:"Everett",team:"FA",position:"TE",id:701},
+{first:"Grant",last:"Calcaterra",team:"PHI",position:"TE",id:702},
+{first:"John",last:"Hurst",team:"FA",position:"WR",id:703},
+{first:"Jake",last:"Briningstool",team:"KC",position:"TE",id:704},
+{first:"Jelani",last:"Woods",team:"NYJ",position:"TE",id:705},
+{first:"Kenny",last:"Yeboah",team:"ARI",position:"TE",id:706},
+{first:"Ko",last:"Kieft",team:"TB",position:"TE",id:707},
+{first:"Kylen",last:"Granson",team:"TEN",position:"TE",id:708},
+{first:"Luke",last:"Lachey",team:"GB",position:"TE",id:709},
+{first:"Mitchell",last:"Wilcox",team:"FA",position:"TE",id:710},
+{first:"Nick",last:"Boyle",team:"FA",position:"TE",id:711},
+{first:"Nick",last:"Vannett",team:"LAR",position:"TE",id:712},
+{first:"Noah",last:"Togiai",team:"FA",position:"TE",id:713},
+{first:"Peyton",last:"Hendershot",team:"FA",position:"TE",id:714},
+{first:"Sean",last:"McKeon",team:"IND",position:"TE",id:715},
+{first:"Tyler",last:"Davis",team:"FA",position:"WR",id:716},
+{first:"Zach",last:"Gentry",team:"FA",position:"TE",id:717},
+{first:"Gabe",last:"Davis",team:"FA",position:"WR",id:718},
+{first:"Jonathan",last:"Mingo",team:"DAL",position:"WR",id:719},
+{first:"Nelson",last:"Agholor",team:"FA",position:"WR",id:720},
+{first:"Brycen",last:"Tremayne",team:"CAR",position:"WR",id:721},
+{first:"DeAndre",last:"Carter",team:"FA",position:"WR",id:722},
+{first:"Tyrell",last:"Shavers",team:"BUF",position:"WR",id:723},
+{first:"Tahj",last:"Washington",team:"MIA",position:"WR",id:724},
+{first:"Bub",last:"Means",team:"NO",position:"WR",id:725},
+{first:"Mason",last:"Tipton",team:"NO",position:"WR",id:726},
+{first:"KeAndre",last:"Lambert-Smith",team:"LAC",position:"WR",id:727},
+{first:"Stephen",last:"Campbell",team:"FA",position:"RB",id:728},
+{first:"Marquez",last:"Callaway",team:"FA",position:"WR",id:729},
+{first:"Samori",last:"Toure",team:"PHI",position:"WR",id:730},
+{first:"Trenton",last:"Irwin",team:"FA",position:"WR",id:731},
+{first:"Dee",last:"Eskridge",team:"FA",position:"WR",id:732},
+{first:"LaJohntay",last:"Wester",team:"BAL",position:"WR",id:733},
+{first:"Tylan",last:"Wallace",team:"CLE",position:"WR",id:734},
+{first:"Allen",last:"Lazard",team:"FA",position:"WR",id:735},
+{first:"Curtis",last:"Samuel",team:"FA",position:"WR",id:736},
+{first:"Jamari",last:"Thrash",team:"CLE",position:"WR",id:737},
+{first:"Jason",last:"Brownlee",team:"KC",position:"WR",id:738},
+{first:"KhaDarel",last:"Hodge",team:"FA",position:"WR",id:739},
+{first:"Shedrick",last:"Jackson",team:"LV",position:"WR",id:740},
+{first:"Ainias",last:"Smith",team:"CAR",position:"WR",id:741},
+{first:"Anthony",last:"Schwartz",team:"FA",position:"WR",id:742},
+{first:"Austin",last:"Trammell",team:"JAC",position:"WR",id:743},
+{first:"Brandon",last:"Powell",team:"FA",position:"WR",id:744},
+{first:"Britain",last:"Covey",team:"PHI",position:"WR",id:745},
+{first:"Byron",last:"Pringle",team:"FA",position:"WR",id:746},
+{first:"Charlie",last:"Jones",team:"CIN",position:"WR",id:747},
+{first:"Chris",last:"Blair",team:"ATL",position:"WR",id:748},
+{first:"Cody",last:"Thompson",team:"FA",position:"WR",id:749},
+{first:"Danny",last:"Gray",team:"PHI",position:"WR",id:750},
+{first:"Daurice",last:"Fountain",team:"FA",position:"WR",id:751},
+{first:"Derius",last:"Davis",team:"LAC",position:"WR",id:752},
+{first:"Equanimeous",last:"St. Brown",team:"FA",position:"WR",id:753},
+{first:"Isaiah",last:"McKenzie",team:"FA",position:"WR",id:754},
+{first:"Jacob",last:"Cowing",team:"SF",position:"WR",id:755},
+{first:"Jalen",last:"Guyton",team:"FA",position:"WR",id:756},
+{first:"Jalen",last:"Reagor",team:"MIA",position:"WR",id:757},
+{first:"Jalin",last:"Hyatt",team:"NYG",position:"WR",id:758},
+{first:"James",last:"Proche II",team:"FA",position:"WR",id:759},
+{first:"Javon",last:"Baker",team:"FA",position:"WR",id:760},
+{first:"Johnny",last:"Wilson",team:"PHI",position:"WR",id:761},
+{first:"Justin",last:"Shorter",team:"LV",position:"WR",id:762},
+{first:"Laquon",last:"Treadwell",team:"IND",position:"WR",id:763},
+{first:"Laviska",last:"Shenault Jr.",team:"FA",position:"WR",id:764},
+{first:"Malachi",last:"Corley",team:"CLE",position:"WR",id:765},
+{first:"Nick",last:"Nash",team:"WAS",position:"WR",id:766},
+{first:"Nikko",last:"Remigio",team:"KC",position:"WR",id:767},
+{first:"Rakim",last:"Jarrett",team:"FA",position:"WR",id:768},
+{first:"Tejhaun",last:"Palmer",team:"ARI",position:"WR",id:769},
+{first:"Tim",last:"Jones",team:"JAC",position:"WR",id:770},
+{first:"Trey",last:"Palmer",team:"NO",position:"WR",id:771},
+{first:"Trishton",last:"Jackson",team:"FA",position:"WR",id:772},
+{first:"Xavier",last:"Gipson",team:"NYG",position:"WR",id:773},
+{first:"Zach",last:"Pascal",team:"FA",position:"WR",id:774},
+{first:"Ross",last:"Travis",team:"FA",position:"TE",id:775},
+{first:"Mazeo",last:"Bennett",team:"FA",position:"WR",id:776},
+{first:"Andre",last:"Szmyt",team:"CLE",position:"K",id:777},
+{first:"Jason",last:"Sanders",team:"NYJ",position:"K",id:778},
+{first:"Jake",last:"Moody",team:"WAS",position:"K",id:779},
+{first:"CARDINALS",last:"ARIZONA",team:"ARI",position:"DEF",id:780},
+{first:"RAIDERS",last:"LAS VEGAS",team:"LV",position:"DEF",id:781},
+{first:"NEW YORK",last:"NY JETS",team:"NYJ",position:"DEF",id:782}
+        ];
+    </script>
 </body>
 </html>
