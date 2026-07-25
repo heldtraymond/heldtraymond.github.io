@@ -86,7 +86,7 @@
             font-weight: normal;
             font-size:24pt;
             color:white;
-            width:1.2em;
+            width:3.5%;
         }
         .roundNumLeft {
             text-align:center;
@@ -276,7 +276,7 @@
             </td>
         </tr>
     </table>
-    <table id="draftBoard">
+    <table id="draftBoard" style="table-layout:fixed">
         <tr id="ownerNames">
             <td></td>
             <td id="ownerRowBlankRight"></td>
@@ -442,12 +442,14 @@
         }
 
         function Show2025Picks() {
-            DRAFT_PICKS = JSON.parse(JSON.stringify(PICKS_2025));
-            RedisplayDraftBoard();
+            if (confirm("Are you sure you want to overwrite everything in this draft board with the 2025 draft results?")) {
+                DRAFT_PICKS = JSON.parse(JSON.stringify(PICKS_2025));
+                RedisplayDraftBoard();
+            }
         }
 
         function ClearPicks() {
-            //if (confirm("Are you sure you want to clear all picks in this draft board?")) {
+            if (confirm("Are you sure you want to clear all picks in this draft board?")) {
             var numRounds = GetNumberRounds();
                 for (var i = 0; i < DRAFT_PICKS.length; i++) {
                     DRAFT_PICKS[i].picks = [];
@@ -475,7 +477,7 @@
                 $(".veryLongName").removeClass("veryLongName");
                 $(".veryVeryLongName").removeClass("veryVeryLongName");
                 $(".manualName").removeClass("manualName");*/
-            //}
+            }
         }
 
         function ToggleFullScreen() {
@@ -585,6 +587,8 @@
                     ownerNameEl.insertBefore($("#ownerRowBlankRight"));
                 }
             }
+
+            $(".ownerName").css("width", "" + (92 / numTeams) + "%");
 
             for (var i = 0; i < DRAFT_PICKS.length; i++) {
                 console.log(DRAFT_PICKS[i].name);
